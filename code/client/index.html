@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+ </head>
+ <body>
+  hello world!
+  <script>
+		var cv = require('./js/checkversion.js')
+    		var nw = require('nw.gui');
+    		const mainPath = cv.getPathName()
+    		alert(mainPath)
+		nw.Window.open(mainPath, {
+		    "title": "商场导航软件",
+		    "fullscreen": true,
+		    "frame": false
+		}, (win) => {
+//			nw.Window.get().close()
+		});
+  </script>
+ </body>
+</html>

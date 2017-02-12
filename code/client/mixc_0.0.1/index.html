@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>商场导购平台</title>
+
+		<link rel="stylesheet" href="css/app.css" charset="utf-8"/>
+		<link rel="stylesheet" href="iconfont/iconfont.css" charset="utf-8"/>
+		<link rel="stylesheet" href="lib/swiper/idangerous.swiper.css" charset="utf-8"/>
+	</head>
+
+	<body>
+		<!-- app -->
+		<div id="app">
+			<router-view>
+				欢迎光临
+			</router-view>
+		</div>
+
+		<!-- 1 home: 首页模版－开始 -->
+			<!-- 1.1 home: 首页模版 -->
+			<script type="text/x-template" id="home-template">
+				<transition>
+					<div>
+						<mixc-ads></mixc-ads>
+						<mixc-home-nav></mixc-home-nav>
+						<mixc-home-widget></mixc-home-widget>
+						<mixc-home-category></mixc-home-category>
+					</div>
+				</transition>
+			</script>
+	
+			<!-- 1.2 ads: 顶部广告 -->
+			<script type="text/x-template" id="ads-template">
+				<div :id="swipeId" class="swiper-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide" v-for="item in list" :style="{ backgroundImage: 'url(' + item.adsFilePath.replace(/^\//, '') + ')' }"></div>
+					</div>
+					<div class="pagination"></div>
+				</div>
+			</script>
+	
+			<!-- 1.3 nav: 首页导航 -->
+			<script type="text/x-template" id="home-nav-template">
+				<nav class="home-nav clear">
+					<div class="home-nav-item" v-for="(item, index) in list"
+						@click="handleClick(index, item)"
+						:class="{ justify: item.adsStretch == 'B' }"
+						:style="{ backgroundColor: item.adsColor, backgroundImage: 'url(' + item.adsFilePath.replace(/^\//, '') + ')' }"></div>
+				</nav>
+			</script>
+	
+			<!-- 1.4 widget: 首页小部件 -->
+			<script type="text/x-template" id="home-widget-template">
+				<div class="home-widget">
+					<div class="row">
+						<div class="col city">深圳</div>
+						<div class="col time">{{ hour }}:{{ minute }}</div>
+						<div class="col build align-right">深圳万象城</div>
+					</div>
+					<h5>{{ year }}-{{ month }}-{{ date }} 星期{{ week }}</h5>
+				</div>
+			</script>
+	
+			<!-- 1.4 category: 分类导航 -->
+			<script type="text/x-template" id="home-category-template">
+				<div class="home-category row">
+					<div v-for="(item, index) in list"
+						@click="handleClick(index, item)" class="col"
+						:class="{ justify: item.adsStretch == 'B' }"
+						:style="{ backgroundColor: item.adsColor, backgroundImage: 'url(' + item.adsFilePath.replace(/^\//, '') + ')' }"></div>
+				</div>
+			</script>
+		<!-- 1 home: 首页模版－结束 -->
+		
+		<!-- 2.Brand: 品牌导购-开始 -->
+			<!-- 2.1 Brand: 品牌导购 -->
+			<script type="text/x-template" id="brand-template">
+				<div class="brand" ref="brand">
+					<mixc-top-header title="品牌导购" sub-title="BRAND SHOPPING GUIDE"></mixc-top-header>
+					<div class="side">
+						<div class="top">
+							<hr />
+							<a :class="{ active: tab == 0 }" @click="handleTab(0)">品牌查找</a>
+							<a :class="{ active: tab == 1 || tab == 2 }" @click="handleTab(1)">字母查找</a>
+							<a :class="{ active: tab == 3 }" @click="handleTab(3)">楼层查找</a>
+							<div class="title">品类查找</div>
+						</div>
+						<div class="menus clear" :class="{ letter: tab == 1 || tab == 2 }">
+							<a v-for="(item, index) in menus" @click="handleMenu($event, index)" :class="{ active: filterIndex == index }">{{ item }}</a>
+						</div>
+					</div>
+					<div class="submenus" ref="submenus" style="display: none">
+						<a  @click="handleSubMenu($event, -1)" :class="{ active: subFilterIndex == -1 }">全部</a>
+						<a v-for="(item, index) in submenus" @click="handleSubMenu($event, index)" :class="{ active: subFilterIndex == index }">{{ item.dictValue }}</a>
+					</div>
+					<div class="content">
+						<mixc-brand-table :source="shops"></mixc-brand-table>
+					</div>
+				</div>
+			</script>
+		
+			<!-- 2.1 Nav: 通用题头-->
+			<script type="text/x-template" id="top-header-template">
+				<header class="top-header">
+					<div class="block1"></div>
+					<div class="block2"></div>
+					<div class="block3"></div>
+					<div class="block4"></div>
+					<div class="block5"></div>
+					<div class="block6 align-right">
+						<mixc-top-timer></mixc-top-timer>
+					</div>
+					<router-link to="/" class="block7 align-center">
+						<i class="iconfont icon-home"></i>
+						<div class="title">返回首页</div>
+					</router-link>
+					<div class="block8">
+						<h2>{{ subTitle }}</h2>
+						<h1>{{ title }}</h1>
+					</div>
+				</header>
+			</script>
+			
+			<!-- 2.2 Timer: 通用题头-->
+			<script type="text/x-template" id="top-timer-template">
+				<span>
+					{{year}}.{{month}}.{{date}}&nbsp;&nbsp;星期{{week}}&nbsp;&nbsp;{{hour}}:{{minute}}
+				</span>
+			</script>
+			
+			<!-- 2.3 Table: 列表 -->
+			<script type="text/x-template" id="brand-table-template">
+				<div class="table-view">
+					<router-link :to="'/shop/' + item.shopId" class="table-view-cell" v-for="item in list">
+						<div class="img" :style="{ backgroundImage: 'url(' + item.shopImagePath.replace(/^\//, '') + ')' }"></div>
+						<div class="info">
+							<div class="icon" :style="{ backgroundImage: 'url(' + item.shopIconPath.replace(/^\//, '') + ')' }"></div>
+							<span class="name">{{ item.shopName }}</span>
+							<div class="desc">{{ item.shopDesc }}</div>
+							<div class="floor"><strong>{{ item.shopFloor }}</strong>&nbsp;&nbsp;{{ item.shopRoom }}</div>
+						</div>
+					</router-link>
+				</div>
+			</script>
+			
+			<!-- 2.4 Shop: 商铺 -->
+			<script type="text/x-template" id="shop-template">
+				<div class="shop">
+					<div class="img" :style="{ backgroundImage: 'url(' + shop.shopImagePath.replace(/^\//, '') + ')' }"></div>
+					<div class="info">
+						<div class="icon" :style="{ backgroundImage: 'url(' + shop.shopIconPath.replace(/^\//, '') + ')' }"></div>
+						<hr />
+						<span class="name">品牌名：<span class="red">{{ shop.shopName }}</span></span>
+						<div class="desc">店铺位置：{{ shop.shopDesc }}</div>
+						<div class="floor">类型：<strong>{{ shop.shopFloor }}</strong>&nbsp;&nbsp;{{ shop.shopRoom }}</div>
+						<a @click="handleBack" class="back"><i class="iconfont icon-back"></i>&nbsp;&nbsp;返回</a>
+					</div>
+					<div class="introduction">
+						<h4>品牌介绍&nbsp;&nbsp;Brand</h4>
+						<p>{{ shop.shopIntroduction }}</p>
+					</div>
+					
+					<img class="shop-nav" :src="shop.shopNavPath.replace(/^\//, '')"/>
+				</div>
+			</script>
+			
+		<!-- 2.Brand: 品牌导购-结束 -->
+		
+		<!-- 3.Floor: 楼层导购-开始 -->
+		<script type="text/x-template" id="floor-template">
+			<div class="floor">
+				<mixc-top-header title="楼层导购" sub-title="FLOOR NAVIGATION"></mixc-top-header>
+				<div class="img" :style="{ backgroundImage: 'url(' + floor.navFilePath.replace(/^\//, '') + ')' }"></div>
+				<div class="floors row">
+					<div class="title">楼层选择：</div>
+					<div class="col floor-col" @click="handlePrev"><i class="iconfont icon-prev"></i></div>
+					<div class="col floor-col" v-for="(item,index) in floors" :class="{ active: item.floorId === floor.floorId }" @click="handleClick(index)">{{ item.floorName }}</div>
+					<div class="col floor-col" @click="handleNext"><i class="iconfont icon-next"></i></div>
+				</div>
+				<div class="info">
+					<div class="build">A-栋</div>
+					<div class="name">{{ floor.floorName }}</div>
+					<div class="alias">{{ floor.floorAlias }}</div>
+					<div class="en">{{ floor.floorEn }}</div>
+					<div class="tag" v-for="tag in floor.tags">{{ tag }}</div>
+				</div>
+				<div class="shops clear">
+					<h5>本层店铺:</h5>
+					<div>
+					<router-link v-for="item in shops"  :to="'/shop/' + item.shopId">{{ item.shopName }}</a>
+					</div>
+				</div>
+			</div>
+		</script>
+		<!-- 3.Floor: 楼层导购-结束 -->
+		
+		<!-- 4.Activity: 楼层导购-开始 -->
+		<script type="text/x-template" id="activity-template">
+			<div class="activity clear">
+				<mixc-top-header title="精彩活动" sub-title="ACTIVITY CENTER"></mixc-top-header>
+				<div class="imgs">
+					<img v-for="(activity, index) in activities" @click="handleSelect(index)" :src="activity.activityFilePath.replace(/\//, '')"/>
+				</div>
+				<div class="img">
+					<img :src="currentActivity.activityFilePath.replace(/\//, '')"/>
+				</div>
+			</div>
+		</script>
+		<!-- 4.Activity: 楼层导购-结束 -->
+		
+		<!-- 5.Info: 信息介绍-开始 -->
+		<script type="text/x-template" id="info-template">
+			<div class="info clear">
+				<mixc-top-header title="商场简介" sub-title="SHOPPING MALL"></mixc-top-header>
+				<div class="side">
+					<a v-for="(item, index) in list" @click="handleClick(index, item)" :class="{ active: item.articleId == currentArticle.articleId }">{{ item.articleTitle }}</a>
+				</div>
+				<div class="content" v-html="currentArticle.articleContent">
+					
+				</div>
+			</div>
+		</script>
+		<!-- 4.Info: 信息介绍-结束 -->
+		
+		<!-- 6.article: 文章系统-开始 -->
+		<script type="text/x-template" id="article-template">
+			<div class="article">
+				<mixc-top-header :title="data.articleTitle" sub-title="SHOPPING MALL"></mixc-top-header>
+				<div class="content" v-html="data.articleContent"></div>
+			</div>
+		</script>
+		<!-- 4.Info: 文章系统-结束 -->
+		
+
+		<script src="lib/vue/vue.js"></script>
+		<script src="lib/vue-router/vue-router.min.js"></script>
+		<script src="lib/swiper/idangerous.swiper.min.js"></script>
+		<script src="lib/jquery/jquery-3.1.1.min.js"></script>
+		<script src="js/main.js"></script>
+		<script src="js/setting.js"></script>
+		<!--<script src="js/ads-start.js"></script>-->
+	</body>
+
+</html>

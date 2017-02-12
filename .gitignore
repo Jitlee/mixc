@@ -1,0 +1,17 @@
+.idea
+composer.lock
+*.log
+thinkphp
+
+*.zip
+.DS_Store
+uploads
+node_modules
+code/server/public/static/*
+code/web/dist/*
+release
+client1
+client2
+client3
+client4
+client_template

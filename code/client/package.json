@@ -1,0 +1,22 @@
+{
+  "name": "mixc",
+  "version": "0.0.1",
+  "main": "main.js",
+  "window": {
+    "title": "商场导航软件",
+    "icon": "",
+    "frame": false,
+    "position": "center",
+    "width": 400,
+    "height": 300,
+    "fullscreen": false,
+    "resizable": false,
+    "always-on-top": true,
+    "show_in_taskbar": true
+  },
+  "dependencies": {
+    "machinepack-zip": "^1.1.0",
+    "md5": "^2.2.1",
+    "request": "^2.79.0"
+  }
+}
