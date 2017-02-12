@@ -74,7 +74,7 @@ ipcMain.on('open-ads', (evt) => {
 
 // 定时更新
 let updateTimeHandler = 0
-const CHECK_VERSION_INTERVAL = 5000
+const CHECK_VERSION_INTERVAL = 15*60*1000 // 15分钟检查更新一次
 function autoUpdate() {
 	clearTimeout(updateTimeHandler)
 	updateTimeHandler = setTimeout(checkVersion, CHECK_VERSION_INTERVAL)
@@ -88,6 +88,7 @@ function checkVersion() {
 			console.log(err)
 		}
 		if(!(rst == 2 && mainWindow)) {
+			autoUpdate()
 			return
 		}
 		mainWindow.loadURL(url.format({
@@ -96,6 +97,7 @@ function checkVersion() {
 		  slashes: true
 		}))
 		console.log('auto update sucess： ' + new Date().toTimeString())
+		autoUpdate()
 	}, true)
 }
 autoUpdate()
