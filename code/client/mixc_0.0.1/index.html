@@ -7,17 +7,35 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title>商场导购平台</title>
 
+		<link rel="stylesheet" href="css/animate.min.css" charset="utf-8"/>
 		<link rel="stylesheet" href="css/app.css" charset="utf-8"/>
 		<link rel="stylesheet" href="iconfont/iconfont.css" charset="utf-8"/>
 		<link rel="stylesheet" href="lib/swiper/idangerous.swiper.css" charset="utf-8"/>
+		<style>
+			.bounce-enter-active {
+				transition: transform 0.5s;
+			}
+			
+			.bounce-leave-active {
+				transition: opacity 0.2s;
+			}
+			
+			.bounce-enter {
+				transform: translateX(50%);
+			}
+			
+			.bounce-leave-active {
+				opacity: 0;
+			}
+		</style>
 	</head>
 
 	<body>
 		<!-- app -->
 		<div id="app">
-			<router-view>
-				欢迎光临
-			</router-view>
+			<transition name="bounce" mode="out-in">
+				<router-view></router-view>
+			</transition>
 		</div>
 
 		<!-- 1 home: 首页模版－开始 -->
@@ -39,7 +57,9 @@
 					<div class="swiper-wrapper">
 						<div class="swiper-slide" v-for="item in list" :style="{ backgroundImage: 'url(' + item.adsFilePath.replace(/^\//, '') + ')' }"></div>
 					</div>
+
 					<div class="pagination"></div>
+
 				</div>
 			</script>
 	
@@ -90,7 +110,7 @@
 							<div class="title">品类查找</div>
 						</div>
 						<div class="menus clear" :class="{ letter: tab == 1 || tab == 2 }">
-							<a v-for="(item, index) in menus" @click="handleMenu($event, index)" :class="{ active: filterIndex == index }">{{ item }}</a>
+							<a v-for="(item, index) in menus" class="animated flipInX" @click="handleMenu($event, index)" :style="{ 'animation-delay': index * 0.1 + 's' }" :class="{ active: filterIndex == index }">{{ item }}</a>
 						</div>
 					</div>
 					<div class="submenus" ref="submenus" style="display: none">
@@ -241,8 +261,7 @@
 		<script src="lib/swiper/idangerous.swiper.min.js"></script>
 		<script src="lib/jquery/jquery-3.1.1.min.js"></script>
 		<script src="js/main.js"></script>
-		<script src="js/setting.js"></script>
-		<!--<script src="js/ads-start.js"></script>-->
+		<script src="js/ads.js"></script>
 	</body>
 
 </html>

@@ -2,66 +2,45 @@ const {app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
 
+const nodeConsole = require('console');
+const console = new nodeConsole.Console(process.stdout, process.stderr);
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let startWindow = null
 
 function createWindow () {
-  // Create the browser window.
   startWindow = new BrowserWindow({width: 400, height: 300, alwaysOnTop: true, frame: false, resize: false, center: true })
 
-  // and load the index.html of the app.
   startWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'start.html'),
     protocol: 'file:',
     slashes: true
   }))
 
-  // Open the DevTools.
-	startWindow.webContents.openDevTools()
-
-  // Emitted when the window is closed.
   startWindow.on('closed', () => { startWindow = null })
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on('ready', createWindow)
 
-// Quit when all windows are closed.
 app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  if (process.platform !== 'darwin') { app.quit() }
 })
-//
-//app.on('activate', () => {
-//// On macOS it's common to re-create a window in the app when the
-//// dock icon is clicked and there are no other windows open.
-//if (win === null) {
-//  createWindow()
-//}
-//})
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
 
-// 启动主界面
 const cv = require('./js/checkversion.js')
+// 启动主界面
 let mainWindow = null
 ipcMain.on('open-main', () => {
-	mainWindow = new BrowserWindow({ alwaysOnTop: true, modal: true, fullscreen: true, frame: false, })
+	mainWindow = new BrowserWindow({ alwaysOnTop: true, modal: true, fullscreen: true, frame: false, resize: false, center: true })
 	mainWindow.setMenu(null)
 	mainWindow.loadURL(url.format({
-	  	pathname: cv.getMainPath(),
+	  	pathname: cv.getMainPath('index.html'),
 	    protocol: 'file:',
 	    slashes: true
 	}))
 	startWindow && startWindow.close()
-	mainWindow.on('closed', () => { startWindow = null })
+	mainWindow.on('closed', () => { mainWindow = null })
 	mainWindow.webContents.openDevTools()
 })
 
@@ -74,5 +53,49 @@ ipcMain.on('open-setting', () => {
     protocol: 'file:',
     slashes: true
   }))
-//	settingWindow.webContents.openDevTools()
-});
+})
+
+// 启动广告页面
+let adsWindow = null
+ipcMain.on('open-ads', (evt) => {
+	if(adsWindow) { return }
+	adsWindow = new BrowserWindow({ parent: mainWindow,alwaysOnTop: true, modal: true, fullscreen: true, frame: false, resize: false, center: true })
+	adsWindow.setMenu(null)
+  adsWindow.loadURL(url.format({
+    pathname: cv.getMainPath('ads.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
+  adsWindow.on('closed', () => { 
+  	adsWindow = null
+  	evt.sender.send('auto-ads')
+  })
+})
+
+// 定时更新
+let updateTimeHandler = 0
+const CHECK_VERSION_INTERVAL = 5000
+function autoUpdate() {
+	clearTimeout(updateTimeHandler)
+	updateTimeHandler = setTimeout(checkVersion, CHECK_VERSION_INTERVAL)
+}
+
+function checkVersion() {
+	console.log('begin auto check version:  ' + new Date().toTimeString())
+	cv.checkVersion((rst, msg, err) => {
+		console.log('check version result:  ' + rst + ', ' + new Date().toTimeString())
+		if(err) {
+			console.log(err)
+		}
+		if(!(rst == 2 && mainWindow)) {
+			return
+		}
+		mainWindow.loadURL(url.format({
+		  pathname: cv.getMainPath('index.html'),
+		  protocol: 'file:',
+		  slashes: true
+		}))
+		console.log('auto update sucess： ' + new Date().toTimeString())
+	}, true)
+}
+autoUpdate()

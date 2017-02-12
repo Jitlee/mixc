@@ -5,6 +5,6 @@
 	
 	const remote = require('electron').remote
 	w.addEventListener('click', () => {
-		remote.getCurrentWindow().hide()
+		remote.getCurrentWindow().close()
 	});
 })(window)
