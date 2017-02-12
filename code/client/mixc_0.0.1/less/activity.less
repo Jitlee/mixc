@@ -1,0 +1,31 @@
+// 精彩活动
+
+.activity {
+    @_w: 28vw;
+    @w: calc(~"@{_w} - 40px");
+    @h: calc(~"74vh - 40px");
+    
+    .imgs {
+        overflow: auto;
+        height: @h;
+        width: @w;
+        float: left;
+        
+        img {
+            margin-top: 20px;
+            width: 100%;
+        }
+    }
+    
+    .img {
+        margin-left: 20px;
+        margin-top: 20px;
+        width: calc(~"100vw - @{_w}");
+        height: @h;
+        float: left;
+        
+        img {
+            width: 100%;
+        }
+    }
+}

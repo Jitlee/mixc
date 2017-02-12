@@ -10,11 +10,12 @@ class Release extends Model
 {
 	protected $type = [
         'isDeleted'  	=>  'boolean',
+        'isEnabled'  	=>  'boolean',
         'releaseId'  	=>  'integer',
     ];
 	public function _query($pageNo = 1) {
 		$list = $this->alias('r')
-			->field('release_id releaseId, release_version releaseVersion, release_desc releaseDesc, release_file releaseFile, create_time createTime, (is_deleted = \'Y\') isDeleted')
+			->field('release_id releaseId, release_version releaseVersion, release_desc releaseDesc, release_file releaseFile, create_time createTime, (is_enabled = \'Y\') isEnabled')
 			->order('r.create_time desc')
 			->page($pageNo, config('page_size'))->select();
 		
@@ -32,6 +33,7 @@ class Release extends Model
 			->field('release_id releaseId, release_version releaseVersion, release_desc releaseDesc, release_file releaseFile, create_time createTime')
 			->where('r.scene_id', $sceneId)
 			->where('r.is_deleted', 'N')
+			->where('r.is_enabled', 'Y')
 			->order('r.create_time desc')
 			->find();
 	}
@@ -72,6 +74,10 @@ class Release extends Model
 //		    echo dump($e);
 		    return false;
 		}
+	}
+	
+	public function enable($releaseId = 0, $isEabled = false) {
+		$this->where('release_id', $releaseId)->update(['is_enabled' => $isEabled ? 'Y' : 'N']);
 	}
 }
 ?>

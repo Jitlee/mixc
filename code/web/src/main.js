@@ -42,10 +42,9 @@ Vue.http.options.emulateJSON = true
 
 Vue.http.interceptors.push(function(request, next) {
 //	
-//	if(request.url.indexOf('http://') != 0) {
-//		request.url = 'http://localhost:8001' + request.url
-//	}
-	
+	if(window.location.hostname == 'localhost') {
+		request.url = 'http://localhost:8001' + request.url
+	}
 　　	next(function(response) {
 		if(typeof this.formLoading == "boolean") {
 			this.formLoading = false;
@@ -64,6 +63,8 @@ Vue.http.interceptors.push(function(request, next) {
 				}
 			} else if(response.data.msg) {
 				this.$message.error(response.data.msg);
+			} else {
+	  			this.$message.error('网络异常，请稍后再试');
 			}
 	  	} else {
 	  		this.$message.error('网络异常，请稍后再试');

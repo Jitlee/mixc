@@ -1,5 +1,5 @@
 (function(w) {
-	if(!require) {
+	if(!w.require) {
 		return
 	}
 	

@@ -1,0 +1,42 @@
+// 商场简介
+
+.info {
+    @_w: 28vw;
+    @w: calc(~"@{_w} - 40px");
+    @h: calc(~"74vh - 40px");
+    
+    .side {
+        overflow: auto;
+        height: @h;
+        width: @w;
+        float: left;
+        
+        a {
+            margin-top: 20px;
+            background-color: @achive-bg-color;
+            display: block;
+            vertical-align: middle;
+            text-align: center;
+            .nowrap();
+            
+            height: 4vh;
+            line-height: 4vh;
+            font-size: 2vh;
+        }
+        
+        a.active {
+            background-color: @achive-bg-active-color;
+        }
+    }
+    
+    .content {
+        color: #333;
+        margin-left: 20px;
+        margin-top: 20px;
+        width: calc(~"100vw - @{_w}");
+        height: @h;
+        float: left;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+}

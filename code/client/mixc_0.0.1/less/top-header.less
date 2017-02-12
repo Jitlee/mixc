@@ -1,0 +1,148 @@
+.top-header {
+    display: block;
+    position: relative;
+    height: 26vh;
+    overflow: hidden;
+    color: @font-color;
+    
+    @h1: 14vh;
+    @h2: 7.5vh;
+    @h3: 4.5vh;
+    
+    @w1: 47vw;
+    @w2: 28.2vw;
+    @w3: calc(~"25vw - 20px");
+    
+    @w1-2: 75vw;
+    @h1-2: 21.5vh;
+    @h2-3: 12vh;
+    
+    .block1 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: @h1;
+        width: @w1;
+        background-color: @nav-block1;
+    }
+    
+    .block2 {
+        position: absolute;
+        top: 0;
+        left: @w1;
+        height: @h1;
+        width: @w2;
+        background-color: @nav-block2;
+    }
+    
+    .block3 {
+        position: absolute;
+        top: 0;
+        left: @w1-2;
+        height: @h1;
+        width: @w3;   
+        background-color: @nav-block3;
+    }
+    
+    .block4 {
+        position: absolute;
+        top: @h1;
+        left: 0;
+        height: @h2;
+        width: @w1;
+        background-color: @nav-block2;
+    }
+    
+    .block5 {
+        position: absolute;
+        top: @h1;
+        left: @w1;
+        height: @h2;
+        width: @w2;
+        background-color: @nav-block3;
+    }
+    
+    .block6 {
+        position: absolute;
+        top: @h1-2;
+        left: 0;
+        height: @h3;
+        width: @w1-2;
+        background-color: @nav-block1;
+        line-height: @h3;
+    }
+    
+    .block6>* {
+        padding-right: 10px;
+        font-size: 1.5vh;
+    }
+    
+    .block7 {
+        display: block;
+        position: absolute;
+        top: @h1;
+        left: @w1-2;
+        height: @h2-3;
+        width: @w3; 
+        background-color: @nav-block7;
+        padding-top: 1.8vh;
+        
+        .iconfont {
+            font-size: 5vh;
+        }
+        
+        .title {
+            font-size: 0.8vh;
+            padding-top: 0.5vh;
+        }
+    }
+    
+    .block8 {
+        position: absolute;
+        right: @w3;
+        bottom: @h2-3;
+        text-align: right;
+        
+        .h() {
+            padding: 0;
+            margin: 0;
+            padding: 10px;
+        }
+        
+        
+        h1 {
+            .h();
+            font-size: 3.2vh;
+        }
+        
+        h2 {
+            .h();
+            font-size: 2.4vh;
+            padding-bottom: 1vh;
+        }
+    }
+    
+    .block9 {
+        position: absolute;
+        top: @h1;
+        left: 0;
+        height: @h2;
+        width: @w1-2;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        display: table;
+        
+        li {
+            padding: 0;
+            text-align: center;
+            display: table-cell;
+            line-height: @h2;
+        }
+        
+        .iconfont {
+            color: rgba(255,255,255, 0.5);
+            font-size: 2.4vh;
+        }
+    }
+}

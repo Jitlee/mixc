@@ -1,0 +1,146 @@
+.brand {
+    position: relative;
+    
+    a {
+        background-color: @achive-bg-color;
+        display: block;
+        vertical-align: middle;
+        text-align: center;
+        .nowrap();
+    }
+    
+    a.active {
+        background-color: @achive-bg-active-color;
+    }
+    
+    .side {
+        position: fixed;
+        width: 14vh;
+        top: 28.5vh;
+        left: 10px;
+        
+        .top {
+            height: 14vh;
+            background-color: @nav-block1;
+            position: relative;
+            
+            padding-top: 0.5vh;
+            
+            a {
+                margin-top: 0.5vh;
+                padding-top: 0.3vh;
+                width: 6vh;
+                font-size: 0.3vh;
+                line-height: 1.5vh;
+                height: 1.5vh;
+            }
+            
+            hr {
+                padding: 0;
+                margin: 0;
+                background-color: @font-color;
+                height: 1px;
+                top: 0px;
+                right: 0px;
+                left: 2vh;
+                transform-origin: right;
+                border: 0;
+                transform: rotate(-45deg);
+            }
+            
+            .title {
+                font-size: 2vh;
+                right: 10px;
+                bottom: 10px;
+                position:absolute;
+            }
+        }
+        
+        .menus {
+            a {
+                margin-top: 1vh;
+                height: 4vh;
+                line-height: 4vh;
+                font-size: 1.6vh;
+            }
+            &.letter {
+                a {
+                    width: 4vh;
+                    float: left;
+                    margin-right: 1vh;
+                }
+                
+                a:nth-child(3n) {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+        
+    .submenus {
+        position: absolute;
+        left: calc(~"14vh + 10px");
+        width: 8vh;
+        z-index: 99;
+        
+        a {
+            height: 2vh;
+            line-height: 2vh;
+            font-size: 1vh;
+            box-sizing: border-box;
+            border: solid 1px @border-color;
+        }
+    }
+    
+    .content {
+        padding-left: calc(~"14vh + 20px");
+        height: 71.5vh;
+        overflow: auto;
+        
+        .table-view-cell {
+            margin-top: calc(~"2.5vh - 10px");
+            height: 14vh;
+            border: 1px solid @border-color;
+            color: @gray-color;
+            background-color: inherit;
+            
+            .img {
+                .bgimg();
+                border-left: 1px solid @border-color;
+                position: absolute;
+                top: 0;
+                right: 0;
+                left: 14vh;
+                bottom: 0;
+            }
+            
+            .info {
+                text-align: center;
+                width: 14vh;
+                .icon {
+                    .bgimg();
+                    border-radius: 50%;
+                    height: 3.8vh;
+                    width: 3.8vh;
+                    margin: 1.9vh auto;
+                }
+                
+                .name {
+                    font-size: 1.4vh;
+                    color: @font-color;
+                    background-color: @black-color;
+                }
+                
+                .desc {
+                    font-size: 1vh;
+                    padding-top: 0.8vh;
+                }
+                
+                .floor {
+                    font-size: 1.2vh;
+                    padding-top: 0.8vh;
+                }
+            }
+        }
+    }
+}

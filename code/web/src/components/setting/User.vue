@@ -17,13 +17,13 @@
 			<el-table-column inline-template label="手机">
 				<div>{{ row.phone }}</div>
 			</el-table-column>
-			<el-table-column inline-template label="状态">
-				<el-tag :type="row.isEnabled ? 'success' : 'gray'" close-transition>{{ row.isEnabled ? '已启用' : '已停用' }}</el-tag>
-			</el-table-column>
+			<el-table-column inline-template label="状态"  width="80px">
+				<i class="el-icon-circle-check" style="font-size: 18px; cursor: pointer" :style="{ color: row.isEnabled ? '#00b642' : '#999' }" @click="handleEnabled($index, row)"></i>
+    		</el-table-column>
 			<el-table-column :context="_self" inline-template label="操作" width="150px">
 				<div>
 					<el-button size="small" @click="handleEdit($index, row)">编辑</el-button>
-					<el-button size="small" type="danger" @click="handleDelete($index, row)">删除</el-button>
+					<el-button size="small" type="danger" @click="handleDelete($index, row)" :disabled="row.uid == uid">删除</el-button>
 				</div>
 			</el-table-column>
 		</el-table>
@@ -71,19 +71,23 @@
 <script>
 export default {
 	data() {
+		let clientId = this.$store.state.client.clientId
+		let uid = this.$store.state.user.uid
 		return {
 			list: [],
 			loading: true,
 				
 			currentPage: 1,
 			totalCount: 0,
-			clientId: 0,
+			clientId: clientId,
+			uid: uid,
 			
 			formTitle: "",
 			formLoading: false,
 			formVisible: false,
 			formData: {
 				uid: 0,
+				clientId: clientId,
 				username: '',
 				displayName: '',
 				trueName: '',
@@ -136,30 +140,32 @@ export default {
 		},
 		
 		handleAdd() {
-			this.formTitle = "新增用户";
-			this.formData.uid = 0;
-			this.formData.username = '';
-			this.formData.displayName = '';
-			this.formData.trueName = '';
-			this.formData.phone = '';
-			this.formData.tel = '';
-			this.formData.email = '';
-			this.formData.sex = 'M';
-			this.formData.remark = '';
-			this.formVisible = true;
+			this.formTitle = "新增用户"
+			this.formData.uid = 0
+			this.formData.clientId = this.clientId
+			this.formData.username = ''
+			this.formData.displayName = ''
+			this.formData.trueName = ''
+			this.formData.phone = ''
+			this.formData.tel = ''
+			this.formData.email = ''
+			this.formData.sex = 'M'
+			this.formData.remark = ''
+			this.formVisible = true
 		},
 		handleEdit(index, row) {
-			this.formData.formTitle = "编辑用户";
-			this.formData.uid = row.uid;
-			this.formData.username = row.username;
-			this.formData.displayName = row.displayName;
-			this.formData.trueName = row.trueName;
-			this.formData.phone = row.phone;
-			this.formData.tel = row.tel;
-			this.formData.email = row.email;
-			this.formData.sex = row.sex;
-			this.formData.remark = row.remark;
-			this.formVisible = true;
+			this.formData.formTitle = "编辑用户"
+			this.formData.uid = row.uid
+			this.formData.clientId = row.clientId
+			this.formData.username = row.username
+			this.formData.displayName = row.displayName
+			this.formData.trueName = row.trueName
+			this.formData.phone = row.phone
+			this.formData.tel = row.tel
+			this.formData.email = row.email
+			this.formData.sex = row.sex
+			this.formData.remark = row.remark
+			this.formVisible = true
 		},
 		handleDelete(index, row) {
 			this.$confirm('确认删除该用户吗?', '提示', {
@@ -190,6 +196,20 @@ export default {
 						this.page(this.currentPage);
 					}
 				});
+			});
+		},
+		
+		handleEnabled(index, row) {
+			if(row.uid == this.uid) {
+				return
+			}
+			
+			this.loading = true
+			let url = ["/api/user/enable", row.uid, row.isEnabled ? 0 : 1].join("/")
+			this.$http.patch(url).then((response) => {
+				if(response.nice) {
+					row.isEnabled = !row.isEnabled
+				}
 			});
 		}
 	}

@@ -249,4 +249,17 @@ class Release {
             return fail('删除失败');
         }
     }
+	
+	/**
+	 * patch: 启用／停用设置
+	 * path: enable/{releaseId}/{enabled}
+	 * method: enable
+	 * param: releaseId - {int} 版本id
+	 * param: enabled - {int} 0停用，1启用
+	 */
+	public function enable($releaseId = 0, $enabled = 0) {
+        $db = model('Release');
+		$db->enable($releaseId, $enabled == 1);
+		return success(true);
+	}
 }

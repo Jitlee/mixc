@@ -21,14 +21,14 @@
 		switch(adsTargetType) {
 			case -1:
 				if(adsTargetId > 0) {
-					path = '/brand/' + adsTargetId;
+					path = '/shop/' + adsTargetId;
 				} else {
-					path = '/brand/0'
+					path = '/shop/0'
 				}
 				break;
 			case -2:
 				if(adsTargetId > 0) {
-					path = '/shop/' + adsTargetId;
+					path = '/brand/' + adsTargetId;
 				} else {
 					path = '/brand/0'
 				}
@@ -683,7 +683,33 @@
 				date: '01',
 				week: '一',
 				hour: '00',
-				minute: '00'
+				minutes: '00'
+			}
+		},
+		created() {
+			this.formatTimer()
+		},
+		methods: {
+			beginTimer() {
+				const now = new Date()
+				if(now.getSeconds() == 0) {
+					setInterval(this.formatTimer.bind(this), 6*1000)
+				} else {
+					setTimeout(this.beginTimer.bind(this), (60 - now.getSeconds()) * 1000)
+				}
+			},
+			formatTimer() {
+				const now = new Date()
+				const month = now.getMonth() + 1
+				const date = now.getDate()
+				const hour = now.getHours()
+				const minutes = now.getMinutes()
+				this.year = now.getFullYear()
+				this.month = month > 9 ? month : ('0' + month)
+				this.date = date > 9 ? date : ('0' + date)
+				this.week = WEEKS[now.getDay()]
+				this.hour = hour > 9 ? hour : ('0' + hour)
+				this.minutes = minutes > 9 ? minutes : ('0' + minutes)
 			}
 		}
 	});
@@ -719,10 +745,35 @@
 				date: '01',
 				week: '一',
 				hour: '00',
-				minute: '00'
+				minutes: '00'
 			}
 		},
-		
+		created() {
+			this.formatTimer()
+		},
+		methods: {
+			beginTimer() {
+				const now = new Date()
+				if(now.getSeconds() == 0) {
+					setInterval(this.formatTimer.bind(this), 6*1000)
+				} else {
+					setTimeout(this.beginTimer.bind(this), (60 - now.getSeconds()) * 1000)
+				}
+			},
+			formatTimer() {
+				const now = new Date()
+				const month = now.getMonth() + 1
+				const date = now.getDate()
+				const hour = now.getHours()
+				const minutes = now.getMinutes()
+				this.year = now.getFullYear()
+				this.month = month > 9 ? month : ('0' + month)
+				this.date = date > 9 ? date : ('0' + date)
+				this.week = WEEKS[now.getDay()]
+				this.hour = hour > 9 ? hour : ('0' + hour)
+				this.minutes = minutes > 9 ? minutes : ('0' + minutes)
+			}
+		}
 	});
 	
 	Vue.component('mixc-home-nav', {

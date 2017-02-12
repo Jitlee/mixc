@@ -1,5 +1,5 @@
 (function(w, d){
-	if(!require) return
+	if(!w.require) return
 	let actions = [];
 	var timeoutHandle = 0;
 	w.addEventListener('click', function(evt) {

@@ -1,0 +1,138 @@
+// 楼层导购
+
+.floor {
+    position: relative;
+    
+    .img {
+        .bgimg();
+        height: 35vh;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .floors {
+        background-color: @nav-block1;
+        height: 6vh;
+        line-height: 6vh;
+        text-align: center;
+        padding-left: 10vh;
+        position: relative;
+        overflow: hidden;
+        
+        &, & .iconfont {
+            font-size: 2.4vh;
+        }
+        
+        &, .row, col {
+            box-sizing: border-box;
+        }
+        
+        .col.active {
+            color: @wheel-bg-color;
+            transform: scale(1.3);
+            transform-origin: 50% 50%;
+        }
+        
+        .title {
+            font-size: 1vh;
+            position: absolute;
+            top: 50%;
+            left: 1vh;
+            transform: translateY(-50%);
+        }
+    }
+    
+    @h: calc(~"33vh - 40px");
+    @w: 16vh;
+    .info {
+        position: absolute;
+        left: 0px;
+        height: @h;
+        width: @w;
+        padding-top: 2vh;
+        box-sizing: border-box;
+        border: solid 1px @border-color;
+        background-color: @font-color;
+        
+        .indent() {
+            text-indent: 4vh;
+        }
+        .build {
+            width: 4vh;
+            height:4vh;
+            line-height:4vh;
+            font-size: 2vh;
+            text-align: center;
+            margin: auto;
+            border-radius: 50%;
+            background-color:  @wheel-bg-color; 
+            .nowrap();
+            text-overflow: clip;
+        }
+        
+        .name {
+            color: @wheel-bg-color;
+            font-size: 7vh;
+            line-height: 9vh;
+            font-family: -webkit-pictograph;
+            .nowrap();
+            .indent();
+        }
+        
+        .alias {
+            color: rgb(102,163, 17);
+            font-size: 2vh;
+            line-height: 3vh;
+            .nowrap();
+            .indent();
+        }
+        
+        .en {
+            color: @nav-block1;
+            font-size: 1vh;
+            line-height: 2vh;
+            padding-bottom: 0.5vh;
+            .nowrap();
+            .indent();
+        }
+        
+        .tag {
+            color: @gray-color;
+            font-size: 1.5vh;
+            line-height: 2.5vh;
+            .nowrap();
+            .indent();
+        }
+    }
+    
+    .shops {
+        box-sizing: border-box;
+        border: solid 1px @border-color;
+        background-color: @light-color;
+        padding-left: calc(~"@{w} + 2vh");
+        height: @h;
+        overflow: auto;
+        
+        h5 {
+            color: @rose-color;
+            line-height: 4vh;
+        }
+        
+        a {
+            display: block;
+            background-color: @font-color;
+            color: @gray-color;
+            font-size: 1vh;
+            float: left;
+            height: 4vh;
+            line-height: 4vh;
+            margin-right: 1vh;
+            width: calc(~"(100vw - 22vh - 20px) / 3");
+            text-align: center;
+        }
+        
+        a:nth-child(3n) {
+            margin-right: 0vh;
+        }
+     }
+}

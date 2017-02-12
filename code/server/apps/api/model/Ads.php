@@ -48,7 +48,7 @@ class Ads extends Model
 		$list =  $db->order('a.ads_start_date asc, a.ads_group_id asc')
 			->page($pageNo, config('page_size'))->select();
 		
-//		echo $this->getLastSql();
+		echo $this->getLastSql();
 		
 		$db = $this->alias('a');
 			

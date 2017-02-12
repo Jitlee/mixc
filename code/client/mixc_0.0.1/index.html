@@ -78,8 +78,8 @@
 				<div class="home-widget">
 					<div class="row">
 						<div class="col city">深圳</div>
-						<div class="col time">{{ hour }}:{{ minute }}</div>
-						<div class="col build align-right">深圳万象城</div>
+						<div class="col time">{{ hour }}:{{ minutes }}</div>
+						<div class="col build align-right">名称中心</div>
 					</div>
 					<h5>{{ year }}-{{ month }}-{{ date }} 星期{{ week }}</h5>
 				</div>
@@ -142,13 +142,23 @@
 						<h2>{{ subTitle }}</h2>
 						<h1>{{ title }}</h1>
 					</div>
+					<ul class="block9">
+						  <li><i class="iconfont icon-tshirt"></i></li>
+						  <li><i class="iconfont icon-qunzi"></i></li>
+						  <li><i class="iconfont icon-underwear"></i></li>
+						  <li><i class="iconfont icon-kuzi"></i></li>
+						  <li><i class="iconfont icon-baobao"></i></li>
+						  <li><i class="iconfont icon-kouhong"></i></li>
+						  <li><i class="iconfont icon-shoubiao"></i></li>
+						  <li><i class="iconfont icon-yanjing"></i></li>
+					</ul>
 				</header>
 			</script>
 			
 			<!-- 2.2 Timer: 通用题头-->
 			<script type="text/x-template" id="top-timer-template">
 				<span>
-					{{year}}.{{month}}.{{date}}&nbsp;&nbsp;星期{{week}}&nbsp;&nbsp;{{hour}}:{{minute}}
+					{{year}}.{{month}}.{{date}}&nbsp;&nbsp;星期{{week}}&nbsp;&nbsp;{{hour}}:{{minutes}}
 				</span>
 			</script>
 			

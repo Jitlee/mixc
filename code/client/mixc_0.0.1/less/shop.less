@@ -1,0 +1,100 @@
+// 商铺详情
+.shop {
+    position: relative;
+    @w: 22vh;
+    @h: 26vh;
+    
+    .img {
+        .bgimg();
+        margin-right: @w;
+        height: @h;
+    }
+    
+    .info {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        height: @h;
+        width: @w;
+        color: @black-color;
+        padding: 10px;
+        box-sizing: border-box;
+        
+       .icon {
+            .bgimg();
+            border-radius: 50%;
+            height: 3.8vh;
+            width: 3.8vh;
+            margin: 0 auto 1.9vh auto;
+        }
+        
+        hr {
+            border: 0;
+            height: 1px;
+            background-color: @border-color;
+        }
+        
+        .name {
+            font-size: 1vh;
+            .red {
+                color: @red-color;
+            }
+        }
+        
+        .desc {
+            font-size: 1vh;
+            padding-top: 1.5vh;
+        }
+        
+        .floor {
+            font-size: 1vh;
+            padding-top: 1.5vh;
+        }
+        
+        .back {
+            display: block;
+            
+            position: absolute;
+            background-color: @shop-bg-color;
+            right: 0;
+            bottom:0;
+            width: 9vh;
+            height: 6vh;
+            line-height: 6vh;
+            
+            text-align: center;
+            font-size: 1vh;
+            
+            .iconfont {
+                font-size: 1vh;
+            }
+        }
+    }
+        
+    .introduction {
+        margin-top: 10px;
+        padding: 10px;
+        
+        box-sizing: border-box;
+        background-color: @shop-bg-color;
+        
+        h4 {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            height: 5vh;
+            line-height: 5vh;
+            font-size: 2vh;
+        }
+        
+        p {
+            font-size: 1vh;
+        }
+    }
+    
+    .shop-nav {
+        box-sizing: border-box;
+        margin-top: 10px;
+        width: 100%;
+    }
+}

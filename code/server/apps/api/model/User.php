@@ -14,7 +14,7 @@ class User extends Model
         'clientId'		=> 'integer'
     ];
     
-	public function _query($pageNo = 1) {
+	public function _query($clientId = 0, $pageNo = 1) {
 		$db = $this->alias('u')
 			->field('u.uid, u.display_name displayName, u.username, i.true_name trueName, i.phone, i.tel, i.email, i.sex, i.remark, (is_enabled = \'Y\') isEnabled')
 			->join('__USER_INFO__ i', 'u.uid = i.uid')->where('is_deleted', 'N');
@@ -32,14 +32,17 @@ class User extends Model
 			}
 		}
 		
-		$list =  $db->order('u.create_time desc')
+		$list =  $db
+			->where('is_deleted', 'N')
+			->where('u.client_id', $clientId)
+			->order('u.create_time desc')
 			->page($pageNo, config('page_size'))->select();
 		
 		$db = $this->alias('u')
-			->join('__USER_INFO__ i', 'u.uid = i.uid')->where('is_deleted', 'N');
+			->join('__USER_INFO__ i', 'u.uid = i.uid')
+			->where('is_deleted', 'N')
+			->where('u.client_id', $clientId);
 			
-		$request = Request::instance();
-		$keywords = $request->get('keywords', '');
 		if($keywords != '') {
 			if(preg_match('/^1\d+$/', $keywords)) {
 				$db = $db->where('i.phone', $keywords);
@@ -51,7 +54,10 @@ class User extends Model
 			}
 		}
 		
-		$total = $db->count();
+		$total = $db
+			->where('is_deleted', 'N')
+			->where('u.client_id', $clientId)
+			->count();
 			
 		return [
 			'list' => $list,

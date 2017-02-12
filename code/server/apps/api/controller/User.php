@@ -7,14 +7,15 @@ namespace app\api\controller;
 class User {
 	/**
 	 * get: 获取用户列表
-	 * path: lst/{pageNo}
+	 * path: lst/{clientId}/{pageNo}
 	 * method: lst
+	 * param: clientId - {int} 客户id
 	 * param: pageNo - {int} 页码，从1开始
 	 * param: keywords - {string} = '' 关键字
 	 */
-	public function lst($pageNo = 1) {
+	public function lst($clientId = 0, $pageNo = 1) {
 		$user = model('User');
-		$list = $user->_query($pageNo);
+		$list = $user->_query($clientId, $pageNo);
 		return success($list);
 	}
 	
