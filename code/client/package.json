@@ -14,6 +14,9 @@
     "always-on-top": true,
     "show_in_taskbar": true
   },
+  "scripts": {
+    "packager": "electron-packager . --platform=win32 --arch=all --electron-version=1.4.13 --out ./package --overwrite --icon=./app.ico"
+  },
   "dependencies": {
     "machinepack-zip": "^1.1.0",
     "md5": "^2.2.1",
