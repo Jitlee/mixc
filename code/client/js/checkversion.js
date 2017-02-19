@@ -48,7 +48,7 @@ function resetConfig() {
 	saveConfig(newConfig)
 }
 
-function checkVersion(callback, autoUpdate) {
+function checkVersion(callback, autoUpdate, process) {
 //	callback(0, '已经是最新版本');
 //	return;
 	const config = readConfig()
@@ -56,7 +56,8 @@ function checkVersion(callback, autoUpdate) {
 	getJSON(url, function(rst) {
 		if(formatVersion(rst.releaseVersion) > formatVersion(config.version)) {
 			if(autoUpdate) {
-				update(config, rst, callback)
+				process && process(1)
+				update(config, rst, callback, process)
 			} else {
 				callback(1, rst)
 			}
@@ -68,7 +69,7 @@ function checkVersion(callback, autoUpdate) {
 	})
 }
 
-function update(config, rst, callback) {
+function update(config, rst, callback, process) {
 	const fileUrl = ['http://', urlTrim(config.server),
 			':', config.port, '\/', rst.releaseFile].join('');
 	const now = new Date().getTime();
@@ -81,21 +82,26 @@ function update(config, rst, callback) {
 			callback(-3, '创建临时目录失败');
 			return
 		}
+		
+		process && process(2)
 		request({url: fileUrl, encoding: null}, function(err, resp, body) {
 			if(err) {
 		  		callback(-2, '下载资源包失败');
 		  	} else {
+		  		process && process(3)
 			  	fs.writeFile(zipPath, body, function(err) {
 			  		if(err) {
 			  			callback(-4, '资源包写入失败');
 			  			return
 			  		}
+			  		process && process(4)
 			    	zip.unzip({ source: zipPath, destination: outPath, }).exec({
 						error: function (err) {
 					 		callback(-5, '解压资源包失败');
 						},
 						success: function () {
-							let newConfig = cv.extend({}, config)
+							process && process(5)
+							let newConfig = extend({}, config)
 							newConfig.version = rst.releaseVersion
 							newConfig.updateTime = rst.now
 							saveConfig(newConfig, (err) => {
@@ -220,29 +226,51 @@ function extend(target, /*optional*/source, /*optional*/deep) {
 	return target; 
 };
 
-function getJSON(url, success, error){
-    var xhr = new XMLHttpRequest()
-    xhr.open('get', url, true)
-    xhr.onreadystatechange=function(){
-        if(xhr.readyState==4){
-            if(xhr.status==200){
-                try {
-                	const data = JSON.parse(xhr.responseText)
-                	if(data && data.code == 200) {
-                		success(data.rst)
-                	} else {
-                		error()
-                	}
-                } catch(e) {
-                	error()
-                }
-            } else {
-            	error()
-            }
-        }
-    }
-    xhr.send(null);
+function getJSON(url, success, error) {
+	request({ url: url }, (err, response, body) => {
+		if (err) {
+			error(err)
+		} else if(response.statusCode == 200) {
+			try {
+    			const data = JSON.parse(body)
+    			if(data && data.code == 200) {
+            		success(data.rst)
+            	} else {
+            		error()
+            	}
+    		} catch(e) {
+    			error(e)
+    		}
+    	} else {
+    		error()
+    	}
+	})
 }
+
+//
+//function getJSON(url, success, error){
+//  var xhr = new XMLHttpRequest()
+//  xhr.open('get', url, true)
+//  xhr.onreadystatechange=function(){
+//      if(xhr.readyState==4){
+//          if(xhr.status==200){
+//              try {
+//              	const data = JSON.parse(xhr.responseText)
+//              	if(data && data.code == 200) {
+//              		success(data.rst)
+//              	} else {
+//              		error()
+//              	}
+//              } catch(e) {
+//              	error()
+//              }
+//          } else {
+//          	error()
+//          }
+//      }
+//  }
+//  xhr.send(null);
+//}
 
 module.exports = {
 	config: config,

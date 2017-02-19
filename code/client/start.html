@@ -45,12 +45,31 @@
 			const cv = require('./js/checkversion.js')
 			cv.checkVersion((rst) => {
 				if(rst < 0) {
-					document.getElementById("msg").innerHTML = '检查最新版本异常'
+					showMsg('检查最新版本异常')
 				}
 				const { remote, ipcRenderer}  = require('electron')
 				const startWindow = remote.getCurrentWindow()
 				ipcRenderer.send('open-main')
-			}, true)
+			}, true, (state) => {
+				switch(state) {
+					case 1:
+						showMsg('发现新版本...')
+						break
+					case 2:
+						showMsg('下载新版本...')
+						break
+					case 3:
+						showMsg('解压资源中...')
+						break
+					case 3:
+						showMsg('更新成功...')
+						break
+				}
+			})
+			
+			function showMsg(msg) {
+				document.getElementById("msg").innerHTML = msg
+			}
 		</script>
 	</body>
 </html>
