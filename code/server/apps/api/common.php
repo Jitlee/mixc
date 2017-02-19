@@ -11,7 +11,7 @@
 
 // 应用公共文件
 
-function success($data = null, $msg = null) {
+function success($data, $msg = null) {
 	header('Access-Control-Allow-Origin:*');
 	header('Access-Control-Allow-Methods:*');
 	header('Access-Control-Allow-Headers: X-Requested-With');

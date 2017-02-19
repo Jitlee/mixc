@@ -190,7 +190,7 @@
 		components: { 'compact-picker': Compact },
 		methods: {
 			page(pageNo) {
-				let url = ['/api/ads/lst', this.clientId, 0, this.queryData.groupId || 0, 1].join('/');
+				let url = ['/api/ads/lst', this.clientId, 0, this.queryData.groupId || 0, pageNo].join('/');
 				this.loading = true;
 				this.$http.get(url).then((response) => {
 					this.loadingCount--;

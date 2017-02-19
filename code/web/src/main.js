@@ -55,10 +55,10 @@ Vue.http.interceptors.push(function(request, next) {
 		if(response.data) {
 			if(response.data.code == 200) {
 				response.nice = true;
+				if(typeof this.formVisible == "boolean") {
+					this.formVisible = false;
+				}
 				if(response.data.msg) {
-					if(typeof this.formVisible == "boolean") {
-						this.formVisible = false;
-					}
 					this.$message({ message: response.data.msg, type: 'success' });
 				}
 			} else if(response.data.msg) {

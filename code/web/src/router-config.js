@@ -50,23 +50,23 @@ export let routes = [
 			{
 				path: '/scene/floor', icon: 'icon-shop', name: '楼层管理', component: floor,
 				children: [
-					{ path: '/scene/floor/room/:floorId', icon: 'icon-shop', name: "房间管理", component: room },
-					{ path: '/scene/floor/poi/:floorId', icon: 'icon-shop', name: "兴趣点管理", component: poi }
+					{ path: '/scene/floor/room/:floorId', icon: 'icon-shop', name: "店铺管理", component: room },
+					{ path: '/scene/floor/poi/:floorId', icon: 'icon-shop', name: "公共设施管理", component: poi }
 				]
 			},
-			{ path: '/scene/floor/mgr/:floorId', icon: 'icon-shop', name: "楼层管理", component: floormgr, hidden: true },
-			{ path: '/scene/poi/7/-2', icon: 'icon-shop', name: '兴趣点类型', component: poiType }
+			{ path: '/scene/floor/mgr/:floorId', icon: 'icon-shop', name: "公共设施管理", component: floormgr, hidden: true },
+			{ path: '/scene/poi/7/-2', icon: 'icon-shop', name: '公共设施类型管理', component: poiType }
 		]
 	},
 	{
 		path: '/shop',
 		icon: 'icon-shop',
-		name: '商铺管理',
+		name: '品牌管理',
 		component: index,
 		children: [
-			{ path: '/shop/list', icon: 'icon-shop', name: '商铺管理', component: shop },
-			{ path: '/shop/edit/:shopId', icon: 'icon-shop', name: '商铺管理', component: shopedit, hidden: true },
-			{ path: '/shop/type/3/-1', icon: 'icon-shop', name: '商铺类型', component: shoptype }
+			{ path: '/shop/list', icon: 'icon-shop', name: '品牌管理', component: shop },
+			{ path: '/shop/edit/:shopId', icon: 'icon-shop', name: '品牌管理', component: shopedit, hidden: true },
+			{ path: '/shop/type/3/-1', icon: 'icon-shop', name: '品牌类型', component: shoptype }
 		]
 	},
 	{
@@ -79,7 +79,6 @@ export let routes = [
 			{ path: '/article/list', icon: 'icon-shop', name: '文章列表', component: articlelist },
 			{ path: '/article/edit/:articleId', icon: 'icon-shop', name: '编辑文章', component: articleedit, hidden: true },
 			{ path: '/ads/list', icon: 'icon-shop', name: '广告管理', component: ads },
-			{ path: '/release/list', icon: 'icon-shop', name: '版本发布', component: release },
 		]
 	},
 	{
@@ -88,6 +87,7 @@ export let routes = [
 		name: '系统设置',
 		component: index,
 		children: [
+			{ path: '/release/list', icon: 'icon-shop', name: '版本发布', component: release },
 			{ path: '/setting/user', icon: 'icon-shop', name: '用户管理', component: user },
 			{ path: '/setting/password', icon: 'icon-shop', name: '修改密码', component: password },
 		]

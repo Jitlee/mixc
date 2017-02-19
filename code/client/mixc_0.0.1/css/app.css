@@ -17,13 +17,16 @@ body {
 }
 /* optional: show position indicator in red */
 ::-webkit-scrollbar-thumb {
-  background: #FF0000;
+  width: 0px;
+  /* remove scrollbar space */
+  background: transparent;
 }
 a,
 a:link,
 a:active {
   color: #fff;
   text-decoration: none;
+  cursor: pointer;
 }
 h5 {
   margin: 0;
@@ -66,14 +69,53 @@ h5 {
   display: block;
   position: relative;
 }
-.swiper-container {
+.ads.swiper-container {
   height: calc(30vh - 10px);
 }
-.swiper-container .swiper-slide {
+.ads.swiper-container .swiper-slide {
   height: calc(30vh - 10px);
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
+}
+.album.swiper-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: #000;
+}
+.album.swiper-container .pagination {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  height: 3vh;
+  line-height: 3vh;
+}
+.album.swiper-container .swiper-pagination-switch {
+  height: 1vh;
+  width: 1vh;
+  background-color: rgba(223, 255, 255, 0.3);
+  display: inline-block;
+  border-radius: 1vh;
+  margin: 0.3vh;
+  transition: background-color 0.1s ease-in-out;
+}
+.album.swiper-container .swiper-active-switch {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.album.swiper-container .swiper-slide {
+  height: 100vh;
+  width: 100vw;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: cover;
+  background-size: contain;
 }
 .top-header {
   display: block;
@@ -149,7 +191,7 @@ h5 {
   font-size: 5vh;
 }
 .top-header .block7 .title {
-  font-size: 0.8vh;
+  font-size: 1vh;
   padding-top: 0.5vh;
 }
 .top-header .block8 {
@@ -203,6 +245,7 @@ nav.home-nav .home-nav-item {
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
+  cursor: pointer;
 }
 nav.home-nav .justify {
   background-size: 8vw;
@@ -232,9 +275,9 @@ nav.home-nav .nav-wheel {
   background-color: #cb2c58;
 }
 .home-widget {
-  height: 10vh;
+  height: 14vh;
   overflow: hidden;
-  margin-top: 4vh;
+  margin-top: 2vh;
   margin-bottom: 0vh;
 }
 .home-widget .city {
@@ -262,10 +305,11 @@ nav.home-nav .nav-wheel {
   vertical-align: middle;
 }
 .home-category .col {
-  height: calc(28vh - 10px);
+  height: calc(26vh - 10px);
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
+  cursor: pointer;
 }
 .home-category .justify {
   background-size: 8vw;
@@ -314,7 +358,7 @@ nav.home-nav .nav-wheel {
   margin-top: 0.5vh;
   padding-top: 0.3vh;
   width: 6vh;
-  font-size: 0.3vh;
+  font-size: 1vh;
   line-height: 1.5vh;
   height: 1.5vh;
 }
@@ -406,7 +450,7 @@ nav.home-nav .nav-wheel {
 }
 .brand .content .table-view-cell .info .desc {
   font-size: 1vh;
-  padding-top: 0.8vh;
+  padding-top: 0.2vh;
 }
 .brand .content .table-view-cell .info .floor {
   font-size: 1.2vh;
@@ -670,7 +714,7 @@ nav.home-nav .nav-wheel {
   text-overflow: ellipsis;
   height: 4vh;
   line-height: 4vh;
-  font-size: 2vh;
+  font-size: 1.5vh;
 }
 .info .side a.active {
   background-color: #f39801;
@@ -684,6 +728,9 @@ nav.home-nav .nav-wheel {
   float: left;
   padding: 10px;
   box-sizing: border-box;
+}
+.info .content img {
+  max-width: 100%;
 }
 .article .content {
   color: #333;

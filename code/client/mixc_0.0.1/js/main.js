@@ -12,6 +12,7 @@
 		shopTypes: null,
 		activities: null,
 		ads: null,
+		albums: null,
 	};
 	
 	function handleAdsNav(row) {
@@ -21,9 +22,9 @@
 		switch(adsTargetType) {
 			case -1:
 				if(adsTargetId > 0) {
-					path = '/shop/' + adsTargetId;
+					path = '/shop/1/' + adsTargetId;
 				} else {
-					path = '/shop/0'
+					path = '/shop/1/0'
 				}
 				break;
 			case -2:
@@ -247,6 +248,32 @@
 		});
 	}
 	
+	function getAlbums(callback) {
+		var ths = this;
+		if(context.albums != null) {
+			callback.call(ths, context.albums);
+		} else {
+			$.getJSON('data/album.json', null, (albums) => {
+				if(albums && albums.length > 0) {
+					context.albums = albums;
+					callback.call(ths, context.albums);
+				}
+			});
+		}
+	}
+	
+	function getAlbumByType(albumType, objId, callback) {
+		getAlbums.call(this, function(albums) {
+			let result = [];
+			for(let i = 0, len = albums.length; i < len; i++) {
+				if(albums[i].albumType == albumType && albums[i].objId == objId) {
+					result.push(albums[i]);
+				}
+			}
+			callback.call(this, result);
+		});
+	}
+	
 	// 注册组件
 	
 	Vue.component('mixc-article', {
@@ -394,8 +421,8 @@
 			},
 			setupShops(floor) {
 				filterShopesByFloor.call(this, floor, (shops) => {
-					this.shops = shops;
-				});
+					this.shops = shops
+				})
 			}
 		}
 	});
@@ -403,8 +430,10 @@
 	Vue.component('mixc-shop', {
 		template: '#shop-template',
 		data() {
+			const shopId = this.$route.params.shopId
 			return {
-				shopId: this.$route.params.shopId,
+				shopId: shopId,
+				garryId: 'shopAbums' + shopId,
 				shop: {
 					shopName: '',
 					shopFloor: '',
@@ -414,21 +443,57 @@
 					shopImagePath: '',
 					shopNavPath: '',
 					shopIntroduction: '',
-				}
+				},
+				shopAlbum: '',
+				shopAlbums: [],
+				swiper: null,
 			}
 		},
 		created() {
 			getShops.call(this, (shops, shopMap) => {
 				const shop = shopMap[this.shopId];
 				if(shop) {
-					this.shop = shop;
+					this.shop = shop
+					if(this.shopAlbum == '') {
+						this.shopAlbum = this.shop.shopImagePath
+					}
+				}
+			})
+			
+			getAlbumByType.call(this, 'shop', this.shopId, (albums) => {
+				if(albums.length > 0) {
+					this.shopAlbum = albums[0].filePath
+					this.shopAlbums = albums
+					this.setup()
+				} else if(this.shop.shopImagePath != '') {
+					this.shopAlbum = this.shop.shopImagePath
 				}
 			})
 		},
 		methods: {
 			handleBack() {
-				this.$router.go(-1);
-			}
+				if(this.$route.params.type == 0) {
+					this.$router.go(-1)
+				} else {
+					this.$router.replace('/')
+				}
+			},
+			setup() {
+				this.$nextTick(() => {
+					this.swiper = new Swiper('#' + this.garryId,{
+					     pagination: '.pagination',
+					     loop:true,
+					     grabCursor: true,
+					     paginationClickable: true
+					})
+				})
+			},
+			handleShow() {
+				$('#' + this.garryId).fadeIn()
+			},
+			handleClose() {
+				$('#' + this.garryId).fadeOut()
+			},
 		}
 	});
 	
@@ -842,7 +907,7 @@
 		routes: [
 			{ path: '/', component: {  template: '<mixc-home></mixc-home>' } },
 			{ path: '/brand/:typeId', component: {  template: '<mixc-brand></mixc-brand>' } },
-			{ path: '/shop/:shopId', component: {  template: '<mixc-shop></mixc-shop>' } },
+			{ path: '/shop/:type/:shopId', component: {  template: '<mixc-shop></mixc-shop>' } },
 			{ path: '/floor', component: {  template: '<mixc-floor></mixc-floor>' } },
 			{ path: '/activity/:activityId', component: {  template: '<mixc-activity></mixc-activity>' } },
 			{ path: '/info', component: {  template: '<mixc-info></mixc-info>' } },

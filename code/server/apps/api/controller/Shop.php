@@ -87,6 +87,23 @@ class Shop {
 	}
 	
 	/**
+	 * patch: 调整商家顺序
+	 * path: move/{clientId}/{shopId}/{sort}
+	 * method: move
+	 * param: clientId - {int} 客户Id
+	 * param: shopId - {int} 商家Id
+	 * param: sort - {int} 新的排名
+	 */
+	public function move($clientId = 0, $shopId = 0, $sort = 0) {
+		$db = model('Shop');
+		if($db->move($clientId, $shopId, $sort - 1) == true) {
+			return success(true);
+		} else {
+			return fail("设置排名失败");
+		}
+	}
+	
+	/**
 	 * delete: 删除商家
 	 * path: delete/{shopId}
 	 * method: delete

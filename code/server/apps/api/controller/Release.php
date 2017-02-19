@@ -64,10 +64,11 @@ class Release {
             $this->copy_dir($templeate, $tmpDir);
             
             // 下载json数据
-            $this->download_data($clientId, $tmpDir, 'Shop', ['shopImagePath', 'shopIconPath', 'shopQRCodePath']);
+            $this->download_data($clientId, $tmpDir, 'Shop', ['shopImagePath', 'shopIconPath', 'shopQRCodePath', 'shopNavPath']);
             $this->download_data($clientId, $tmpDir, 'Activity', ['activityFilePath']);
             $this->download_data($clientId, $tmpDir, 'Floor', ['navFilePath']);
             $this->download_data($clientId, $tmpDir, 'Ads', ['adsFilePath']);
+            $this->download_data($clientId, $tmpDir, 'Album', ['filePath']);
             $this->download_data($clientId, $tmpDir, 'Article', ['articleContent']);
 //          $this->download_image($clientId, $tmpDir, [10]);
             $this->download_shop_types($clientId, $tmpDir);

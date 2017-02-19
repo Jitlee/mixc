@@ -18,7 +18,8 @@ body {
 }
 /* optional: show position indicator in red */
 ::-webkit-scrollbar-thumb {
-    background: #FF0000;
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;
 }
 
 // 图片背景
@@ -41,6 +42,7 @@ body {
 a, a:link, a:active {
     color: @font-color;
     text-decoration: none;
+    cursor: pointer;
 }
 
 h5 {

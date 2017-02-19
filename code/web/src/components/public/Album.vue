@@ -17,7 +17,13 @@
 			</form>
 		</div>
 		<div>
-			<mixc-card v-for="(item, index) in files" :index="index" :fileKey="item.fileKey" :title="item.fileName" :url="item.filePath" :time="item.createTime" @remove="handleRemove"></mixc-card>
+			<mixc-card v-for="(item, index) in files"
+				 :index="index" :fileKey="item.fileKey"
+				  :title="item.fileName" :url="item.filePath"
+				  :time="item.createTime"
+				  @remove="handleRemove"
+				  @moveup="handleMoveUp"
+				  @movedown="handleMoveDown"></mixc-card>
 		</div>
 	</div>
 </template>
@@ -112,7 +118,22 @@
 						this.files.splice(index, 1)
 					}
 				});	
-			}
+			},
+			
+			handleMoveUp(index, fileKey) {
+				this.move(this.albumType, this.objId, fileKey, 'moveup')
+			},
+			handleMoveDown(index, fileKey) {
+				this.move(this.albumType, this.objId, fileKey, 'movedown')
+			},
+			
+			move(albumType, objId, fileKey, action) {
+				this.$http.patch(["/api/album", action, albumType, objId, fileKey].join("/")).then((response) => {
+					if(response.nice) {
+						this.queryData()
+					}
+				});
+			},
 		}
 	}
 </script>

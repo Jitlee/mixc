@@ -53,7 +53,7 @@
 	
 			<!-- 1.2 ads: 顶部广告 -->
 			<script type="text/x-template" id="ads-template">
-				<div :id="swipeId" class="swiper-container">
+				<div :id="swipeId" class="ads swiper-container">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide" v-for="item in list" :style="{ backgroundImage: 'url(' + item.adsFilePath.replace(/^\//, '') + ')' }"></div>
 					</div>
@@ -165,7 +165,7 @@
 			<!-- 2.3 Table: 列表 -->
 			<script type="text/x-template" id="brand-table-template">
 				<div class="table-view">
-					<router-link :to="'/shop/' + item.shopId" class="table-view-cell" v-for="item in list">
+					<router-link :to="'/shop/0/' + item.shopId" class="table-view-cell" v-for="item in list">
 						<div class="img" :style="{ backgroundImage: 'url(' + item.shopImagePath.replace(/^\//, '') + ')' }"></div>
 						<div class="info">
 							<div class="icon" :style="{ backgroundImage: 'url(' + item.shopIconPath.replace(/^\//, '') + ')' }"></div>
@@ -180,13 +180,13 @@
 			<!-- 2.4 Shop: 商铺 -->
 			<script type="text/x-template" id="shop-template">
 				<div class="shop">
-					<div class="img" :style="{ backgroundImage: 'url(' + shop.shopImagePath.replace(/^\//, '') + ')' }"></div>
+					<div class="img" @click.navtive="handleShow" :style="{ backgroundImage: 'url(' + shopAlbum.replace(/^\//, '') + ')' }"></div>
 					<div class="info">
 						<div class="icon" :style="{ backgroundImage: 'url(' + shop.shopIconPath.replace(/^\//, '') + ')' }"></div>
 						<hr />
 						<span class="name">品牌名：<span class="red">{{ shop.shopName }}</span></span>
-						<div class="desc">店铺位置：{{ shop.shopDesc }}</div>
-						<div class="floor">类型：<strong>{{ shop.shopFloor }}</strong>&nbsp;&nbsp;{{ shop.shopRoom }}</div>
+						<div class="floor">店铺位置：<strong>{{ shop.shopFloor }}</strong>&nbsp;&nbsp;{{ shop.shopRoom }}</div>
+						<div class="desc">类型：{{ shop.shopDesc }}</div>
 						<a @click="handleBack" class="back"><i class="iconfont icon-back"></i>&nbsp;&nbsp;返回</a>
 					</div>
 					<div class="introduction">
@@ -195,6 +195,13 @@
 					</div>
 					
 					<img class="shop-nav" :src="shop.shopNavPath.replace(/^\//, '')"/>
+					
+					<div :id="garryId" class="album swiper-container" @click="handleClose" style="display: none">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide" v-for="item in shopAlbums" :style="{ backgroundImage: 'url(' + item.filePath.replace(/^\//, '') + ')' }"></div>
+						</div>
+						<div class="pagination"></div>
+					</div>
 				</div>
 			</script>
 			
@@ -221,7 +228,7 @@
 				<div class="shops clear">
 					<h5>本层店铺:</h5>
 					<div>
-					<router-link v-for="item in shops"  :to="'/shop/' + item.shopId">{{ item.shopName }}</a>
+					<router-link v-for="item in shops"  :to="'/shop/0/' + item.shopId">{{ item.shopName }}</a>
 					</div>
 				</div>
 			</div>
@@ -254,7 +261,7 @@
 				</div>
 			</div>
 		</script>
-		<!-- 4.Info: 信息介绍-结束 -->
+		<!-- 5.Info: 信息介绍-结束 -->
 		
 		<!-- 6.article: 文章系统-开始 -->
 		<script type="text/x-template" id="article-template">
@@ -263,15 +270,15 @@
 				<div class="content" v-html="data.articleContent"></div>
 			</div>
 		</script>
-		<!-- 4.Info: 文章系统-结束 -->
+		<!-- 6.article: 文章系统-结束 -->
 		
-
 		<script src="lib/vue/vue.js"></script>
 		<script src="lib/vue-router/vue-router.min.js"></script>
 		<script src="lib/swiper/idangerous.swiper.min.js"></script>
 		<script src="lib/jquery/jquery-3.1.1.min.js"></script>
 		<script src="js/main.js"></script>
 		<script src="js/ads.js"></script>
+		<script src="js/setting.js"></script>
 	</body>
 
 </html>

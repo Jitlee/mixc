@@ -22,6 +22,11 @@
 	.mixc-card:hover .mask {
 		background-color: rgba(0,0,0,0.6);
 	}
+	
+	.mixc-card .mask .center {
+	    margin-top: 70px;
+	    display: none;
+	}
 	.mixc-card .mask .btn {
 		display: inline-block;
 	    color: #fff;
@@ -29,13 +34,11 @@
 	    cursor: pointer;
 	    vertical-align: middle;
 	    transition: transform .3s cubic-bezier(.23,1,.32,1) .1s,opacity .3s cubic-bezier(.23,1,.32,1) .1s;
-	    display: none;
 	    margin: auto;
-	    margin-top: 70px;
 	    width: 50px;
 	}
 	
-	.mixc-card:hover .mask .btn {
+	.mixc-card:hover .mask .center {
 		display: block;
 	}
 	
@@ -107,7 +110,11 @@
 	<div class="mixc-card" :style="{ backgroundImage: 'url(' + url + ')' }">
 		<div class="mixc-thumb"></div>
 		<div class="mask">
+			<div class="center">
+			<span class="btn" @click="handlerMoveUp"><i class="el-icon-caret-top"></i><span>上移</span></span>
 			<span class="btn" @click="handlerRemove"><i class="el-icon-delete2"></i><span>删除</span></span>
+			<span class="btn" @click="handlerMoveDown"><i class="el-icon-caret-bottom"></i><span>下移</span></span>
+			</div>
 		</div>
 		<div class="mixc-thumb-title">
 			<div class="title">{{ title }}</div>
@@ -135,7 +142,13 @@
 		methods: {
 			handlerRemove (){
 				this.$emit('remove', this.index, this.fileKey)
-			}
+			},
+			handlerMoveUp (){
+				this.$emit('moveup', this.index, this.fileKey)
+			},
+			handlerMoveDown (){
+				this.$emit('movedown', this.index, this.fileKey)
+			},
 		}
 	}
 </script>

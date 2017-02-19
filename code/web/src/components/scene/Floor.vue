@@ -17,11 +17,11 @@
 					<el-button size="small" @click="handleMoveDown($index, row)">下移</el-button>
 				</div>
 			</el-table-column>
-			<el-table-column :context="_self" inline-template label="操作" width="200px">
+			<el-table-column :context="_self" inline-template label="操作" width="220px">
 				<div>
 					<el-button size="small" @click="handleEdit($index, row)">编辑</el-button>
 					<el-button size="small" type="danger" @click="handleDelete($index, row)">删除</el-button>
-					<el-button size="small" @click="handleSub($index, row)">管理</el-button>
+					<el-button size="small" @click="handleSub($index, row)">店铺管理</el-button>
 				</div>
 			</el-table-column>
 		</el-table>

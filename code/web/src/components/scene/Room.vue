@@ -3,15 +3,15 @@
 		<el-row style="margin-bottom: 10px;">
 			<el-col :span="24">
 				<div class="grid-content" align="left">
-					<el-button @click.native="handleAdd">新增房间</el-button>
+					<el-button @click.native="handleAdd">店铺房间</el-button>
 				</div>
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="list" border style="width: 100%">
-			<el-table-column inline-template label="房间名称" align="left">
+			<el-table-column inline-template label="店铺名称" align="left">
 				<div>{{ row.roomName }}</div>
 			</el-table-column>
-			<el-table-column inline-template label="入驻商铺" align="left">
+			<el-table-column inline-template label="入驻品牌" align="left">
 				<div>{{ row.shopName }}</div>
 			</el-table-column>
 			<el-table-column inline-template label="X坐标" align="left">

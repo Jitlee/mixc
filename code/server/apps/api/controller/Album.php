@@ -20,6 +20,18 @@ class Album {
 	}
 	
 	/**
+	 * get: 获取所有相册
+	 * path: all/{clientId}
+	 * method: all
+	 * param: clientId - {int} 客户id
+	 */
+	public function all($clientId = 0) {
+		$db = model('Album');
+		$list = $db->_getall($clientId);
+		return success($list);
+	}
+	
+	/**
 	 * post: 保存相册
 	 * path: save
 	 * method: save
@@ -50,6 +62,40 @@ class Album {
 			return success(true, '删除成功');
 		} else {
 			return fail("删除失败");
+		}
+	}
+	
+	/**
+	 * patch: 上调一个顺序
+	 * path: moveup/{albumType}/{objId}/{fileKey}
+	 * param: albumType - {string} 相册类型
+	 * param: objId - {int} 对象Id
+	 * param: fileKey - {string} 文件Key
+	 */
+	public function moveup($albumType, $objId, $fileKey) {
+		$album = model('Album');
+		$rst = $album->moveUp($albumType, $objId, $fileKey);
+		if($rst == 0) {
+			return success(true);
+		} else {
+			return fail('上移失败失败');
+		}
+	}
+	
+	/**
+	 * patch: 下调一个顺序
+	 * path: movedown/{albumType}/{objId}/{fileKey}
+	 * param: albumType - {string} 相册类型
+	 * param: objId - {int} 对象Id
+	 * param: fileKey - {string} 文件Key
+	 */
+	public function movedown($albumType, $objId, $fileKey) {
+		$album = model('Album');
+		$rst = $album->moveDown($albumType, $objId, $fileKey);
+		if($rst == 0) {
+			return success(true);
+		} else {
+			return fail('下移失败失败');
 		}
 	}
 }

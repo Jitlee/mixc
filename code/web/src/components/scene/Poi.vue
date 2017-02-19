@@ -8,10 +8,10 @@
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="list" border style="width: 100%">
-			<el-table-column inline-template label="兴趣点名称" align="left">
+			<el-table-column inline-template label="公共设施名称" align="left">
 				<div>{{ row.poiName }}</div>
 			</el-table-column>
-			<el-table-column inline-template label="兴趣点类型" align="left">
+			<el-table-column inline-template label="公共设施类型" align="left">
 				<div>{{ row.poiTypeText }}</div>
 			</el-table-column>
 			<el-table-column inline-template label="X坐标" align="left">

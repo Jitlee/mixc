@@ -39,7 +39,7 @@ class Shop extends Model
 			->join('__FILE__ f4', 'f4.file_key = i.shop_nav_key and f4.file_type = 13')
 			->where('s.is_deleted', 'N')
 			->where('s.client_id', $clientId)
-			->order('s.create_time desc')->select();
+			->order('s.shop_sort asc')->select();
 			
 //		echo $this->getlastSql();
 					
@@ -60,7 +60,7 @@ class Shop extends Model
 		}
 		
 		$db = $db->where('s.client_id', $clientId)->where('s.is_deleted', 'N');
-		$list =  $db->order('s.create_time desc')
+		$list =  $db->order('s.shop_sort asc')
 			->page($pageNo, config('page_size'))->select();
 		
 //		echo $this->getLastSql();
@@ -128,6 +128,10 @@ class Shop extends Model
 		try {
 			if($shopId == 0) {
 				$shopdata['client_id'] = (int)$request->post('clientId');
+				$shopSort = $this->where('client_id', $shopdata['client_id'])->max('shop_sort');
+				if($shopSort >= 0) {
+					$shopdata['shop_sort'] = $shopSort + 1;
+				}
 				$this->insert($shopdata);
 				
 				$shopId = (int)$this->getLastInsID();
@@ -145,6 +149,54 @@ class Shop extends Model
 //			echo dump($e);
 			return -1;
 		}
+	}
+	
+	public function move($clientId, $shopId, $sort) {
+		$targetSort = 0;
+		if($sort < -1) {
+			$sort = 0;
+		}
+		$current = $this->field('shop_sort')->where('shop_id', $shopId)->find();
+		if(empty($current)) {
+			return true;
+		}
+		$currentSort = $current['shop_sort'];
+		
+		$target = $this
+			->field('shop_sort')
+			->where('client_id', $clientId)
+			->where('is_deleted', 'N')
+			->order('shop_sort asc')
+			->limit($sort, 1)->select();
+		$targetSort = 0;
+		if(empty($target)) {
+			$targetSort = $this->where('client_id', $clientId)->max('shop_sort') + 1;
+		} else {
+			$targetSort = (int)$target[0]['shop_sort'];
+		}
+		
+		if($currentSort == $targetSort) {
+			return true;
+		}
+		
+		if($targetSort >= 0) {
+			Db::startTrans();
+			try{
+				if($currentSort > $targetSort) {
+					$this->where('client_id', $clientId)
+						->where('shop_sort', 'egt', $targetSort)->update(['shop_sort' => ['exp','shop_sort+1']]);
+				} else {
+					$this->where('client_id', $clientId)
+						->where('shop_sort', 'elt', $targetSort)->update(['shop_sort' => ['exp','shop_sort-1']]);
+				}
+				$this->where('shop_id', $shopId)->update(['shop_sort' => $targetSort]);
+				Db::commit();
+				return true;
+			} catch (\Exception $e) {
+				Db::rollback();
+			}
+		}
+		return false;
 	}
 	
 	public function _delete($shopId = 0) {

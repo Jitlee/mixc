@@ -45,10 +45,10 @@ class Ads extends Model
 		}
 		
 		$db = $db->where('a.client_id', $clientId)->where('a.is_deleted', 'N');
-		$list =  $db->order('a.ads_start_date asc, a.ads_group_id asc')
+		$list =  $db->order('a.ads_group_id asc, a.ads_start_date asc')
 			->page($pageNo, config('page_size'))->select();
 		
-		echo $this->getLastSql();
+//		echo $this->getLastSql();
 		
 		$db = $this->alias('a');
 			
