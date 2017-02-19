@@ -46,7 +46,7 @@ ipcMain.on('open-main', () => {
 
 // 启动设置页面
 ipcMain.on('open-setting', () => {
-	const settingWindow = new BrowserWindow({width: 600, height: 400, alwaysOnTop: true, parent: mainWindow, model: true, frame: false, resize: false, center: true })
+	const settingWindow = new BrowserWindow({width: 600, height: 600, alwaysOnTop: true, parent: mainWindow, model: true, frame: false, resize: false, center: true })
 	settingWindow.setMenu(null)
   settingWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'setting.html'),
