@@ -37,7 +37,7 @@
 		<el-dialog :title="formTitle" v-model="formVisible" :close-on-click-modal="false">
 			<el-form :model="formData" label-width="80px" ref="formData" style="position: relative;">
 				<el-form-item label="排名" class="el-form-item-left">
-					<el-input type="tel" v-model="formData.shopSort" auto-complete="off" :maxlength="20" placeholder="请输品牌新的排名"></el-input>
+					<el-input type="tel" v-model="formData.shopSort" auto-complete="off" :maxlength="20" :placeholder="'请输入品牌《' + formData.shopName + '》新的排名'"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -61,6 +61,7 @@
 				formTitle: '设置排名',
 				formData: {
 					shopId: 0,
+					shopName: '',
 					shopSort: '',
 				},
 				
@@ -100,6 +101,7 @@
 			handleMove(index, row) {
 				this.formData.shopId = row.shopId
 				this.formData.shopSort = ''
+				this.formData.shopName = row.shopName
 				this.formVisible = true
 			},
 			formSubmit(){
