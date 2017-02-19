@@ -45,6 +45,7 @@
 				} else {
 					path = '/activity/0'
 				}
+				break;
 			case -5:
 				path = '/info';
 				break;
@@ -275,7 +276,6 @@
 	}
 	
 	// 注册组件
-	
 	Vue.component('mixc-article', {
 		template: '#article-template',
 		data() {
@@ -894,8 +894,14 @@
 					     paginationClickable: true
 					})
 				});
-			}
-			
+			},
+			handleClick(evt) {
+				const index = this.swiper.activeIndex - 1
+				const ads = this.list[index]
+				if(ads) {
+					handleAdsNav.call(this, ads);
+				}
+			},
 		}
 	});
 

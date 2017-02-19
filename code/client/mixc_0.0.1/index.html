@@ -53,7 +53,7 @@
 	
 			<!-- 1.2 ads: 顶部广告 -->
 			<script type="text/x-template" id="ads-template">
-				<div :id="swipeId" class="ads swiper-container">
+				<div :id="swipeId" class="ads swiper-container"  @click.navtive="handleClick">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide" v-for="item in list" :style="{ backgroundImage: 'url(' + item.adsFilePath.replace(/^\//, '') + ')' }"></div>
 					</div>
@@ -67,7 +67,7 @@
 			<script type="text/x-template" id="home-nav-template">
 				<nav class="home-nav clear">
 					<div class="home-nav-item" v-for="(item, index) in list"
-						@click="handleClick(index, item)"
+						@click.navtive="handleClick(index, item)"
 						:class="{ justify: item.adsStretch == 'B' }"
 						:style="{ backgroundColor: item.adsColor, backgroundImage: 'url(' + item.adsFilePath.replace(/^\//, '') + ')' }"></div>
 				</nav>
