@@ -151,9 +151,9 @@
 			getShopTypes.call(this, (shopTypes) => {
 				const shopType = shopTypes[typeIndex];
 				let result = [];
-				for(let i = 0, len = shopType.children.length; i < len; i++) {
-					const mShopType = shopType.children[i].dictId;
-					for(var j = 0; j < shopLength; j++) {
+				for(var j = 0; j < shopLength; j++) {
+					for(let i = 0, len = shopType.children.length; i < len; i++) {
+						const mShopType = shopType.children[i].dictId;
 						const shop = shops[j];
 						if(shop.shopType == mShopType) {
 							result.push(shop);

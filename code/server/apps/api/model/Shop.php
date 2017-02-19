@@ -179,7 +179,7 @@ class Shop extends Model
 			return true;
 		}
 		
-		if($targetSort >= 0) {
+		if(is_numeric($targetSort)) {
 			Db::startTrans();
 			try{
 				if($currentSort > $targetSort) {
@@ -193,6 +193,7 @@ class Shop extends Model
 				Db::commit();
 				return true;
 			} catch (\Exception $e) {
+//				echo dump($e);
 				Db::rollback();
 			}
 		}
