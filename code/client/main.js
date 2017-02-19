@@ -41,7 +41,7 @@ ipcMain.on('open-main', () => {
 	}))
 	startWindow && startWindow.close()
 	mainWindow.on('closed', () => { mainWindow = null })
-	mainWindow.webContents.openDevTools()
+//	mainWindow.webContents.openDevTools()
 })
 
 // 启动设置页面
@@ -66,11 +66,10 @@ ipcMain.on('open-ads', (evt) => {
     protocol: 'file:',
     slashes: true
   }))
-//adsWindow.on('closed', () => { 
-//	adsWindow = null
-//	evt.sender.send('auto-ads')
-//})
-  adsWindow.webContents.openDevTools()
+	adsWindow.on('closed', () => { 
+		adsWindow = null
+		evt.sender.send('auto-ads')
+	})
 })
 
 // 定时更新
