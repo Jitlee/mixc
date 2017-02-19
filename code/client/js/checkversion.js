@@ -9,16 +9,16 @@ const dataPath = getUserFolderPath();
 let configPath = path.join(path.dirname(process.execPath), 'config.json')
 let config = { server: 'cky.ritacc.net', port: 8888, updateTime: 1485012010437, version: '0.0.1', sourceId: 1 }
 	
-function getMainPath() {
+function getMainPath(fileName = 'index.html') {
 	const config = readConfig()
 	const uuid = md5(config.version, config.updateTime);
 	const mixcPath = path.join(dataPath, 'mixc');
 	const localPath = path.join(mixcPath, uuid);
 	if(fs.existsSync(localPath)) {
-		return path.join(localPath, 'index.html');
+		return path.join(localPath, fileName);
 	} else {
 		resetConfig()
-		return path.join(__dirname, '../mixc_0.0.1/index.html');
+		return path.join(__dirname, '../mixc_0.0.1', fileName);
 	}
 }
 
@@ -49,6 +49,8 @@ function resetConfig() {
 }
 
 function checkVersion(callback, autoUpdate) {
+//	callback(0, '已经是最新版本');
+//	return;
 	const config = readConfig()
 	const url = ['http://', urlTrim(config.server), ':', config.port, '\/api/release/last/', config.sourceId].join('');
 	getJSON(url, function(rst) {

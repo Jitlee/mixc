@@ -6,6 +6,7 @@
 	const { ipcRenderer } = require('electron')
 	
 	const TIMEOUT = 3*60*1000
+//	const TIMEOUT = 10*1000
 	let lastActiveTime = new Date().getTime()
 	w.addEventListener('click', refreshTime)
 	let timeHandler = 0
@@ -14,6 +15,7 @@
 		timeHandler = w.setTimeout(() => {
 			let now = new Date().getTime()
 			if(now - lastActiveTime > TIMEOUT) {
+				lastActiveTime = now
 				ipcRenderer.send('open-ads')
 			} else {
 				beginTiming()
