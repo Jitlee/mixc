@@ -32,7 +32,7 @@ const cv = require('./js/checkversion.js')
 // 启动主界面
 let mainWindow = null
 ipcMain.on('open-main', () => {
-	mainWindow = new BrowserWindow({ alwaysOnTop: true, modal: true, fullscreen: true, frame: false, resize: false, center: true })
+	mainWindow = new BrowserWindow({ alwaysOnTop: true, fullscreen: true, frame: false, resize: false, center: true })
 	mainWindow.setMenu(null)
 	mainWindow.loadURL(url.format({
 	  	pathname: cv.getMainPath('index.html'),
@@ -45,14 +45,18 @@ ipcMain.on('open-main', () => {
 })
 
 // 启动设置页面
+let settingWindow = null
 ipcMain.on('open-setting', () => {
-	const settingWindow = new BrowserWindow({width: 600, height: 600, alwaysOnTop: true, parent: mainWindow, model: true, frame: false, resize: false, center: true })
+	if(settingWindow !=null) {
+		return settingWindow
+	}
+	settingWindow = new BrowserWindow({width: 600, height: 600, alwaysOnTop: true, parent: mainWindow, model: true, frame: false, resize: false, center: true })
 	settingWindow.setMenu(null)
   settingWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'setting.html'),
     protocol: 'file:',
-    slashes: true
   }))
+	settingWindow.on('closed', () => { settingWindow = null })
 })
 
 // 启动广告页面
@@ -64,7 +68,6 @@ ipcMain.on('open-ads', (evt) => {
   adsWindow.loadURL(url.format({
     pathname: cv.getMainPath('ads.html'),
     protocol: 'file:',
-    slashes: true
   }))
 	adsWindow.on('closed', () => { 
 		adsWindow = null
