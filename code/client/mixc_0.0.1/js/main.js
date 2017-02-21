@@ -378,7 +378,9 @@
 				},
 				allFloors: [],
 				floors: [],
-				shops: [],
+				pages: [],
+				swiper: null,
+				swipeId: 'swipe' + new Date().getTime(),
 			}
 		},
 		created() {
@@ -421,9 +423,37 @@
 			},
 			setupShops(floor) {
 				filterShopesByFloor.call(this, floor, (shops) => {
-					this.shops = shops
+					const pages = [];
+					const len = shops.length
+					const PAGE_SIZE = 15
+					for(let i = 0; i < len; i += PAGE_SIZE) {
+						const _shops = []
+						for(let j = i; j < i + PAGE_SIZE && j < len; j++) {
+							_shops.push(shops[j])
+						}
+						pages.push(_shops)
+					}
+					if(this.swiper) {
+						this.swiper.removeAllSlides()
+						this.swiper.destroy(true, true)
+					}
+					this.pages = pages;
+					this.setup()
 				})
-			}
+			},
+			
+			setup() {
+				let id = '#' + this.swipeId;
+				this.$nextTick(() => {
+					this.swiper = new Swiper(id,{
+					    pagination: '.pagination',
+					    loop:false,
+					    grabCursor: true,
+					    paginationClickable: true,
+					    slidesPerView: true,
+					})
+				});
+			},
 		}
 	});
 	
@@ -481,10 +511,10 @@
 			setup() {
 				this.$nextTick(() => {
 					this.swiper = new Swiper('#' + this.garryId,{
-					     pagination: '.pagination',
-					     loop:true,
-					     grabCursor: true,
-					     paginationClickable: true
+					    pagination: '.pagination',
+					    loop:true,
+					    grabCursor: true,
+					    paginationClickable: true
 					})
 				})
 			},
@@ -888,10 +918,12 @@
 				let id = '#' + this.swipeId;
 				this.$nextTick(() => {
 					this.swiper = new Swiper(id,{
-					     pagination: '.pagination',
-					     loop:true,
-					     grabCursor: true,
-					     paginationClickable: true
+					    pagination: '.pagination',
+					    loop:true,
+					    grabCursor: true,
+					    paginationClickable: true,
+					    autoplay : 5000,
+						speed: 500,
 					})
 				});
 			},

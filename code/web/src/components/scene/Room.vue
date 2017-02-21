@@ -3,15 +3,15 @@
 		<el-row style="margin-bottom: 10px;">
 			<el-col :span="24">
 				<div class="grid-content" align="left">
-					<el-button @click.native="handleAdd">店铺房间</el-button>
+					<el-button @click.native="handleAdd">新增店铺房间</el-button>
 				</div>
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="list" border style="width: 100%">
-			<el-table-column inline-template label="店铺名称" align="left">
+			<el-table-column inline-template label="店铺房间名称" align="left">
 				<div>{{ row.roomName }}</div>
 			</el-table-column>
-			<el-table-column inline-template label="入驻品牌" align="left">
+			<el-table-column inline-template label="入驻店铺" align="left">
 				<div>{{ row.shopName }}</div>
 			</el-table-column>
 			<el-table-column inline-template label="X坐标" align="left">
@@ -34,9 +34,9 @@
 					<el-form-item label="名称" prop="roomName">
 						<el-input v-model="formData.roomName" auto-complete="off" :maxlength="30" placeholder="请输入房间名称"></el-input>
 					</el-form-item>
-					<el-form-item label="入驻商铺">
-						<el-select v-model="formData.shopId" placeholder="请选入驻商铺">
-							<el-option label="请选入驻商铺" :value="0"></el-option>
+					<el-form-item label="入驻店铺">
+						<el-select v-model="formData.shopId" placeholder="请选入驻店铺">
+							<el-option label="请选入驻店铺" :value="0"></el-option>
 					      	<el-option v-for="item in shops" :label="item.shopName" :value="item.shopId"></el-option>
 					    </el-select>
 					</el-form-item>
@@ -80,14 +80,14 @@
 				shops: [],
 				clientId: clientId,
 				
-				formTitle: "",
+				formTitle: '',
 				formLoading: false,
 				formVisible: false,
 				formData: {
 					floorId: floorId,
 					roomId: 0,
 					roomName: '',
-					shopId: 0,
+					shopId: '',
 					x: 0,
 					y: 0
 				},
@@ -110,7 +110,7 @@
 		},
 		methods: {
 			loadData() {
-				this.$http.get(["/api/room/lst", this.clientId].join("/")).then((response) => {
+				this.$http.get(["/api/room/lst", this.floorId].join("/")).then((response) => {
 					if(response.nice) {
 						let rst = response.data.rst
 						if(rst) {
@@ -121,7 +121,7 @@
 			},
 			
 			loadShops() {
-				this.$http.get(["/api/shop/all", this.floorId].join("/")).then((response) => {
+				this.$http.get(["/api/shop/all", this.clientId].join("/")).then((response) => {
 					if(response.nice) {
 						let rst = response.data.rst
 						if(rst) {
@@ -135,7 +135,8 @@
 				this.formTitle = "新增房间";
 				this.formData.floorId = this.floorId;
 				this.formData.roomId = 0;
-				this.formData.shopId = 0;
+				this.formData.shopId = '';
+				this.formData.roomName = '';
 				this.formData.x = 0;
 				this.formData.y = 0;
 				this.formVisible = true;
@@ -145,6 +146,7 @@
 				this.formData.floorId = row.floorId;
 				this.formData.roomId = row.roomId;
 				this.formData.shopId = row.shopId;
+				this.formData.roomName = row.roomName;
 				this.formData.x = row.x;
 				this.formData.y = row.y;
 				this.formVisible = true;

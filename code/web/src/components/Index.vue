@@ -1,8 +1,8 @@
 <template>
 	<div class="panel">
-		<nav>
+		<nav style="position: fixed;width: 100%;z-index: 99;">
 			<el-menu theme="dark" :default-active="primaryIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-				<li class="el-menu-band">商场导购平台</li>
+				<li class="el-menu-band">导航平台</li>
 				<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
 					<el-menu-item :index="index+''"><i class="iconfont" :class="item.icon"></i>{{item.name}}</el-menu-item>
 				</template>

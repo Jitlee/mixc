@@ -49,3 +49,38 @@
         background-size: contain;
     }
 }
+
+
+.floor.swiper-container {
+    position: relative;
+    height: calc(~"29vh - 50px");
+    overflow: hidden;
+    width: calc(~"100vw - 20vh - 20px");
+    
+    .swiper-slide {
+    }
+        
+    .pagination {
+        position: absolute;
+        bottom: 0;
+        left:0;
+        right: 0;
+        text-align: center;
+        height: 3vh;
+        line-height: 3vh;
+    }
+    
+    .swiper-pagination-switch {
+        height: 1vh;
+        width: 1vh;
+        background-color: @gray-color;
+        display: inline-block;
+        border-radius: 1vh;
+        margin: 0.3vh;
+        transition: background-color 0.1s ease-in-out;
+    }
+    
+    .swiper-active-switch {
+        background-color: @rose-color;
+    }
+}

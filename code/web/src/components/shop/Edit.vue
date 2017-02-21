@@ -1,31 +1,31 @@
 <template>
 	<el-tabs style="width: 100%">
-		<el-tab-pane label="品牌信息" name="info">
+		<el-tab-pane label="店铺信息" name="info">
 			<el-form :model="formData" :rules="formRules" ref="formData" label-width="100px">
 				<div style="position: relative">
 					<mixc-upload :clientId="formData.clientId" :type="1" v-model="formData.shopIcon" :path="shopIconPath" title="单击上传商标"></mixc-upload>
-					<el-form-item label="品牌名称" prop="shopName" class="el-form-item-left">
-						<el-input v-model="formData.shopName" auto-complete="off" placeholder="请输入品牌名称" :maxlength="20"></el-input>
+					<el-form-item label="店铺名称" prop="shopName" class="el-form-item-left">
+						<el-input v-model="formData.shopName" auto-complete="off" placeholder="请输入店铺名称" :maxlength="20"></el-input>
 					</el-form-item>
 					<el-form-item label="英文名称" prop="shopEnName" class="el-form-item-left">
-						<el-input v-model="formData.shopEnName" auto-complete="off" placeholder="请输入品牌英文名称" :maxlength="30"></el-input>
+						<el-input v-model="formData.shopEnName" auto-complete="off" placeholder="请输入店铺英文名称" :maxlength="30"></el-input>
 					</el-form-item>
 					<el-form-item label="搜索索引" prop="shopEnName" class="el-form-item-left">
-						<el-input v-model="formData.shopIndex" auto-complete="off" placeholder="请输入品牌索引(字母A-Z|数字0-9)" :maxlength="1"></el-input>
+						<el-input v-model="formData.shopIndex" auto-complete="off" placeholder="请输入店铺索引(字母A-Z|数字0-9)" :maxlength="1"></el-input>
 					</el-form-item>
 				</div>
 				<hr /> 
 				<div style="position: relative;height: 160px;">
-					<mixc-upload :clientId="formData.clientId" :type="9" v-model="formData.shopImage" :path="shopImagePath" title="单击上传品牌图片"></mixc-upload>
-					<el-form-item label="品牌类型" prop="shopType" class="el-form-item-left">
+					<mixc-upload :clientId="formData.clientId" :type="9" v-model="formData.shopImage" :path="shopImagePath" title="单击上传店铺图片"></mixc-upload>
+					<el-form-item label="店铺类型" prop="shopType" class="el-form-item-left">
 						<el-select v-model="formData.shopType" placeholder="请选择">
 						    	<el-option-group v-for="group in shopTypeGroups" :label="group.dictValue">
 						      <el-option v-for="item in group.children" :label="item.dictValue" :value="item.dictId"></el-option>
 						    	</el-option-group>
 					  	</el-select>
 					</el-form-item>
-					<el-form-item label="品牌特色" class="el-form-item-left">
-						<el-input v-model="formData.shopDesc" auto-complete="off" placeholder="请输入品牌特色" :maxlength="100"></el-input>
+					<el-form-item label="店铺特色" class="el-form-item-left">
+						<el-input v-model="formData.shopDesc" auto-complete="off" placeholder="请输入店铺特色" :maxlength="100"></el-input>
 					</el-form-item>
 				</div>
 				<hr /> 
@@ -41,11 +41,11 @@
 				<hr /> 
 				<div style="position: relative">
 					<mixc-upload :clientId="formData.clientId" :type="2" v-model="formData.shopQRCode" :path="shopQRCodePath" title="单击上传二维码"></mixc-upload>
-					<el-form-item label="品牌电话" class="el-form-item-left" style="position: relative">
-						<el-input v-model="formData.shopTel" auto-complete="off" placeholder="请输入品牌电话" :maxlength="20"></el-input>
+					<el-form-item label="店铺电话" class="el-form-item-left" style="position: relative">
+						<el-input v-model="formData.shopTel" auto-complete="off" placeholder="请输入店铺电话" :maxlength="20"></el-input>
 					</el-form-item>
-					<el-form-item label="品牌网址" class="el-form-item-left">
-						<el-input v-model="formData.shopUrl" type="url" auto-complete="off" placeholder="请输入品牌网址 http://" :maxlength="100"></el-input>
+					<el-form-item label="店铺网址" class="el-form-item-left">
+						<el-input v-model="formData.shopUrl" type="url" auto-complete="off" placeholder="请输入店铺网址 http://" :maxlength="100"></el-input>
 					</el-form-item>
 					<el-form-item label="服务时间" class="el-form-item-left">
 						<el-col :span="11">
@@ -57,8 +57,8 @@
 			    			</el-col>
 					</el-form-item>
 				</div>
-				<el-form-item label="品牌简介">
-					<el-input type="textarea" v-model="formData.shopIntroduction" placeholder="请输入品牌简介" :maxlength="400"></el-input>
+				<el-form-item label="店铺简介">
+					<el-input type="textarea" v-model="formData.shopIntroduction" placeholder="请输入店铺简介" :maxlength="400"></el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click.native="formSubmit" :loading="formLoading">保存</el-button>
@@ -66,7 +66,7 @@
 				</el-form-item>
 			</el-form>
 		</el-tab-pane>
-	    <el-tab-pane label="品牌相册" name="album" :disabled="shopId == 0">
+	    <el-tab-pane label="店铺相册" name="album" :disabled="shopId == 0">
 	    		<mixc-album :client-id="clientId" :obj-id="shopId" album-type="shop"></mixc-album>
 	    </el-tab-pane>
 	</el-tabs>
@@ -114,19 +114,19 @@
 				formRules: {
 					shopName: [{
 						required: true,
-						message: '请输入品牌名称',
+						message: '请输入店铺名称',
 						trigger: 'blur',
 						length: 20
 					}],
 					shopEnName: [{
 						required: true,
-						message: '请输入品牌英文名称',
+						message: '请输入店铺英文名称',
 						trigger: 'blur',
 						length: 30
 					}],
 					shopIndex: [{
 						required: true,
-						message: '请输入品牌索引(字母A-Z|数字0-9)',
+						message: '请输入店铺索引(字母A-Z|数字0-9)',
 						trigger: 'blur',
 						length: 1
 					}]

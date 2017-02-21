@@ -50,7 +50,7 @@ export let routes = [
 			{
 				path: '/scene/floor', icon: 'icon-shop', name: '楼层管理', component: floor,
 				children: [
-					{ path: '/scene/floor/room/:floorId', icon: 'icon-shop', name: "店铺管理", component: room },
+					{ path: '/scene/floor/room/:floorId', icon: 'icon-shop', name: "店铺房间管理", component: room },
 					{ path: '/scene/floor/poi/:floorId', icon: 'icon-shop', name: "公共设施管理", component: poi }
 				]
 			},
@@ -61,12 +61,12 @@ export let routes = [
 	{
 		path: '/shop',
 		icon: 'icon-shop',
-		name: '品牌管理',
+		name: '店铺管理',
 		component: index,
 		children: [
-			{ path: '/shop/list', icon: 'icon-shop', name: '品牌管理', component: shop },
-			{ path: '/shop/edit/:shopId', icon: 'icon-shop', name: '品牌管理', component: shopedit, hidden: true },
-			{ path: '/shop/type/3/-1', icon: 'icon-shop', name: '品牌类型', component: shoptype }
+			{ path: '/shop/list', icon: 'icon-shop', name: '店铺管理', component: shop },
+			{ path: '/shop/edit/:shopId', icon: 'icon-shop', name: '店铺管理', component: shopedit, hidden: true },
+			{ path: '/shop/type/3/-1', icon: 'icon-shop', name: '店铺类型', component: shoptype }
 		]
 	},
 	{

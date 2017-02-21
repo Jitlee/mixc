@@ -1,6 +1,6 @@
 <template>
 	<el-tabs style="width: 100%">
-		<el-tab-pane label="店铺管理" name="room">
+		<el-tab-pane label="店铺房间管理" name="room">
 			<mixc-room :p-floor-id="floorId"></mixc-room>
 		</el-tab-pane>
 	    <el-tab-pane label="公共设施管理" name="poi">

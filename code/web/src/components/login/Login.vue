@@ -1,6 +1,6 @@
 <template>
 	<el-form :model="loginForm" :rules="rules" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm card-box loginform">
-		<h3 class="title">商场导购平台</h3>
+		<h3 class="title">导航平台</h3>
 		<el-form-item prop="username">
 			<el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="账号"></el-input>
 		</el-form-item>

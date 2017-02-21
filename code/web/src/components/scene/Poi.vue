@@ -3,7 +3,7 @@
 		<el-row style="margin-bottom: 10px;">
 			<el-col :span="24">
 				<div class="grid-content" align="left">
-					<el-button @click.native="handleAdd">新增兴趣点</el-button>
+					<el-button @click.native="handleAdd">新增公共设施</el-button>
 				</div>
 			</el-col>
 		</el-row>

@@ -170,7 +170,7 @@
 						<div class="info">
 							<div class="icon" :style="{ backgroundImage: 'url(' + item.shopIconPath.replace(/^\//, '') + ')' }"></div>
 							<span class="name">{{ item.shopName }}</span>
-							<div class="desc">{{ item.shopDesc }}</div>
+							<div class="desc">{{ item.subShopTypeText }}</div>
 							<div class="floor"><strong>{{ item.shopFloor }}</strong>&nbsp;&nbsp;{{ item.shopRoom }}</div>
 						</div>
 					</router-link>
@@ -186,7 +186,7 @@
 						<hr />
 						<span class="name">品牌名：<span class="red">{{ shop.shopName }}</span></span>
 						<div class="floor">店铺位置：<strong>{{ shop.shopFloor }}</strong>&nbsp;&nbsp;{{ shop.shopRoom }}</div>
-						<div class="desc">类型：{{ shop.shopDesc }}</div>
+						<div class="desc">类型：{{ shop.subShopTypeText }}</div>
 						<a @click="handleBack" class="back"><i class="iconfont icon-back"></i>&nbsp;&nbsp;返回</a>
 					</div>
 					<div class="introduction">
@@ -227,8 +227,13 @@
 				</div>
 				<div class="shops clear">
 					<h5>本层店铺:</h5>
-					<div>
-					<router-link v-for="item in shops"  :to="'/shop/0/' + item.shopId">{{ item.shopName }}</a>
+					<div :id="swipeId" class="floor swiper-container">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide" v-for="shops in pages">
+								<router-link v-for="shop in shops"  :to="'/shop/0/' + shop.shopId">{{ shop.shopName }}</a>
+							</div>
+						</div>
+						<div class="pagination" v-show="pages.length > 1"></div>
 					</div>
 				</div>
 			</div>

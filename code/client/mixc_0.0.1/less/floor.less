@@ -111,7 +111,6 @@
         background-color: @light-color;
         padding-left: calc(~"@{w} + 2vh");
         height: @h;
-        overflow: auto;
         
         h5 {
             color: @rose-color;
@@ -126,9 +125,15 @@
             float: left;
             height: 4vh;
             line-height: 4vh;
-            margin-right: 1vh;
+            margin-right: 0.5vh;
+            margin-left: 0.5vh;
+            margin-bottom: 1vh;
             width: calc(~"(100vw - 22vh - 20px) / 3");
             text-align: center;
+        }
+        
+        a:nth-child(1n) {
+            margin-left: 0vh;
         }
         
         a:nth-child(3n) {

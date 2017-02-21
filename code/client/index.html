@@ -9,14 +9,13 @@
   <title>Document</title>
  </head>
  <body>
-  hello world!
   <script>
 		var cv = require('./js/checkversion.js')
     		var nw = require('nw.gui');
     		const mainPath = cv.getPathName()
     		alert(mainPath)
 		nw.Window.open(mainPath, {
-		    "title": "商场导航软件",
+		    "title": "导航平台",
 		    "fullscreen": true,
 		    "frame": false
 		}, (win) => {

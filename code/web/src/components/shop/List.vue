@@ -8,19 +8,19 @@
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="shops" border style="width: 100%">
-			<el-table-column inline-template label="品牌名称" align="left">
+			<el-table-column inline-template label="店铺名称" align="left">
 				<div>{{ row.shopName }}</div>
 			</el-table-column>
 			<el-table-column inline-template label="英文名称" align="left">
 				<div>{{ row.shopEnName }}</div>
 			</el-table-column>
-			<el-table-column inline-template label="品牌类型">
+			<el-table-column inline-template label="店铺类型">
 				<div>
 					<el-tag type="success">{{ row.mainShopTypeText }}</el-tag>
 					<el-tag type="gray">{{ row.subShopTypeText }}</el-tag>
 				</div>
 			</el-table-column>
-			<el-table-column inline-template label="品牌特色" align="left" :show-overflow-tooltip="true">
+			<el-table-column inline-template label="店铺特色" align="left" :show-overflow-tooltip="true">
 				<div>{{ row.shopDesc }}</div>
 			</el-table-column>
 			<el-table-column :context="_self" inline-template label="操作" width="200px">
@@ -37,7 +37,7 @@
 		<el-dialog :title="formTitle" v-model="formVisible" :close-on-click-modal="false">
 			<el-form :model="formData" label-width="80px" ref="formData" style="position: relative;">
 				<el-form-item label="排名" class="el-form-item-left">
-					<el-input type="tel" v-model="formData.shopSort" auto-complete="off" :maxlength="20" :placeholder="'请输入品牌《' + formData.shopName + '》新的排名'"></el-input>
+					<el-input type="tel" v-model="formData.shopSort" auto-complete="off" :maxlength="20" :placeholder="'请输入店铺《' + formData.shopName + '》新的排名'"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">

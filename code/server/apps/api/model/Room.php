@@ -21,6 +21,7 @@ class Room extends Model
 		}
 		
 		$list =  $db->where('floor_id', $floorId)->where('r.is_deleted', 'N')->order('r.create_time asc')->select();
+//		echo $this->getLastSql();
 		return $list;
 	}
 	
