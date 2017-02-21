@@ -424,18 +424,21 @@
 			setupShops(floor) {
 				filterShopesByFloor.call(this, floor, (shops) => {
 					const pages = [];
-					const len = shops.length
-					const PAGE_SIZE = 15
+					const PAGE_SIZE = 6
+					const set = new Set()
+					const _shops = []
+					shops.forEach(s => { if(!set.has(s.shopId)) {
+						_shops.push(s)  }
+						set.add(s.shopId)
+					})
+					set.clear()
+					const len = _shops.length
 					for(let i = 0; i < len; i += PAGE_SIZE) {
-						const _shops = []
+						const page = []
 						for(let j = i; j < i + PAGE_SIZE && j < len; j++) {
-							_shops.push(shops[j])
+							page.push(_shops[j])
 						}
-						pages.push(_shops)
-					}
-					if(this.swiper) {
-						this.swiper.removeAllSlides()
-						this.swiper.destroy(true, true)
+						pages.push(page)
 					}
 					this.pages = pages;
 					this.setup()
@@ -445,13 +448,17 @@
 			setup() {
 				let id = '#' + this.swipeId;
 				this.$nextTick(() => {
-					this.swiper = new Swiper(id,{
-					    pagination: '.pagination',
-					    loop:false,
-					    grabCursor: true,
-					    paginationClickable: true,
-					    slidesPerView: true,
-					})
+					if(this.swiper) {
+						this.swiper.reLoop()
+					} else {
+						this.swiper = new Swiper(id,{
+						    pagination: '.pagination',
+						    loop:false,
+						    grabCursor: true,
+						    paginationClickable: true,
+						    slidesPerView: true,
+						})
+					}
 				});
 			},
 		}

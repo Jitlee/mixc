@@ -603,7 +603,7 @@ nav.home-nav .nav-wheel {
   transform-origin: 50% 50%;
 }
 .floor .floors .title {
-  font-size: 1vh;
+  font-size: 1.5vh;
   position: absolute;
   top: 50%;
   left: 1vh;
@@ -691,7 +691,7 @@ nav.home-nav .nav-wheel {
   display: block;
   background-color: #fff;
   color: #999;
-  font-size: 1vh;
+  font-size: 1.2vh;
   float: left;
   height: 4vh;
   line-height: 4vh;
