@@ -424,7 +424,7 @@
 			setupShops(floor) {
 				filterShopesByFloor.call(this, floor, (shops) => {
 					const pages = [];
-					const PAGE_SIZE = 6
+					const PAGE_SIZE = 15
 					const set = new Set()
 					const _shops = []
 					shops.forEach(s => { if(!set.has(s.shopId)) {
@@ -447,6 +447,7 @@
 			
 			setup() {
 				let id = '#' + this.swipeId;
+				const ths = this
 				this.$nextTick(() => {
 					if(this.swiper) {
 						this.swiper.reLoop()
@@ -456,7 +457,7 @@
 						    loop:false,
 						    grabCursor: true,
 						    paginationClickable: true,
-						    slidesPerView: true,
+						    slidesPerView: true
 						})
 					}
 				});
@@ -501,7 +502,6 @@
 				if(albums.length > 0) {
 					this.shopAlbum = albums[0].filePath
 					this.shopAlbums = albums
-					this.setup()
 				} else if(this.shop.shopImagePath != '') {
 					this.shopAlbum = this.shop.shopImagePath
 				}
@@ -516,17 +516,20 @@
 				}
 			},
 			setup() {
-				this.$nextTick(() => {
-					this.swiper = new Swiper('#' + this.garryId,{
-					    pagination: '.pagination',
-					    loop:true,
-					    grabCursor: true,
-					    paginationClickable: true
-					})
+				if(this.swiper) {
+					return
+				}
+				this.swiper = new Swiper('#' + this.garryId,{
+				    pagination: '.pagination',
+				    loop:true,
+				    grabCursor: true,
+				    paginationClickable: true,
+				    onTap: this.handleClose.bind(this)
 				})
 			},
 			handleShow() {
 				$('#' + this.garryId).fadeIn()
+				this.setup()
 			},
 			handleClose() {
 				$('#' + this.garryId).fadeOut()
@@ -928,13 +931,14 @@
 					    pagination: '.pagination',
 					    loop:true,
 					    grabCursor: true,
-					    paginationClickable: true,
+//					    paginationClickable: true,
 					    autoplay : 5000,
 						speed: 500,
+					    onTap: this.handleClick.bind(this),
 					})
 				});
 			},
-			handleClick(evt) {
+			handleClick() {
 				const index = this.swiper.activeIndex - 1
 				const ads = this.list[index]
 				if(ads) {

@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="css/animate.min.css" charset="utf-8"/>
 		<link rel="stylesheet" href="css/app.css" charset="utf-8"/>
 		<link rel="stylesheet" href="iconfont/iconfont.css" charset="utf-8"/>
-		<link rel="stylesheet" href="lib/swiper/idangerous.swiper.css" charset="utf-8"/>
+		<link rel="stylesheet" href="lib/swiper/swiper.min.css" charset="utf-8"/>
 		<style>
 			.bounce-enter-active {
 				transition: transform 0.5s;
@@ -53,7 +53,7 @@
 	
 			<!-- 1.2 ads: 顶部广告 -->
 			<script type="text/x-template" id="ads-template">
-				<div :id="swipeId" class="ads swiper-container"  @click.navtive="handleClick">
+				<div :id="swipeId" class="ads swiper-container">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide" v-for="item in list" :style="{ backgroundImage: 'url(' + item.adsFilePath.replace(/^\//, '') + ')' }"></div>
 					</div>
@@ -196,7 +196,7 @@
 					
 					<img class="shop-nav" :src="shop.shopNavPath.replace(/^\//, '')"/>
 					
-					<div :id="garryId" class="album swiper-container" @click="handleClose" style="display: none">
+					<div :id="garryId" class="album swiper-container" style="display: none">
 						<div class="swiper-wrapper">
 							<div class="swiper-slide" v-for="item in shopAlbums" :style="{ backgroundImage: 'url(' + item.filePath.replace(/^\//, '') + ')' }"></div>
 						</div>
@@ -279,7 +279,7 @@
 		
 		<script src="lib/vue/vue.js"></script>
 		<script src="lib/vue-router/vue-router.min.js"></script>
-		<script src="lib/swiper/idangerous.swiper.min.js"></script>
+		<script src="lib/swiper/swiper.min.js"></script>
 		<script src="lib/jquery/jquery-3.1.1.min.js"></script>
 		<script src="js/main.js"></script>
 		<script src="js/setting.js"></script>

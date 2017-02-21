@@ -97,17 +97,17 @@ h5 {
   height: 3vh;
   line-height: 3vh;
 }
-.album.swiper-container .swiper-pagination-switch {
+.album.swiper-container .swiper-pagination-bullet {
   height: 1vh;
   width: 1vh;
-  background-color: rgba(223, 255, 255, 0.3);
+  background-color: rgba(223, 255, 255, 0.8);
   display: inline-block;
   border-radius: 1vh;
   margin: 0.3vh;
   transition: background-color 0.1s ease-in-out;
 }
-.album.swiper-container .swiper-active-switch {
-  background-color: rgba(255, 255, 255, 0.8);
+.album.swiper-container .swiper-pagination-bullet-active {
+  background-color: #e86b6a;
 }
 .album.swiper-container .swiper-slide {
   height: 100vh;
@@ -132,7 +132,7 @@ h5 {
   height: 3vh;
   line-height: 3vh;
 }
-.floor.swiper-container .swiper-pagination-switch {
+.floor.swiper-container .swiper-pagination-bullet {
   height: 1vh;
   width: 1vh;
   background-color: #999;
@@ -141,7 +141,7 @@ h5 {
   margin: 0.3vh;
   transition: background-color 0.1s ease-in-out;
 }
-.floor.swiper-container .swiper-active-switch {
+.floor.swiper-container .swiper-pagination-bullet-active {
   background-color: #e05eb6;
 }
 .top-header {
