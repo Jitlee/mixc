@@ -1,10 +1,10 @@
 {
-  "name": "mixc",
+  "name": "Shopping",
   "version": "0.0.2",
   "main": "main.js",
   "window": {
-    "title": "商场导航软件",
-    "icon": "",
+    "title": "导航软件",
+    "icon": "./favicon.ico",
     "frame": false,
     "position": "center",
     "width": 400,
