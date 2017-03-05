@@ -968,4 +968,14 @@
 	new Vue({
 		router
 	}).$mount('#app');
+	
+	// -----------------------------
+	// 代码
+	
+	const { ipcRenderer } = require('electron')
+	// 自动播放广告时回到主页
+	ipcRenderer.on('open-ads', () => {
+		router.replace('/')
+		console.log('播放广告了');
+	});
 })();

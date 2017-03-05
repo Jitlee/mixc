@@ -18,8 +18,11 @@
     "packager": "electron-packager . --platform=win32 --arch=all --electron-version=1.4.13 --out ./package --overwrite --icon ./favicon.ico"
   },
   "dependencies": {
+    "getmac": "^1.2.1",
+    "ip": "^1.1.5",
     "machinepack-zip": "^1.1.0",
     "md5": "^2.2.1",
+    "power-off": "^1.1.2",
     "request": "^2.79.0"
   }
 }

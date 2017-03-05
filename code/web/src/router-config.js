@@ -17,6 +17,7 @@ import user from './components/setting/User.vue'
 import password from './components/setting/Password.vue'
 
 import activity from './components/activity/List.vue'
+import terminal from './components/terminal/List.vue'
 
 import articlelist from './components/article/List.vue'
 import articleedit from './components/article/Edit.vue'
@@ -67,6 +68,15 @@ export let routes = [
 			{ path: '/shop/list', icon: 'icon-shop', name: '店铺管理', component: shop },
 			{ path: '/shop/edit/:shopId', icon: 'icon-shop', name: '店铺管理', component: shopedit, hidden: true },
 			{ path: '/shop/type/3/-1', icon: 'icon-shop', name: '店铺类型', component: shoptype }
+		]
+	},
+	{
+		path: '/terminal',
+		icon: 'icon-terminal',
+		name: '设备管理',
+		component: index,
+		children: [
+			{ path: '/terminal/list', icon: 'icon-terminal', name: '终端管理', component: terminal },
 		]
 	},
 	{

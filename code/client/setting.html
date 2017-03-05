@@ -128,7 +128,7 @@
 				layer.open({content: '请确认服务器配置是否输入正确'})
 			}
 			let config = cv.extend({}, cv.config)
-			config.server = server
+			config.server = urlTrim(server)
 			config.port = Number(port)
 			config.sourceId = Number(sourceId)
 			cv.saveConfig(config ,function(err){  
@@ -138,6 +138,10 @@
 		        	handleClose();
 		        }
 		    });  
+		}
+		
+		function urlTrim(url) {
+			return url.replace(/^http:\/\//, '').replace('/\/$/', '')
 		}
 		
 		function handleClose() {

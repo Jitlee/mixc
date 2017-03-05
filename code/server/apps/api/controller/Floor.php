@@ -18,6 +18,17 @@ class Floor {
 		$list = $floor->_query($buildId, $pageNo);
 		return success($list);
 	}
+	/**
+	 * get: 获取层列表
+	 * path: all/{buildId}
+	 * method: all
+	 * param: buildId - {int} 楼id
+	 */
+	public function all($buildId = 0) {
+		$floor = model('Floor');
+		$list = $floor->_all($buildId);
+		return success($list);
+	}
 	
 	/**
 	 * get: 获取层列表

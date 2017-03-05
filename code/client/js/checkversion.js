@@ -232,18 +232,18 @@ function getJSON(url, success, error) {
 			error(err)
 		} else if(response.statusCode == 200) {
 			try {
-    			const data = JSON.parse(body)
-    			if(data && data.code == 200) {
-            		success(data.rst)
-            	} else {
-            		error()
-            	}
-    		} catch(e) {
-    			error(e)
+    				const data = JSON.parse(body)
+    				if(data && data.code == 200) {
+            			success(data.rst)
+	            	} else {
+	            		error()
+	            	}
+	    		} catch(e) {
+	    			error(e)
+	    		}
+    		} else {
+    			error()
     		}
-    	} else {
-    		error()
-    	}
 	})
 }
 
