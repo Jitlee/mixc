@@ -136,7 +136,7 @@ function autActive() {
 						// 检测是否关机
 						const now = new Date()
 						const minutes = now.getHours() * 60 + now.getMinutes();
-						if(Math.abs(minutes - rst.shutdownTime) < ACTIVE_INTERVAL * 1.5) {
+						if(Math.abs(minutes - rst.shutdownTime) * 60 * 1000 < ACTIVE_INTERVAL * 1.5) {
 							// 关机
 							powerOff((err, stderr, stdout) => {
 							    if(!err && !stderr) {
@@ -150,3 +150,5 @@ function autActive() {
 		}
 	})
 }
+
+// 关闭提示
