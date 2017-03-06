@@ -6,7 +6,6 @@
 	const { ipcRenderer } = require('electron')
 	
 	let TIMEOUT = 3
-//	const TIMEOUT = 10*1000
 	let lastActiveTime = new Date().getTime()
 	w.addEventListener('click', refreshTime)
 	let timeHandler = 0
@@ -24,8 +23,8 @@
 			} else {
 				beginTiming()
 			}
-//		}, TIMEOUT * 60 * 1000)
-		}, 10000)
+		}, TIMEOUT * 60 * 1000)
+//		}, 10000)
 	}
 	
 	function refreshTime() {

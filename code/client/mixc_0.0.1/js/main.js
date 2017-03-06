@@ -1054,21 +1054,17 @@
 	Vue.component('mixc-setting', {
 		template: '#setting-template',
 		data() {
+			const cv = getCV()
+			const config = cv == null ? { } : cv.readConfig()
 			return {
-				formData: {
-					server: '',
-					port: '',
-					sourceId: '',
-				}
+				cv: cv,
+				formData: config,
 			}
 		},
 		created() {
 			if(!window.require) {
 				return
 			}
-			const cv = require('./js/checkversion.js')
-			const config = cv.readConfig()
-			$.extend(this.formData, config)
 		},
 		methods: {
 			handleSubmit() {
@@ -1076,10 +1072,7 @@
 				if(!window.require) {
 					return
 				}
-				const cv = require('./js/checkversion.js')
-				const config = cv.readConfig()
-				$.extend(config, this.formData)
-				cv.saveConfig(config)
+				this.cv.saveConfig(this.formData)
 			},
 		}
 	});
@@ -1103,6 +1096,14 @@
 	
 	// -----------------------------
 	// 代码
+	
+	// 获取cv
+	function getCV() {
+		if(!window.require) {
+			return null
+		}
+		return require('./js/checkversion.js')
+	}
 	
 	// 自动播放广告时回到主页
 	window.__backHome = function(){

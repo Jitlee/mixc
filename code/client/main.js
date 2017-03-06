@@ -39,7 +39,8 @@ ipcMain.on('open-main', () => {
 		setTimeout(() => {
 			mainWindow.webContents.send('ads-time', adsTime)
 			mainWindow.webContents.send('password', password)
-		}, 1000)
+			mainWindow.webContents.send('get-config', cv.readConfig())
+		}, 3000)
 	})
 	mainWindow.loadURL(url.format({
 	  	pathname: cv.getMainPath('index.html'),
@@ -137,8 +138,9 @@ function autActive() {
 	const url = ['http://', config.server, ':', config.port, '/api/terminal/active/', config.sourceId].join('');
 	adsTime = config.adsTime
 	password = config.password
+	console.log('active url: ' + url)
 	request.post({ url:url, form: activeData }, (err, response, body) => {
-		if(response.statusCode == 200) {
+		if(response && response.statusCode == 200) {
 			try {
 				const data = JSON.parse(body)
 				if(data && data.code == 200) {
@@ -176,4 +178,14 @@ function autActive() {
 	})
 }
 
-// 关闭提示
+// 保存设置
+ipcMain.on('save-config', (evt, newConfig) => {
+	console.log('save-config')
+	if(newConfig) {
+		const config = cv.readConfig()
+		config.server = newConfig.server || config.server
+		config.port = newConfig.port || config.port
+		config.sourceId = newConfig.sourceId || config.sourceId
+		cv.saveConfig(config)
+	}
+})
