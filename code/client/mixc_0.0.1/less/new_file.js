@@ -1000,10 +1000,12 @@
 										const { app } = require('electron')
 										app.quit()
 									}
-			      					layer.close(index)
+			      					layer.close(index);
 								},
-								no: this.onsetting.bind(this),
-			  				})
+								no: function(index) {
+									this.$emit('setting');
+								},
+			  				});
 						} else {
 							this.index = 0;
 							this.nums = []
@@ -1013,41 +1015,25 @@
 					}
 				}
 			},
-			onsetting() {
-				console.log('打开设置页面');
-				this.$emit('setting')
-			},
 			passwordChanged(evt, password) {
 				this.password = password
 			}
 		}
 	});
 	
+	
+	
 	Vue.component('mixc-config', {
 		template: '#config-template',
 		data() {
 			return {
-				passwordVisible: false,
-				settingVisible: false,
 				
-				doubleClick: {
-					interval: 200, // 200毫秒模拟双击
-					lastTime: 0, // 上次点击的时间
-				}
 			}
 		},
+		created() {
+		},
 		methods: {
-			handleOpen() {
-				const time = new Date().getTime()
-				const lastTime = this.doubleClick.lastTime
-				this.doubleClick.lastTime = time
-				if(time - lastTime < this.doubleClick.interval) {
-					// 双击成功
-					if(!this.passwordVisible) {
-						this.passwordVisible = true
-					}
-				}
-			}
+			
 		}
 	});
 	
@@ -1055,31 +1041,10 @@
 		template: '#setting-template',
 		data() {
 			return {
-				formData: {
-					server: '',
-					port: '',
-					sourceId: '',
-				}
 			}
-		},
-		created() {
-			if(!window.require) {
-				return
-			}
-			const cv = require('./js/checkversion.js')
-			const config = cv.readConfig()
-			$.extend(this.formData, config)
 		},
 		methods: {
 			handleSubmit() {
-				this.$emit('close')
-				if(!window.require) {
-					return
-				}
-				const cv = require('./js/checkversion.js')
-				const config = cv.readConfig()
-				$.extend(config, this.formData)
-				cv.saveConfig(config)
 			},
 		}
 	});

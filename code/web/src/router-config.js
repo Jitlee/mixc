@@ -18,6 +18,7 @@ import password from './components/setting/Password.vue'
 
 import activity from './components/activity/List.vue'
 import terminal from './components/terminal/List.vue'
+import terminalpassword from './components/terminal/Password.vue'
 
 import articlelist from './components/article/List.vue'
 import articleedit from './components/article/Edit.vue'
@@ -76,7 +77,8 @@ export let routes = [
 		name: '设备管理',
 		component: index,
 		children: [
-			{ path: '/terminal/list', icon: 'icon-terminal', name: '终端管理', component: terminal },
+			{ path: '/terminal/list', icon: 'icon-terminal', name: '客户端管理', component: terminal },
+			{ path: '/terminal/password', icon: 'icon-terminal', name: '客户端密码', component: terminalpassword },
 		]
 	},
 	{

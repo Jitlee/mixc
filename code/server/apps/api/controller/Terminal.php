@@ -29,6 +29,8 @@ class Terminal {
 	 * param: tmlMac - {string} = '' 终端MAC地址
 	 * param: tmlIp - {string} = '' 终端IP地址
 	 * param: tmlDesc - {string} = '' 终端描述字段
+	 * param: shutdownTime - {int} = 0 关机时间(时:分)
+	 * param: adsTime - {int} = 0 开始播放广告时间(分钟)
 	 */
 	public function save() {
 		$db = model('Terminal');

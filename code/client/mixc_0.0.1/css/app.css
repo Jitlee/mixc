@@ -69,6 +69,9 @@ h5 {
   display: block;
   position: relative;
 }
+.layui-m-layer {
+  color: #000;
+}
 .ads.swiper-container {
   height: calc(30vh - 10px);
 }
@@ -100,7 +103,7 @@ h5 {
 .album.swiper-container .swiper-pagination-bullet {
   height: 1vh;
   width: 1vh;
-  background-color: rgba(223, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.8);
   display: inline-block;
   border-radius: 1vh;
   margin: 0.3vh;
@@ -766,4 +769,177 @@ nav.home-nav .nav-wheel {
 .article .content {
   color: #333;
   padding-top: 20px;
+}
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity .3s ease;
+}
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+.modal-container {
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+.modal-header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #42b983;
+}
+.modal-body {
+  margin: 20px 0;
+}
+.modal-footer:after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+}
+.modal-default-button {
+  float: right;
+  width: 120px;
+  height: 30px;
+  background-color: #cccccc;
+  border: none;
+  font-size: 16px;
+  outline: none;
+  border: solid 2px #cccccc;
+}
+.modal-default-button:hover {
+  border-color: #999;
+}
+.modal-default-button:active {
+  background-color: #999;
+  border-color: #999;
+}
+.modal-default-button:disabled {
+  color: #8D8D8D;
+}
+.modal-default-button:focus:disabled {
+  background-color: #cccccc;
+  border: solid 2px #cccccc;
+}
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+.modal-enter {
+  opacity: 0;
+}
+.modal-leave-active {
+  opacity: 0;
+}
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+.config .button {
+  display: block;
+  z-index: 9999;
+  height: 50px;
+  width: 50px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  border: solid 1px red;
+}
+.password .input {
+  display: block;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.password .input .num {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+  border: solid 1px #ccc;
+  transition: background-color 0.2s ease-in-out;
+  margin: 10px;
+}
+.password .input .num.active {
+  background-color: #ccc;
+}
+.password .keyboard {
+  display: block;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  padding: 5px;
+}
+.password .keyboard:after {
+  content: "";
+  height: 0;
+  clear: both;
+  display: block;
+}
+.password .keyboard .key {
+  display: block;
+  float: left;
+  width: 84px;
+  height: 84px;
+  line-height: 84px;
+  border-radius: 84px;
+  margin: 5px;
+  text-align: center;
+  color: #333;
+  border: solid 1px #ccc;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+.password .keyboard .key-back {
+  width: 178px;
+}
+.password .keyboard .key:active {
+  background-color: #ccc;
+  color: #fff;
+}
+.form-row {
+  padding: 10px 0;
+}
+.form-row .form-label {
+  font-size: 14px;
+  height: 30px;
+  line-height: 30px;
+  box-sizing: border-box;
+  color: #666;
+}
+.form-row .form-input {
+  outline: none;
+  height: 30px;
+  background-color: #FFF;
+  color: #333;
+  font-size: 16px;
+  border-radius: 0px;
+  border: 2px solid #999;
+  -webkit-transition: border-color 0.3s ease-in-out;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 5px;
+}
+.form-row .form-input:hover {
+  border-color: #333;
+}
+.form-row .form-input:focus {
+  border-color: #0078d7;
 }

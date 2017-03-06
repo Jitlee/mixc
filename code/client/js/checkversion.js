@@ -7,7 +7,7 @@ const md5 = require('md5');
 
 const dataPath = getUserFolderPath();
 let configPath = path.join(path.dirname(process.execPath), 'config.json')
-let config = { server: 'cky.ritacc.net', port: 8888, updateTime: 1485012010437, version: '0.0.1', sourceId: 1 }
+let config = { server: 'cky.ritacc.net', port: 8888, updateTime: 1485012010437, version: '0.0.1', sourceId: 1, adsTime: 3 }
 	
 function getMainPath(fileName = 'index.html') {
 	const config = readConfig()

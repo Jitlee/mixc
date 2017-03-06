@@ -5,6 +5,13 @@
 				<div class="grid-content" align="left">
 					<el-button @click.native="handleAdd">新增</el-button>
 					<el-button @click.native="handleRefresh">刷新</el-button>
+					<el-tag type="success" style="margin-left: 2em;">设置默认关机时间</el-tag>
+					<el-time-select v-model="defaultData.timeString" @input="handleDefaultShutdown" style="width: 100px" :picker-options="{ start: '10:00', step: '00:15', end: '23:30' }" placeholder="选择时间"></el-time-select>
+					
+					<el-tag type="warning" style="margin-left: 2em;">设置默认进入广告时间</el-tag>
+					<el-select v-model="defaultData.adsTime" placeholder="请选择" @change="handleDefaultAds" style="display:inline-block">
+					    <el-option v-for="item in adsTimes" :label="item + '分钟'" :value="item"></el-option>
+				  	</el-select>
 				</div>
 			</el-col>
 		</el-row>
@@ -12,17 +19,20 @@
 			<el-table-column inline-template label="客户端名称" align="left">
 				<div>{{ row.tmlName }}</div>
 			</el-table-column>
-			<el-table-column inline-template label="所在楼层" align="left">
+			<el-table-column inline-template label="所在楼层" align="left" width="95px">
 				<div>{{ row.floorName }}</div>
 			</el-table-column>
-			<el-table-column inline-template label="客户端MAC地址" align="left">
+			<el-table-column inline-template label="客户端MAC地址" align="left" width="160px">
 				<div>{{ row.tmlMac }}</div>
 			</el-table-column>
-			<el-table-column inline-template label="客户端IP" align="left">
+			<el-table-column inline-template label="客户端IP" align="left" width="140px">
 				<div>{{ row.tmlIp }}</div>
 			</el-table-column>
-			<el-table-column inline-template label="定时关机时间" align="left">
-				<div>{{ row.shutdownTimeText }}</div>
+			<el-table-column inline-template label="关机时间" align="left" width="95px">
+				<div>{{ row.shutdownTime == 0 ? '默认时间' : row.shutdownTimeText }}</div>
+			</el-table-column>
+			<el-table-column inline-template label="空闲时间" align="left" width="95px">
+				<div>{{ row.adsTime == 0 ? '默认时间' : (row.adsTime + '分钟') }}</div>
 			</el-table-column>
 			<el-table-column inline-template label="上次启动时间" align="left">
 				<div>{{ row.onlineTime }}</div>
@@ -48,7 +58,6 @@
 					<el-form-item label="所在楼层" prop="floorId" class="el-form-item-left">
 						<el-select v-model="formData.floorId" placeholder="请选择">
 						    <el-option v-for="item in floors" :label="item.floorName" :value="item.floorId"></el-option>
-						    	</el-option-group>
 					  	</el-select>
 					</el-form-item>
 					<el-form-item label="客户端MAC地址" prop="tmlMac" class="el-form-item-left">
@@ -58,8 +67,17 @@
 						<el-input v-model="formData.tmlIp" auto-complete="off" :maxlength="30" placeholder="请输入IP地址"></el-input>
 					</el-form-item>
 					<el-form-item label="定时关机时间" class="el-form-item-left" style="text-align: left">
-						<el-time-select v-model="shutdownTime" :picker-options="{ start: '08:00', step: '00:15', end: '23:30' }" placeholder="选择时间"></el-time-select>
+						<el-time-select v-model="shutdownTime" :picker-options="{ start: '10:00', step: '00:15', end: '23:30' }" placeholder="默认时间"></el-time-select>
+						<el-button type="primary" size="mini" @click="handleClearDefault">设置默认</el-button>
 					</el-form-item>
+					
+					<el-form-item label="空闲时间" class="el-form-item-left">
+						<el-select v-model="formData.adsTime" placeholder="请选择">
+						    <el-option label="默认时间" :value="0"></el-option>
+						    <el-option v-for="item in adsTimes" :label="item + '分钟'" :value="item"></el-option>
+					  	</el-select>
+					</el-form-item>
+					
 					<el-form-item label="客户端品牌" class="el-form-item-left">
 						<el-input v-model="formData.tmlBrand" auto-complete="off" :maxlength="30" placeholder="请输入品牌"></el-input>
 					</el-form-item>
@@ -103,7 +121,7 @@
 				formLoading: false,
 				formVisible: false,
 				
-				shutdownTime: '21:00',
+				shutdownTime: '00:00',
 				formData: {
 					tmlId: 0,
 					clientId: clientId,
@@ -114,7 +132,8 @@
 					tmlBrand: '',
 					tmlModel: '',
 					tmlDesc: '',
-					shutdownTime: 540,
+					shutdownTime: 0,
+					adsTime: 0,
 					x: 0,
 					y: 0,
 					
@@ -131,7 +150,17 @@
 					]
 				},
 				
+				defaultData: { // 统一设置时间
+					timeString: '',
+					time: 1260,
+					adsTime: '',
+					adsFlag: false, // 临时标记，初始化时不需要提交
+					password: ''
+				},
+				
 				floors: [],
+				
+				adsTimes: [3,5,8,10,15,20,30,60]
 			};
 		},
 		created() {
@@ -151,6 +180,7 @@
 						}
 					}
 					this.loadFloors();
+					this.loadDefaultData();
 				});
 			},
 			
@@ -167,6 +197,48 @@
 						}
 					}
 				});
+			},
+			
+			// 获取默认时间数据
+			loadDefaultData() {
+				if(this.floors.length > 0) {
+					return
+				}
+				let url = ["/api/scene/getdefault", this.clientId].join("/");
+				this.$http.get(url).then((response) => {
+					if(response.nice) {
+						const rst = response.data.rst
+						if(rst) {
+							this.defaultData.time = rst.shutdownTime
+							this.defaultData.timeString = this.stringWithMinutes(rst.shutdownTime)
+							this.defaultData.adsTime = rst.adsTime
+							this.$nextTick(() => {
+								this.defaultData.adsFlag = true
+							})
+						}
+					}
+				});
+			},
+			
+			// 设置默认关机时间
+			handleDefaultShutdown(val) {
+				this.defaultData.time = this.minutesWithString(val);
+				let url = ["/api/scene/setshutdown", this.clientId, this.defaultData.time].join("/");
+				this.$http.patch(url).then((response) => { });
+			},
+			
+			// 设置默认广告时间
+			handleDefaultAds(val) {
+				if(!this.defaultData.adsFlag) {
+					return
+				}
+				let url = ["/api/scene/setadstime", this.clientId, this.defaultData.adsTime].join("/");
+				this.$http.patch(url).then((response) => { });
+			},
+			
+			handleClearDefault(val) {
+				this.formData.shutdownTime = 0
+				this.shutdownTime = ''
 			},
 			
 			handleCurrentChange(pageNo) {
@@ -187,8 +259,9 @@
 				this.formData.tmlBrand = '';
 				this.formData.tmlModel = '';
 				this.formData.tmlDesc = '';
-				this.formData.shutdownTime = 540;
-				this.shutdownTime = '21:00';
+				this.formData.shutdownTime = 0;
+				this.formData.adsTime = 0;
+				this.shutdownTime = '';
 				this.formData.x = 0;
 				this.formData.y = 0;
 				this.formVisible = true;
@@ -196,7 +269,7 @@
 			handleEdit(index, row) {
 				this.formTitle = "编辑";
 				this.formData.tmlId = row.tmlId;
-				this.formData.floorId = row.floorId;
+				this.formData.floorId = row.floorId || '';
 				this.formData.tmlName = row.tmlName;
 				this.formData.tmlMac = row.tmlMac;
 				this.formData.tmlIp = row.tmlIp;
@@ -204,7 +277,12 @@
 				this.formData.tmlModel = row.tmlModel;
 				this.formData.tmlDesc = row.tmlDesc;
 				this.formData.shutdownTime = row.shutdownTime;
-				this.shutdownTime = this.stringWithMinutes(row.shutdownTime);
+				this.formData.adsTime = row.adsTime;
+				if(row.shutdownTime == 0) {
+					this.shutdownTime = '';
+				} else {
+					this.shutdownTime = this.stringWithMinutes(row.shutdownTime);
+				}
 				this.x = row.x;
 				this.y = row.y;
 				this.formVisible = true;
@@ -214,7 +292,10 @@
 			},
 			minutesWithString(time) {
 				const arr = time.split(':')
-				return Number(arr[0]) * 60 + Number(arr[1])
+				if(arr.length == 2) {
+					return Number(arr[0]) * 60 + Number(arr[1])
+				}
+				return 0
 			},
 			handleDelete(index, row) {
 				this.$confirm('确认删除该记录吗?', '提示', {

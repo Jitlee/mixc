@@ -17,7 +17,7 @@ class Terminal extends Model
     
 	public function _query($clientId = 0, $pageNo = 1) {
 		$list = $this->alias('t')
-			->field("tml_id tmlId, t.client_id clientId, tml_name tmlName, tml_brand tmlBrand, tml_model tmlModel, tml_mac tmlMac, tml_ip tmlIp, tml_desc tmlDesc, online_time onlineTime, active_time activeTime, shutdown_time shutdownTime, f_format_time(shutdown_time) shutdownTimeText, x, y, (unix_timestamp() - unix_timestamp(active_time) < 200) isActive")
+			->field("tml_id tmlId, t.client_id clientId, tml_name tmlName, tml_brand tmlBrand, tml_model tmlModel, tml_mac tmlMac, tml_ip tmlIp, tml_desc tmlDesc, online_time onlineTime, active_time activeTime, shutdown_time shutdownTime, f_format_time(shutdown_time) shutdownTimeText, x, y, (unix_timestamp() - unix_timestamp(active_time) < 200) isActive, ads_time adsTime")
 			->field('t.floor_id floorId, f.floor_name floorName')
 			->join('__FLOOR__ f','f.floor_id = t.floor_id', 'left')
 			->where('t.client_id', $clientId)->order('tml_name asc')
@@ -43,6 +43,7 @@ class Terminal extends Model
 			'tml_desc' 		=> $request->post('tmlDesc'),
 			'floor_id' 		=> $request->post('floorId'),
 			'shutdown_time' 		=> $request->post('shutdownTime'),
+			'ads_time' 		=> $request->post('adsTime'),
 		];
 		try {
 			if($tmlId == 0) {
@@ -65,7 +66,7 @@ class Terminal extends Model
 		if(empty($mac)) {
 			return -5;
 		}
-		$data = $this->field('unix_timestamp(active_time) active_time, tml_id, unix_timestamp() now, shutdown_time')->where('tml_mac', $mac)->find();
+		$data = $this->field('unix_timestamp(active_time) active_time, tml_id, unix_timestamp() now, shutdown_time, ads_time')->where('tml_mac', $mac)->find();
 		if(empty($data)) {
 			$clientData = Db::table('__SCENE__')->field('client_id')->where('scene_id', $releaseSourceId)->find();
 			if(empty($clientData)) {
@@ -81,10 +82,12 @@ class Terminal extends Model
 				'tml_ip'				=> $ip,
 				'active_time'		=> date('Y-m-d H:i',time()),
 				'online_time'		=> date('Y-m-d H:i',time()),
+				'shutdown_time'		=> 0,
+				'ads_time'		=> 0,
 			];
 			try {
 				$this->insert($data);
-				return ['shutdownTime' => 540 ];
+				return ['shutdownTime' => 1260 ];
 			} catch(\Exception $e) {
 //				echo dump($e);
 				return -1;
@@ -95,6 +98,7 @@ class Terminal extends Model
 		$tmlId = (int)$data['tml_id'];
 		$time = (int)$data['now'];
 		$shutdownTime = (int)$data['shutdown_time'];
+		$adsTime = (int)$data['ads_time'];
 		
 		$data = [
 			'active_time' => date('Y-m-d H:i:s', $time),
@@ -107,7 +111,8 @@ class Terminal extends Model
 		try {
 			$this->where('tml_id', $tmlId)->update($data);
 			return [
-				'shutdownTime' => $shutdownTime
+				'shutdownTime' => $shutdownTime,
+				'adsTime' => $adsTime,
 			];
 		} catch(\Exception $e) {
 				echo dump($e);
