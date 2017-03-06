@@ -49,7 +49,7 @@ ipcMain.on('open-main', () => {
 	}))
 	startWindow && startWindow.close()
 	mainWindow.on('closed', () => { mainWindow = null })
-	mainWindow.webContents.openDevTools()
+//	mainWindow.webContents.openDevTools()
 })
 
 // 启动设置页面
