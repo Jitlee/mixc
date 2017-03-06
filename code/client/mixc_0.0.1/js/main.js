@@ -997,12 +997,12 @@
 							this.title = '请输出密码'
 							
 							layer.open({
-				    				content: '您确定要退出应用程序吗？',
-				    				btn: ['是的', '不，去设置页面'],
-				    				shadeClose: true, //开启遮罩关闭
-				    				yes: function(index){
+			    				content: '您确定要退出应用程序吗？',
+			    				btn: ['是的', '不，去设置页面'],
+			    				shadeClose: true, //开启遮罩关闭
+			    				yes: function(index){
 									if(window.require) {
-										const { app } = require('electron')
+										const { app } = require('electron').remote
 										app.quit()
 									}
 			      					layer.close(index)
