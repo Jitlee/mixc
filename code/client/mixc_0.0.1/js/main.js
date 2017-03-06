@@ -973,7 +973,7 @@
 			
 			const { ipcRenderer } = require('electron')
 			
-			ipcRenderer.on('ads-time', this.passwordChanged.bind(this));
+			ipcRenderer.on('password', this.passwordChanged.bind(this));
 		},
 		methods: {
 			handleKeyUp(key) {
@@ -990,7 +990,12 @@
 					if(this.index == 4) {
 						if(this.password == this.nums.join('')) {
 							this.$emit('close')
-							console.info('程序需要退出')
+							console.info('密码正确')
+							
+							this.index = 0
+							this.nums = []
+							this.title = '请输出密码'
+							
 							layer.open({
 				    				content: '您确定要退出应用程序吗？',
 				    				btn: ['是的', '不，去设置页面'],
@@ -1005,7 +1010,7 @@
 								no: this.onsetting.bind(this),
 			  				})
 						} else {
-							this.index = 0;
+							this.index = 0
 							this.nums = []
 							this.title = '再试一次'
 							$(this.$refs.input).animateCss('shake')
@@ -1018,7 +1023,9 @@
 				this.$emit('setting')
 			},
 			passwordChanged(evt, password) {
-				this.password = password
+				if(password && password.length == 4) {
+					this.password = password
+				}
 			}
 		}
 	});
