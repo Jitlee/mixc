@@ -62,6 +62,7 @@ class Article {
 	 * method: save
 	 * param: articleId - {int} = 0 文章id(新增的时候为0)
 	 * param: clientId - {int}  客户id
+	 * param: articleGroupId - {int} 分组Id
 	 * param: articleTitle - {string} = '' 文章标题
 	 * param: articleContent - {string} = '' 商家简介
 	 */

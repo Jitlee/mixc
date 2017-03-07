@@ -8,6 +8,11 @@ use think\Request;
 // 楼层
 class Floor extends Model
 {
+	protected $type = [
+        'clientId'  		=>  'integer',
+        'floorId'  		=>  'integer',
+    ];
+    
 	public function _query($buildId = 0, $pageNo = 1) {
 		$request = Request::instance();
 		$keywords = $request->get('keywords', '');

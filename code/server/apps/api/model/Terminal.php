@@ -11,6 +11,7 @@ class Terminal extends Model
 	protected $type = [
         'isActive'  		=>  'boolean',
         'clientId'  		=>  'integer',
+        'floorId'  		=>  'integer',
         'tmlId'  		=>  'integer',
         'shutdownTime'  		=>  'integer',
         'adsTime'  		=>  'integer',

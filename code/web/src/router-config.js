@@ -34,74 +34,65 @@ export let routes = [
 		hidden: true
 	},
 	{
-		path: '/index',
-		icon: 'icon-index',
-		name: '主页',
-		component: index,
-		children: [
-			{ path: '/index/chart', name: '统计', component: { template: '<p>统计</p>' } }
-		]
-	},
-	{
 		path: 'scene',
-		icon: 'icon-index',
+		icon: 'icon-louceng',
 		name: '楼层管理',
 		component: index,
 		role: 2 + 4 + 8,
 		children: [
 			{
-				path: '/scene/floor', icon: 'icon-shop', name: '楼层管理', component: floor,
+				path: '/scene/floor', icon: 'icon-1380louceng1f', name: '楼层管理', component: floor,
 				children: [
 					{ path: '/scene/floor/room/:floorId', icon: 'icon-shop', name: "店铺房间管理", component: room },
 					{ path: '/scene/floor/poi/:floorId', icon: 'icon-shop', name: "公共设施管理", component: poi }
 				]
 			},
 			{ path: '/scene/floor/mgr/:floorId', icon: 'icon-shop', name: "公共设施管理", component: floormgr, hidden: true },
-			{ path: '/scene/poi/7/-2', icon: 'icon-shop', name: '公共设施类型管理', component: poiType }
+			{ path: '/scene/poi/7/-2', icon: 'icon-xingqudian', name: '公共设施类型管理', component: poiType }
 		]
 	},
 	{
 		path: '/shop',
-		icon: 'icon-shop',
+		icon: 'icon-dianpu',
 		name: '店铺管理',
 		component: index,
 		children: [
-			{ path: '/shop/list', icon: 'icon-shop', name: '店铺管理', component: shop },
-			{ path: '/shop/edit/:shopId', icon: 'icon-shop', name: '店铺管理', component: shopedit, hidden: true },
-			{ path: '/shop/type/3/-1', icon: 'icon-shop', name: '店铺类型', component: shoptype }
+			{ path: '/shop/list', icon: 'icon-dianpu', name: '店铺管理', component: shop },
+			{ path: '/shop/edit/:shopId', icon: 'icon-dianpu', name: '店铺管理', component: shopedit, hidden: true },
+			{ path: '/shop/type/3/-1', icon: 'icon-type', name: '店铺类型', component: shoptype }
 		]
 	},
 	{
 		path: '/terminal',
-		icon: 'icon-terminal',
+		icon: 'icon-zhongduan',
 		name: '设备管理',
 		component: index,
 		children: [
-			{ path: '/terminal/list', icon: 'icon-terminal', name: '客户端管理', component: terminal },
-			{ path: '/terminal/password', icon: 'icon-terminal', name: '客户端密码', component: terminalpassword },
+			{ path: '/terminal/list', icon: 'icon-zhongduan', name: '客户端管理', component: terminal },
+			{ path: '/terminal/password', icon: 'icon-mima', name: '客户端密码', component: terminalpassword },
 		]
 	},
 	{
 		path: '/activity',
-		icon: 'icon-activity',
-		name: '活动管理',
+		icon: 'icon-neirong',
+		name: '内容管理',
 		component: index,
 		children: [
-			{ path: '/activity/list', icon: 'icon-shop', name: '精彩活动', component: activity },
-			{ path: '/article/list', icon: 'icon-shop', name: '文章列表', component: articlelist },
-			{ path: '/article/edit/:articleId', icon: 'icon-shop', name: '编辑文章', component: articleedit, hidden: true },
-			{ path: '/ads/list', icon: 'icon-shop', name: '广告管理', component: ads },
+			{ path: '/activity/list', icon: 'icon-jingcaihuodong', name: '精彩活动', component: activity },
+			{ path: '/article/list', icon: 'icon-bianxie', name: '文章列表', component: articlelist },
+			{ path: '/article/edit/:articleId', icon: 'icon-bianxie', name: '编辑文章', component: articleedit, hidden: true },
+			{ path: '/ads/list', icon: 'icon-guanggao', name: '广告管理', component: ads },
 		]
 	},
 	{
 		path: '/setting',
-		icon: 'icon-setting',
+		icon: 'icon-shezhi1',
 		name: '系统设置',
 		component: index,
 		children: [
-			{ path: '/release/list', icon: 'icon-shop', name: '版本发布', component: release },
-			{ path: '/setting/user', icon: 'icon-shop', name: '用户管理', component: user },
-			{ path: '/setting/password', icon: 'icon-shop', name: '修改密码', component: password },
+			{ path: '/release/list', icon: 'icon-icon103', name: '版本发布', component: release },
+			{ path: '/setting/user', icon: 'icon-10', name: '用户管理', component: user },
+			{ path: '/setting/password', icon: 'icon-mima', name: '修改密码', component: password },
 		]
 	}
 ]

@@ -1,10 +1,10 @@
 
 @font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1484568564001'); /* IE9*/
-  src: url('iconfont.eot?t=1484568564001#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('iconfont.woff?t=1484568564001') format('woff'), /* chrome, firefox */
-  url('iconfont.ttf?t=1484568564001') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1484568564001#iconfont') format('svg'); /* iOS 4.1- */
+  src: url('iconfont.eot?t=1488899265645'); /* IE9*/
+  src: url('iconfont.eot?t=1488899265645#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1488899265645') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1488899265645') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1488899265645#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -15,6 +15,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-dianpu:before { content: "\e600"; }
+
+.icon-shezhi1:before { content: "\e603"; }
+
 .icon-list:before { content: "\e605"; }
 
 .icon-image:before { content: "\e614"; }
@@ -23,9 +27,17 @@
 
 .icon-fullscreen:before { content: "\e675"; }
 
+.icon-xingqudian:before { content: "\e604"; }
+
 .icon-shezhi:before { content: "\e61a"; }
 
+.icon-zhongduan:before { content: "\e660"; }
+
 .icon-link:before { content: "\e601"; }
+
+.icon-mima:before { content: "\e628"; }
+
+.icon-10:before { content: "\e607"; }
 
 .icon-client:before { content: "\e7c8"; }
 
@@ -33,9 +45,17 @@
 
 .icon-build:before { content: "\ea65"; }
 
+.icon-bianxie:before { content: "\e608"; }
+
 .icon-unlink:before { content: "\e602"; }
 
 .icon-font:before { content: "\e618"; }
+
+.icon-1380louceng1f:before { content: "\ed0f"; }
+
+.icon-neirong:before { content: "\e619"; }
+
+.icon-jingcaihuodong:before { content: "\e683"; }
 
 .icon-align:before { content: "\e606"; }
 
@@ -43,11 +63,19 @@
 
 .icon-undo:before { content: "\e71a"; }
 
+.icon-type:before { content: "\e60d"; }
+
 .icon-users:before { content: "\e61f"; }
 
 .icon-color:before { content: "\e6f3"; }
 
 .icon-fontstyle:before { content: "\e646"; }
 
+.icon-icon103:before { content: "\e61b"; }
+
+.icon-louceng:before { content: "\e62b"; }
+
 .icon-eraser:before { content: "\e718"; }
+
+.icon-guanggao:before { content: "\e609"; }
 

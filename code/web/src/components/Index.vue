@@ -4,7 +4,7 @@
 			<el-menu theme="dark" :default-active="primaryIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
 				<li class="el-menu-band">导航平台</li>
 				<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-					<el-menu-item :index="index+''"><i class="iconfont" :class="item.icon"></i>{{item.name}}</el-menu-item>
+					<el-menu-item :index="index+''"><i class="iconfont" :class="item.icon"></i>&nbsp;{{item.name}}</el-menu-item>
 				</template>
 			</el-menu>
 			<p class="welcome">
@@ -14,9 +14,9 @@
 		</nav>
 		<article>
 			<aside>
-				<el-menu :default-active="minorIndex" class="el-menu-vertical-demo" ref="submenu" @select="handleSubSelect">
+				<el-menu :default-active="minorIndex" class="el-menu-vertical-demo" style="text-align: left" ref="submenu" @select="handleSubSelect">
 					<template v-for="(item,index) in menus" v-if="!item.hidden">
-						<el-menu-item :index="index+''"><i class="iconfont" :class="item.icon"></i>{{item.name}}</el-menu-item>
+						<el-menu-item :index="index+''"><i class="iconfont" :class="item.icon"></i>&nbsp;{{item.name}}</el-menu-item>
 					</template>
 				</el>
 			</aside>

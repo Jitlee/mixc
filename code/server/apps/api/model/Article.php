@@ -86,10 +86,13 @@ class Article extends Model
 	public function _save() {
 		$request = Request::instance();
 		$articleId = (int)$request->post('articleId');
+		$content = $request->post('articleContent');
+		$content = preg_replace('/href\=("|\')[^"^\']+("|\')/i', '', $content);
+		$content = $this->del_script($content);
 		$data = [
 			'article_group_id' 		=> $request->post('articleGroupId'),
 			'article_title' 		=> $request->post('articleTitle'),
-			'article_content' 	=> $request->post('articleContent')
+			'article_content' 	=> $content
 		];
 		
 		try {
@@ -106,6 +109,14 @@ class Article extends Model
 			return -1;
 		}
 	}
+	
+	//去除 script 脚 本  
+	function del_script($string){  
+	   $pregfind = array('/<script.*>.*<\/script>/siU','/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i');  
+	   $pregreplace = array('','');  
+	   $string = preg_replace($pregfind, $pregreplace, $string);  
+	   return $string;  
+	}  
 	
 	public function _delete($articleId = 0) {
 		try{

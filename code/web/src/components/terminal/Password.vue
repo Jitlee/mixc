@@ -1,6 +1,6 @@
 <template>
-	<section style="text-align: left;position: relative">
-		<label>统一四位客户端密码：</label>
+	<section style="text-align: left;position: relative"  v-loading.body="loading">
+		<label>设置所有客户端密码：</label>
 		<el-row style="width: 300px;margin:20px 0">
 		  <el-col :span="6" v-for="(p,index) in passwords"><div class="password-bord" :class="{ active: activeIndex == index }">{{ p }}</div></el-col>
 		</el-row>
@@ -88,9 +88,29 @@
 				
 				formLoading: false,
 				formEnabled: true,
+				
+				loading: false,
 			};
 		},
+		
+		created() {
+			this.loadDefault()	
+		},
 		methods: {
+			loadDefault() {
+				let url = ["/api/scene/getdefault", this.clientId].join("/");
+				this.loading = true;
+				this.$http.get(url).then((response) => {
+					if(response.nice) {
+						let rst = response.data.rst
+						if(rst && rst.password && rst.password.length == 4) {
+							this.passwords = rst.password.split('')
+							this.activeIndex = 3
+							this.formEnabled = false
+						}
+					}
+				});	
+			},
 			handleKey(key) {
 				if(key == -1) {
 					this.passwords[this.activeIndex] = ''
