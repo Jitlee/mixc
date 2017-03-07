@@ -1,10 +1,6 @@
 const fs = require('fs');
 const path = require('path')
 
-const zip = require('machinepack-zip');
-const request = require('request');
-const md5 = require('md5');
-
 const dataPath = getUserFolderPath();
 let configPath = path.join(path.dirname(process.execPath), 'config.json')
 let config = { server: 'cky.ritacc.net', port: 8888, updateTime: 1485012010437, version: '0.0.1', sourceId: 1, adsTime: 3 }
@@ -46,118 +42,6 @@ function resetConfig() {
 	let newConfig = extend({}, config)
 	newConfig.version = '0.0.1'
 	saveConfig(newConfig)
-}
-
-function checkVersion(callback, autoUpdate, process) {
-	callback(0, '已经是最新版本');
-	return;
-	const config = readConfig()
-	const url = ['http://', urlTrim(config.server), ':', config.port, '\/api/release/last/', config.sourceId].join('');
-	getJSON(url, function(rst) {
-		if(formatVersion(rst.releaseVersion) > formatVersion(config.version)) {
-			if(autoUpdate) {
-				process && process(1)
-				update(config, rst, callback, process)
-			} else {
-				callback(1, rst)
-			}
-		} else {
-			callback(0, '已经是最新版本')
-		}
-	}, function() {
-		callback(-1, '检查版本失败')
-	})
-}
-
-function update(config, rst, callback, process) {
-	const fileUrl = ['http://', urlTrim(config.server),
-			':', config.port, '\/', rst.releaseFile].join('');
-	const now = new Date().getTime();
-	const uuid = md5(rst.releaseVersion, now);
-	const mixcPath = path.join(dataPath, 'mixc');
-	const zipPath = path.join(mixcPath, uuid + '.zip');
-	const outPath = path.join(mixcPath, uuid);
-	checkPath(mixcPath, function(flag) {
-		if(!flag) {
-			callback(-3, '创建临时目录失败');
-			return
-		}
-		
-		process && process(2)
-		request({url: fileUrl, encoding: null}, function(err, resp, body) {
-			if(err) {
-		  		callback(-2, '下载资源包失败');
-		  	} else {
-		  		process && process(3)
-			  	fs.writeFile(zipPath, body, function(err) {
-			  		if(err) {
-			  			callback(-4, '资源包写入失败');
-			  			return
-			  		}
-			  		process && process(4)
-			    	zip.unzip({ source: zipPath, destination: outPath, }).exec({
-						error: function (err) {
-					 		callback(-5, '解压资源包失败');
-						},
-						success: function () {
-							process && process(5)
-							let newConfig = extend({}, config)
-							newConfig.version = rst.releaseVersion
-							newConfig.updateTime = rst.now
-							saveConfig(newConfig, (err) => {
-								if(err) {
-									callback(-6, '保存最新的配置失败');
-								} else {
-									const lastUUID = md5(config.version, config.updateTime);
-									const lastPath = path.join(mixcPath, lastUUID);
-									try {
-										deleteFolderRecursive(zipPath)
-										deleteFolderRecursive(lastUUID);
-									} catch(e) { console.error('删除旧资源失败' + e) }
-									
-							 		callback(1, rst);
-								}
-							})
-						},
-					});
-				});
-		  	}
-		});
-	});
-}
-
-function deleteFolderRecursive(path) {
-  	if(fs.existsSync(path)) {
-		if(fs.lstatSync(path).isDirectory()) {
-    		fs.readdirSync(path).forEach(function(file,index){
-	      		var curPath = path + "/" + file;
-	      		if(fs.lstatSync(curPath).isDirectory()) { // recurse
-	        		deleteFolderRecursive(curPath);
-	      		} else { // delete file
-	        		fs.unlinkSync(curPath);
-	      		}
-	    	});
-	    	fs.rmdirSync(path);
-  		} else {
-  			fs.unlinkSync(path);
-  		}
-  	}
-};
-
-function checkPath(target, callback) {
-	fs.exists(target, function(exists) {
-		if(exists) {
-			callback(true)
-		} else {
-			fs.mkdir(target, 0777, function(err){
-		 		if(err){
-		  			callback(false)
-				}else{
-			  		callback(true)
-			 	}
-			})
-		}
-	})
 }
 
 function getUserFolderPath() {
@@ -224,59 +108,12 @@ function extend(target, /*optional*/source, /*optional*/deep) {
 		i++; 
 	} 
 	return target; 
-};
-
-function getJSON(url, success, error) {
-	request({ url: url }, (err, response, body) => {
-		if (err) {
-			error(err)
-		} else if(response.statusCode == 200) {
-			try {
-    				const data = JSON.parse(body)
-    				if(data && data.code == 200) {
-            			success(data.rst)
-	            	} else {
-	            		error()
-	            	}
-	    		} catch(e) {
-	    			error(e)
-	    		}
-    		} else {
-    			error()
-    		}
-	})
 }
-
-//
-//function getJSON(url, success, error){
-//  var xhr = new XMLHttpRequest()
-//  xhr.open('get', url, true)
-//  xhr.onreadystatechange=function(){
-//      if(xhr.readyState==4){
-//          if(xhr.status==200){
-//              try {
-//              	const data = JSON.parse(xhr.responseText)
-//              	if(data && data.code == 200) {
-//              		success(data.rst)
-//              	} else {
-//              		error()
-//              	}
-//              } catch(e) {
-//              	error()
-//              }
-//          } else {
-//          	error()
-//          }
-//      }
-//  }
-//  xhr.send(null);
-//}
 
 module.exports = {
 	config: config,
 	readConfig: readConfig,
 	saveConfig: saveConfig,
-	checkVersion: checkVersion,
 	extend: extend,
 	formatTime: formatTime,
 	getMainPath: getMainPath

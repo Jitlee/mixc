@@ -860,7 +860,6 @@ nav.home-nav .nav-wheel {
   position: fixed;
   left: 0;
   top: 0;
-  border: solid 1px red;
 }
 .password .input {
   display: block;
