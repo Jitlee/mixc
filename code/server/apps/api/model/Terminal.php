@@ -13,6 +13,7 @@ class Terminal extends Model
         'clientId'  		=>  'integer',
         'tmlId'  		=>  'integer',
         'shutdownTime'  		=>  'integer',
+        'adsTime'  		=>  'integer',
     ];
     
 	public function _query($clientId = 0, $pageNo = 1) {
@@ -68,7 +69,7 @@ class Terminal extends Model
 		}
 		$data = $this->field('unix_timestamp(active_time) active_time, tml_id, unix_timestamp() now, shutdown_time, ads_time')->where('tml_mac', $mac)->find();
 		if(empty($data)) {
-			$clientData = Db::table('__SCENE__')->field('client_id')->where('scene_id', $releaseSourceId)->find();
+			$clientData = Db::table('__SCENE__')->field('client_id, shutdown_time, ads_time, password')->where('scene_id', $releaseSourceId)->find();
 			if(empty($clientData)) {
 				return -3;
 			}
@@ -87,7 +88,11 @@ class Terminal extends Model
 			];
 			try {
 				$this->insert($data);
-				return ['shutdownTime' => 1260 ];
+				return [
+					'shutdownTime' => (int)$clientData['shutdown_time'],
+					'adsTime' => (int)$clientData['ads_time'],
+					'password' => $clientData['password'],
+				];
 			} catch(\Exception $e) {
 //				echo dump($e);
 				return -1;
@@ -99,6 +104,15 @@ class Terminal extends Model
 		$time = (int)$data['now'];
 		$shutdownTime = (int)$data['shutdown_time'];
 		$adsTime = (int)$data['ads_time'];
+		
+		$defaultData = Db::table('__SCENE__')->field('shutdown_time, ads_time, password')->where('scene_id', $releaseSourceId)->find();
+		if($shutdownTime == 0) {
+			$shutdownTime = (int)$defaultData['shutdown_time'];
+		}
+		if($adsTime == 0) {
+			$adsTime = (int)$defaultData['ads_time'];
+		}
+		$passwrod = $defaultData['password'];
 		
 		$data = [
 			'active_time' => date('Y-m-d H:i:s', $time),
@@ -113,6 +127,7 @@ class Terminal extends Model
 			return [
 				'shutdownTime' => $shutdownTime,
 				'adsTime' => $adsTime,
+				'password' => $passwrod,
 			];
 		} catch(\Exception $e) {
 				echo dump($e);
