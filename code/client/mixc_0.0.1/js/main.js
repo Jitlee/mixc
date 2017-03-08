@@ -967,13 +967,6 @@
 			}
 		},
 		created() {
-			if(!window.require) {
-				return
-			}
-			
-			const { ipcRenderer } = require('electron')
-			
-			ipcRenderer.on('password', this.passwordChanged.bind(this));
 		},
 		methods: {
 			handleKeyUp(key) {
@@ -1022,11 +1015,6 @@
 				console.log('打开设置页面');
 				this.$emit('setting')
 			},
-			passwordChanged(evt, password) {
-				if(password && password.length == 4) {
-					this.password = password
-				}
-			}
 		}
 	});
 	
@@ -1051,6 +1039,11 @@
 				if(time - lastTime < this.doubleClick.interval) {
 					// 双击成功
 					if(!this.passwordVisible) {
+						
+						if(cv) {
+							config = cv.readConfig()
+						}
+						
 						this.passwordVisible = true
 					}
 				}
@@ -1061,10 +1054,7 @@
 	Vue.component('mixc-setting', {
 		template: '#setting-template',
 		data() {
-			const cv = getCV()
-			const config = cv == null ? { } : cv.readConfig()
 			return {
-				cv: cv,
 				formData: config,
 			}
 		},
@@ -1076,10 +1066,7 @@
 		methods: {
 			handleSubmit() {
 				this.$emit('close')
-				if(!window.require) {
-					return
-				}
-				this.cv.saveConfig(this.formData)
+				cv && cv.saveConfig(this.formData)
 			},
 		}
 	});
@@ -1097,20 +1084,12 @@
 	});
 	
 	// 启动APP
-	new Vue({
-		router
-	}).$mount('#app');
+	new Vue({ router }).$mount('#app');
 	
 	// -----------------------------
 	// 代码
-	
-	// 获取cv
-	function getCV() {
-		if(!window.require) {
-			return null
-		}
-		return require('./js/checkversion.js')
-	}
+	const cv = !window.require ? null : require('./js/checkversion.js')
+	let config = { server: 'cky.ritacc.net', port: '8888', sourceId: '1' }
 	
 	// 自动播放广告时回到主页
 	window.__backHome = function(){
@@ -1126,4 +1105,6 @@
 	        	});
 	    }
 	});
+	
+	
 })();
