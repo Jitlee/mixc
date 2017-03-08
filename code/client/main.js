@@ -43,6 +43,7 @@ ipcMain.on('open-main', () => {
 		}))
 		startWindow && startWindow.close()
 		mainWindow.on('closed', () => { mainWindow = null })
+//		mainWindow.webContents.openDevTools()
 	})
 })
 
