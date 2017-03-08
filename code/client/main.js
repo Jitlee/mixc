@@ -33,16 +33,17 @@ const cv = require('./js/checkversion.js')
 // 启动主界面
 let mainWindow = null
 ipcMain.on('open-main', () => {
-	mainWindow = new BrowserWindow({ alwaysOnTop: true, fullscreen: true, frame: false, resize: false, center: true })
-	mainWindow.setMenu(null)
-	mainWindow.loadURL(url.format({
-	  	pathname: cv.getMainPath('index.html'),
-	    protocol: 'file:',
-	    slashes: true
-	}))
-	startWindow && startWindow.close()
-	mainWindow.on('closed', () => { mainWindow = null })
-//	mainWindow.webContents.openDevTools()
+	autActive(() => {
+		mainWindow = new BrowserWindow({ alwaysOnTop: true, fullscreen: true, frame: false, resize: false, center: true })
+		mainWindow.setMenu(null)
+		mainWindow.loadURL(url.format({
+		  	pathname: cv.getMainPath('index.html'),
+		    protocol: 'file:',
+		    slashes: true
+		}))
+		startWindow && startWindow.close()
+		mainWindow.on('closed', () => { mainWindow = null })
+	})
 })
 
 // 启动设置页面
@@ -110,11 +111,9 @@ autoUpdate()
 const powerOff = require('power-off');
 const ip = require('ip')
 const mac = require('getmac')
-const ACTIVE_INTERVAL = 3*60*1000 // 3分钟检查更新一次
+const ACTIVE_INTERVAL = 1*60*1000 // 3分钟检查更新一次
 const ipAddress = ip.address() // 本机ip
 const config = cv.readConfig()
-let adsTime = 0
-let password = '0000'
 let activeData = { ip: ipAddress };
 mac.getMac((err, address) => {
 	if(err) {
@@ -126,7 +125,7 @@ mac.getMac((err, address) => {
 	setInterval(autActive, ACTIVE_INTERVAL)
 	autActive()
 })
-function autActive() {
+function autActive(callback) {
 	// 发送心跳
 	const url = ['http://', config.server, ':', config.port, '/api/terminal/active/', config.sourceId].join('');
 	console.log('active url: ' + url)
@@ -141,17 +140,21 @@ function autActive() {
 					config.adsTime = rst.adsTime
 					config.password = rst.password
 					config.shutdownTime = rst.shutdownTime
+					console.log('the new password: ' + rst.password)
 					cv.saveConfig(config)
 					// 检测是否需要关机
 				}
-	    	} catch(e) { console.error(e) }
+	    } catch(e) { console.error(e) }
 		}
 		checkPowerOff()
+		if(typeof callback == 'function') {
+			callback()
+		}
 	})
 }
 
 // 检测是否需要关机
-funciton checkPowerOff() {
+function checkPowerOff() {
 	if(config.shutdownTime > 0) {
 		const now = new Date()
 		const minutes = now.getHours() * 60 + now.getMinutes();

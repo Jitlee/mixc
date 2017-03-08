@@ -1,4 +1,8 @@
 (function(){
+	
+	const cv = !window.require ? null : require('./js/checkversion.js')
+	const _configListeners = []
+	
 	const WEEKS = '日一二三四五六';
 	const LETTERS = ["123"].concat(Array.apply(null, {length:26}).map((e, i) => { return String.fromCharCode(65 + i) }));
 	const DIGITS = ["ABC"].concat(Array.apply(null, {length:10}).map((e, i) => { return (i + 1) % 10 }));
@@ -967,6 +971,7 @@
 			}
 		},
 		created() {
+			_configListeners.push(this.onconfig.bind(this))
 		},
 		methods: {
 			handleKeyUp(key) {
@@ -1015,6 +1020,11 @@
 				console.log('打开设置页面');
 				this.$emit('setting')
 			},
+			onconfig(config) {
+				if(config && config.password && config.password.length == 4) {
+					this.password = config.password
+				}
+			},
 		}
 	});
 	
@@ -1041,7 +1051,8 @@
 					if(!this.passwordVisible) {
 						
 						if(cv) {
-							config = cv.readConfig()
+							const config = $.extend({ server: 'cky.ritacc.net', port: '8888', sourceId: '1' }, cv.readConfig());
+							_configListeners.forEach(fun => fun(config))
 						}
 						
 						this.passwordVisible = true
@@ -1055,19 +1066,20 @@
 		template: '#setting-template',
 		data() {
 			return {
-				formData: config,
+				formData: {},
 			}
 		},
 		created() {
-			if(!window.require) {
-				return
-			}
+			_configListeners.push(this.onconfig.bind(this))
 		},
 		methods: {
 			handleSubmit() {
 				this.$emit('close')
 				cv && cv.saveConfig(this.formData)
 			},
+			onconfig(config) {
+				this.formData = config
+			}
 		}
 	});
 	
@@ -1088,8 +1100,6 @@
 	
 	// -----------------------------
 	// 代码
-	const cv = !window.require ? null : require('./js/checkversion.js')
-	let config = { server: 'cky.ritacc.net', port: '8888', sourceId: '1' }
 	
 	// 自动播放广告时回到主页
 	window.__backHome = function(){
@@ -1098,11 +1108,11 @@
 	}
 	
 	$.fn.extend({
-	    	animateCss: function (animationName) {
-	        	var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-	        	this.addClass('animated ' + animationName).one(animationEnd, function() {
-	        		$(this).removeClass('animated ' + animationName);
-	        	});
+    	animateCss: function (animationName) {
+	    	var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+	    	this.addClass('animated ' + animationName).one(animationEnd, function() {
+	    		$(this).removeClass('animated ' + animationName);
+	    	});
 	    }
 	});
 	
