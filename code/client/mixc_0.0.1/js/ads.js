@@ -4,7 +4,7 @@
 	}
 	
 	const { ipcRenderer } = require('electron')
-	const cv = require('./js/checkversion.js')
+	const cv = require(process.resourcesPath + '/app/js/checkversion.js')
 	
 	let TIMEOUT = 3
 	let lastActiveTime = new Date().getTime()

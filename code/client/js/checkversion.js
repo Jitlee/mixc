@@ -52,7 +52,7 @@ function checkVersion(callback, autoUpdate, process) {
 //	callback(0, '已经是最新版本');
 //	return;
 	const config = readConfig()
-	const url = ['http://', urlTrim(config.server), ':', config.port, '\/api/release/last/', config.sourceId].join('');
+	const url = ['http://', urlTrim(config.server), ':', config.port, '/api/release/last/', config.sourceId].join('');
 	getJSON(url, function(rst) {
 		if(formatVersion(rst.releaseVersion) > formatVersion(config.version)) {
 			if(autoUpdate) {

@@ -15,7 +15,7 @@
     "show_in_taskbar": true
   },
   "scripts": {
-    "packager": "electron-packager . --platform=win32 --arch=all --electron-version=1.4.13 --out ./package --overwrite --icon ./favicon.ico"
+    "packager": "electron-packager . --platform=win32 --arch=x64 --electron-version=1.4.13 --out ./package --overwrite --icon ./favicon.ico"
   },
   "dependencies": {
     "getmac": "^1.2.1",

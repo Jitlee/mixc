@@ -1,7 +1,8 @@
 (function(){
 	
-	const cv = !window.require ? null : require('./js/checkversion.js')
+	const cv = !window.require ? null : require(process.resourcesPath + '/app/js/checkversion.js')
 	const _configListeners = []
+	window.cv = cv
 	
 	const WEEKS = '日一二三四五六';
 	const LETTERS = ["123"].concat(Array.apply(null, {length:26}).map((e, i) => { return String.fromCharCode(65 + i) }));
