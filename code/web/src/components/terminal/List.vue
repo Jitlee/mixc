@@ -1,5 +1,6 @@
 <template>
 	<section>
+		<el-alert title="温馨提示：状态和设置在3分钟内生效，查看最新状态，请点击刷新按钮" type="success" show-icon style="text-align: left; margin-bottom: 10px"></el-alert>
 		<el-row style="margin-bottom: 10px;">
 			<el-col :span="24">
 				<div class="grid-content" align="left">
@@ -37,8 +38,8 @@
 			<el-table-column inline-template label="上次启动时间" align="left">
 				<div>{{ row.onlineTime }}</div>
 			</el-table-column>
-			<el-table-column inline-template label="状态" align="left">
-				<div>{{ row.isActive }}</div>
+			<el-table-column inline-template label="状态" align="left" width="80px">
+				<i class="el-icon-circle-check" style="font-size: 18px; cursor: pointer" :style="{ color: row.isActive ? '#00b642' : '#999' }"></i>
 			</el-table-column>
 			<el-table-column :context="_self" inline-template label="操作" width="150px">
 				<div>
