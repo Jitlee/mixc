@@ -11,7 +11,7 @@
 					
 					<el-tag type="warning" style="margin-left: 2em;">设置默认进入广告时间</el-tag>
 					<el-select v-model="defaultData.adsTime" placeholder="请选择" @change="handleDefaultAds" style="display:inline-block">
-					    <el-option v-for="item in adsTimes" :label="item + '分钟'" :value="item"></el-option>
+					    <el-option v-for="item in adsTimes" :label="item.text" :value="item.value"></el-option>
 				  	</el-select>
 				</div>
 			</el-col>
@@ -33,7 +33,7 @@
 				<div>{{ row.shutdownTime == 0 ? '默认时间' : row.shutdownTimeText }}</div>
 			</el-table-column>
 			<el-table-column inline-template label="空闲时间" align="left" width="95px">
-				<div>{{ row.adsTime == 0 ? '默认时间' : (row.adsTime + '分钟') }}</div>
+				<div>{{ row.adsTime == 0 ? '默认时间' : (row.adsTime <= 60 ? (row.adsTime + '秒') : (row.adsTime/60) + '分钟') }}</div>
 			</el-table-column>
 			<el-table-column inline-template label="上次启动时间" align="left">
 				<div>{{ row.onlineTime }}</div>
@@ -49,7 +49,7 @@
 			</el-table-column>
 		</el-table>
 		<el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="15" layout="total, prev, pager, next" :total="totalCount"></el-pagination>
-		
+		<p class="explain">* <strong>空闲时间</strong>表示设备从无操作到进入播放屏保广告的时间</p>
 		<el-dialog :title="formTitle" v-model="formVisible" :close-on-click-modal="false">
 			<el-form :model="formData" label-width="150px" :rules="formRules" ref="formData">
 				<div style="position:relative">
@@ -75,7 +75,7 @@
 					<el-form-item label="空闲时间" class="el-form-item-left">
 						<el-select v-model="formData.adsTime" placeholder="请选择">
 						    <el-option label="默认时间" :value="0"></el-option>
-						    <el-option v-for="item in adsTimes" :label="item + '分钟'" :value="item"></el-option>
+						    <el-option v-for="item in adsTimes" :label="item.text" :value="item.value"></el-option>
 					  	</el-select>
 					</el-form-item>
 					
@@ -161,7 +161,16 @@
 				
 				floors: [],
 				
-				adsTimes: [3,5,8,10,15,20,30,60]
+				adsTimes: [
+					{ text: '30秒', value: 30 },
+					{ text: '60秒', value: 60 },
+					{ text: '2分钟', value: 120 },
+					{ text: '5分钟', value: 300 },
+					{ text: '8分钟', value: 480 },
+					{ text: '10分钟', value: 600 },
+					{ text: '15分钟', value: 900 },
+					{ text: '30分钟', value: 1800 },
+				]
 			};
 		},
 		created() {

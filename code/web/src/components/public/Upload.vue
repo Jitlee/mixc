@@ -1,4 +1,4 @@
-<style scope>
+<style scoped>
 	.mixc-upload {
 		width: 150px;
 		height: 150px;
@@ -26,7 +26,7 @@
 		border-color: #139e13;
 	}
 	
-	h5 {
+	.mixc-upload h5 {
 		padding: 0;
 		margin: 0;
 		text-align: center;
