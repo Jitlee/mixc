@@ -1,26 +1,27 @@
 // 精彩活动
 
 .activity {
-    @_w: 28vw;
-    @w: calc(~"@{_w} - 40px");
-    @h: calc(~"74vh - 40px");
+    @_w: 15.625vh;
+    @w: calc(~"@{_w} - 20px");
+    @h: calc(~"77.6vh - 30px");
     
     .imgs {
         overflow: auto;
         height: @h;
-        width: @w;
+        width: @_w;
         float: left;
+        //margin-top: 10px;
         
         img {
-            margin-top: 20px;
+            margin-bottom: 5px;
             width: 100%;
         }
     }
     
     .img {
-        margin-left: 20px;
-        margin-top: 20px;
-        width: calc(~"100vw - @{_w}");
+        margin-left: 10px;
+        //margin-top: 10px;
+        width: calc(~"100vw - @{_w} - 30px");
         height: @h;
         float: left;
         

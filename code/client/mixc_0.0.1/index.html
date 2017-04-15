@@ -27,6 +27,14 @@
 			.bounce-leave-active {
 				opacity: 0;
 			}
+			
+			.menuList-enter {
+			  	opacity: 0;
+			}
+			
+			.menuList-enter-active{
+			  animation: flipInX 0.2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+			}
 		</style>
 	</head>
 
@@ -78,11 +86,11 @@
 			<script type="text/x-template" id="home-widget-template">
 				<div class="home-widget">
 					<div class="row">
-						<div class="col city">深圳</div>
+						<div class="col city">福州</div>
 						<div class="col time">{{ hour }}:{{ minutes }}</div>
 						<div class="col build align-right">名城中心</div>
 					</div>
-					<h5>{{ year }}-{{ month }}-{{ date }} 星期{{ week }}</h5>
+					<h5>{{ year }}.{{ month }}.{{ date }} 星期{{ week }}</h5>
 				</div>
 			</script>
 	
@@ -108,11 +116,11 @@
 							<a :class="{ active: tab == 0 }" @click="handleTab(0)">品牌查找</a>
 							<a :class="{ active: tab == 1 || tab == 2 }" @click="handleTab(1)">字母查找</a>
 							<a :class="{ active: tab == 3 }" @click="handleTab(3)">楼层查找</a>
-							<div class="title">品类查找</div>
+							<div class="title">{{ navTitle }}</div>
 						</div>
-						<div class="menus clear" :class="{ letter: tab == 1 || tab == 2 }">
-							<a v-for="(item, index) in menus" class="animated flipInX" @click="handleMenu($event, index)" :style="{ 'animation-delay': index * 0.1 + 's' }" :class="{ active: filterIndex == index }">{{ item }}</a>
-						</div>
+						<transition-group name="menuList" tag="div" class="menus clear" ref="list" :class="{ letter: tab == 1 || tab == 2 }">
+							<a v-for="(item, index) in menus" @click="handleMenu($event, index)" :key="item" :class="{ active: filterIndex == index }">{{ item }}</a>
+						</transition-group>
 					</div>
 					<div class="submenus" ref="submenus" style="display: none">
 						<a  @click="handleSubMenu($event, -1)" :class="{ active: subFilterIndex == -1 }">全部</a>
@@ -183,12 +191,15 @@
 				<div class="shop">
 					<div class="img" @click.navtive="handleShow" :style="{ backgroundImage: 'url(' + shopAlbum.replace(/^\//, '') + ')' }"></div>
 					<div class="info">
-						<div class="icon" :style="{ backgroundImage: 'url(' + shop.shopIconPath.replace(/^\//, '') + ')' }"></div>
+						<div class="icon">
+							<div class="icon-img" :style="{ backgroundImage: 'url(' + shop.shopIconPath.replace(/^\//, '') + ')' }"></div>
+						</div>
 						<hr />
 						<span class="name">品牌名：<span class="red">{{ shop.shopName }}</span></span>
 						<div class="floor">店铺位置：<strong>{{ shop.shopFloor }}</strong>&nbsp;&nbsp;{{ shop.shopRoom }}</div>
 						<div class="desc">类型：{{ shop.subShopTypeText }}</div>
-						<a @click="handleBack" class="back"><i class="iconfont icon-back"></i>&nbsp;&nbsp;返回</a>
+						<a @click="handleBack" class="back"><i class="iconfont icon-back"></i>&nbsp;&nbsp;返 回</a>
+						<div class="qr-img"  :style="{ backgroundImage: 'url(' + (shop.shopQRCodePath ? shop.shopQRCodePath.replace(/^\//, '') : '') + ')' }"></div>
 					</div>
 					<div class="introduction">
 						<h4>品牌介绍&nbsp;&nbsp;Brand</h4>
@@ -227,7 +238,7 @@
 					<div class="tag" v-for="tag in floor.tags">{{ tag }}</div>
 				</div>
 				<div class="shops clear">
-					<h5>本层店铺:</h5>
+					<h5>本层店铺：</h5>
 					<div :id="swipeId" class="floor swiper-container">
 						<div class="swiper-wrapper">
 							<div class="swiper-slide" v-for="shops in pages">

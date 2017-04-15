@@ -3,7 +3,7 @@
 		<el-tab-pane label="店铺信息" name="info">
 			<el-form :model="formData" :rules="formRules" ref="formData" label-width="100px">
 				<div style="position: relative">
-					<mixc-upload :clientId="formData.clientId" :type="1" v-model="formData.shopIcon" :path="shopIconPath" title="单击上传商标"></mixc-upload>
+					<mixc-upload :clientId="formData.clientId" :type="1" v-model="formData.shopIcon" :path="shopIconPath" title="单击上传LOGO"></mixc-upload>
 					<el-form-item label="店铺名称" prop="shopName" class="el-form-item-left">
 						<el-input v-model="formData.shopName" auto-complete="off" placeholder="请输入店铺名称" :maxlength="20"></el-input>
 					</el-form-item>
@@ -24,7 +24,7 @@
 						    	</el-option-group>
 					  	</el-select>
 					</el-form-item>
-					<el-form-item label="店铺特色" class="el-form-item-left">
+					<el-form-item label="店铺特色" class="el-form-item-left" v-if="false">
 						<el-input v-model="formData.shopDesc" auto-complete="off" placeholder="请输入店铺特色" :maxlength="100"></el-input>
 					</el-form-item>
 				</div>
@@ -58,7 +58,7 @@
 					</el-form-item>
 				</div>
 				<el-form-item label="店铺简介">
-					<el-input type="textarea" v-model="formData.shopIntroduction" placeholder="请输入店铺简介" :maxlength="400"></el-input>
+					<el-input type="textarea" v-model="formData.shopIntroduction" placeholder="请输入店铺简介" :maxlength="400" :rows="8"></el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click.native="formSubmit" :loading="formLoading">保存</el-button>

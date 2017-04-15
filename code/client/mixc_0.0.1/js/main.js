@@ -482,6 +482,7 @@
 					shopRoom: '',
 					shopDesc: '',
 					shopIconPath: '',
+					shopQRCodePath: '',
 					shopImagePath: '',
 					shopNavPath: '',
 					shopIntroduction: '',
@@ -577,7 +578,13 @@
 				
 				menus: [],
 				
+				tempMenus: [],
+				tempIndex: 0,
+				tempTimeoutId: 0,
+				
 				submenus: [],
+				
+				navTitle: '品类查找'
 			}
 		},
 		created() {
@@ -597,12 +604,41 @@
 		},
 		
 		methods: {
+			setTempMenus(menus) {
+				clearTimeout(this.tempTimeoutId)
+				this.tempMenus = menus
+				this.tempIndex = 0
+				this.menus.length = 0
+				this.beginTransition()
+			},
+			beginTransition() {
+				const length = this.tempMenus.length
+				if(this.tempIndex < length) {
+					this.menus.push(this.tempMenus[this.tempIndex])
+					this.tempIndex++
+//					if(this.tab== 1 || this.tab == 2) {
+//						if(this.tempIndex < length) {
+//							this.menus.push(this.tempMenus[this.tempIndex])
+//							this.tempIndex++
+//						}
+//						if(this.tempIndex < length) {
+//							this.menus.push(this.tempMenus[this.tempIndex])
+//							this.tempIndex++
+//						}
+//					}
+					if(this.tempIndex < length) {
+						this.tempTimeoutId = setTimeout(this.beginTransition.bind(this), this.tab== 1 || this.tab == 2 ? 50 : 150)
+					}
+				}	
+			},
+			
 			handleTab(tab) {
 				if(tab == this.tab) {
 					return;
 				}
 				
 				this.tab = tab;
+				this.navTitle = ['品类查找', '字母查找', '数字查找', '楼层查找'][tab]
 				this.filterIndex = -1;
 				this.subFilterIndex = -1;
 				this.setupShopes();
@@ -663,7 +699,7 @@
 			},
 			setupMajorShopTypes() {
 				getShopTypes.call(this, (shopTypes) => {
-					this.menus = shopTypes.map((e) => { return e.dictValue });
+					this.setTempMenus(shopTypes.map((e) => { return e.dictValue }))
 					
 					if(!(this.typeId >= 0)) {
 						return;
@@ -692,14 +728,14 @@
 			
 			setupFloors() {
 				getFloors.call(this, (floors) => {
-					this.menus = floors.map((e) => { return e.floorName });
+					this.setTempMenus(floors.map((e) => { return e.floorName }))
 				});
 			},
 			setupLetters() {
-				this.menus = LETTERS;
+				this.setTempMenus(LETTERS)
 			},
 			setupDigits() {
-				this.menus = DIGITS;
+				this.setTempMenus(DIGITS)
 			},
 			
 			filterMajorShopTypes(evt, index) {
@@ -797,6 +833,7 @@
 		},
 		created() {
 			this.formatTimer()
+			this.beginTimer()
 		},
 		methods: {
 			beginTimer() {
@@ -859,6 +896,7 @@
 		},
 		created() {
 			this.formatTimer()
+			this.beginTimer()
 		},
 		methods: {
 			beginTimer() {
@@ -1108,11 +1146,11 @@
 	}
 	
 	$.fn.extend({
-    	animateCss: function (animationName) {
-	    	var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-	    	this.addClass('animated ' + animationName).one(animationEnd, function() {
-	    		$(this).removeClass('animated ' + animationName);
-	    	});
+    		animateCss: function (animationName) {
+		    	var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+		    	this.addClass('animated ' + animationName).one(animationEnd, function() {
+		    		$(this).removeClass('animated ' + animationName);
+		    	});
 	    }
 	});
 	

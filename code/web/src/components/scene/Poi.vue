@@ -31,11 +31,11 @@
 		<el-dialog :title="formTitle" v-model="formVisible" :close-on-click-modal="false">
 			<el-form :model="formData" label-width="100px" :rules="formRules" ref="formData">
 				<div style="position:relative">
-					<el-form-item label="兴趣点名称">
+					<el-form-item label="公共设施名称">
 						<el-input v-model="formData.poiName" auto-complete="off" :maxlength="30" :placeholder="poiNamePlaceHolder"></el-input>
 					</el-form-item>
-					<el-form-item label="兴趣点类型" prop="poiType">
-						<el-select v-model="formData.poiType" placeholder="请选兴趣点类型" @change="handlePoiTypeChange">
+					<el-form-item label="公共设施类型" prop="poiType">
+						<el-select v-model="formData.poiType" placeholder="请选公共设施类型" @change="handlePoiTypeChange">
 					      	<el-option v-for="item in poiTypes" :label="item.dictValue" :value="item.dictId"></el-option>
 					    </el-select>
 					</el-form-item>
@@ -81,7 +81,7 @@
 				floorId: floorId,
 				clientId: clientId,
 				
-				poiNamePlaceHolder: '请输入兴趣点名称',
+				poiNamePlaceHolder: '请输入公共设施名称',
 				
 				formTitle: "",
 				formLoading: false,
@@ -96,7 +96,7 @@
 				},
 				formRules: {
 					poiType: [
-						{ required: true, type: 'integer', message: '请输入兴趣点类型', trigger: 'blur' }
+						{ required: true, type: 'integer', message: '请输入公共设施类型', trigger: 'blur' }
 					],
 					x: [
 						{ required: true, type: 'integer', message: '请输入X坐标', trigger: 'blur' }
@@ -147,18 +147,18 @@
 			},
 			
 			handleAdd() {
-				this.formTitle = "新增兴趣点";
+				this.formTitle = "新增公共设施";
 				this.formData.floorId = this.floorId;
 				this.formData.poiId = 0;
 				this.formData.poiName = '';
 				this.formData.poiType = '';
 				this.formData.x = 0;
 				this.formData.y = 0;
-				this.poiNamePlaceHolder = "请输入兴趣点名称";
+				this.poiNamePlaceHolder = "请输入公共设施名称";
 				this.formVisible = true;
 			},
 			handleEdit(index, row) {
-				this.formTitle = "编辑兴趣点";
+				this.formTitle = "编辑公共设施";
 				this.formData.floorId = row.floorId;
 				this.formData.poiId = row.poiId;
 				this.formData.poiName = row.poiName;

@@ -5,25 +5,28 @@
     
     .img {
         .bgimg();
-        height: 35vh;
+        height: 36.97916666666667vh;
         margin-top: 10px;
         margin-bottom: 10px;
     }
     
     .floors {
         background-color: @nav-block1;
-        height: 6vh;
-        line-height: 6vh;
+        height: 5.21vh;
+        line-height: 5.21vh;
         text-align: center;
-        padding-left: 10vh;
+        padding-left: 6vh;
         position: relative;
         overflow: hidden;
+        border-bottom: 3px solid #333;
         
         &, & .iconfont {
-            font-size: 2.4vh;
+            font-size: 2vh;
         }
         
         &, .row, col {
+            font-style: italic;
+            cursor: pointer;
             box-sizing: border-box;
         }
         
@@ -34,7 +37,9 @@
         }
         
         .title {
-            font-size: 1.5vh;
+            cursor: default;
+            font-size: 1.1vh;
+            font-style: normal;
             position: absolute;
             top: 50%;
             left: 1vh;
@@ -42,8 +47,8 @@
         }
     }
     
-    @h: calc(~"33vh - 40px");
-    @w: 16vh;
+    @h: 32.60vh;
+    @w: 16.823vh;
     .info {
         position: absolute;
         left: 0px;
@@ -54,13 +59,15 @@
         border: solid 1px @border-color;
         background-color: @font-color;
         
+        text-align: center;
+        
         .indent() {
             text-indent: 4vh;
         }
         .build {
-            width: 4vh;
-            height:4vh;
-            line-height:4vh;
+            width: 4.5vh;
+            height:4.5vh;
+            line-height:4.5vh;
             font-size: 2vh;
             text-align: center;
             margin: auto;
@@ -72,72 +79,80 @@
         
         .name {
             color: @wheel-bg-color;
-            font-size: 7vh;
-            line-height: 9vh;
+            font-size: 6.6vh;
+            line-height: 6vh;
             font-family: -webkit-pictograph;
             .nowrap();
-            .indent();
+            text-align: center;
+            font-weight: bold;
         }
         
         .alias {
             color: rgb(102,163, 17);
-            font-size: 2vh;
+            font-size: 1.5vh;
             line-height: 3vh;
             .nowrap();
-            .indent();
+            //.indent();
         }
         
         .en {
             color: @nav-block1;
-            font-size: 1vh;
+            font-size: 1.1vh;
             line-height: 2vh;
-            padding-bottom: 0.5vh;
+            padding-bottom: 1.5vh;
             .nowrap();
-            .indent();
+            //.indent();
+            margin-top:-10px;
+            color: #fabe2a;
         }
         
         .tag {
-            color: @gray-color;
-            font-size: 1.5vh;
-            line-height: 2.5vh;
+            color: @black-color;
+            font-size: 1vh;
+            line-height: 1.7vh;
             .nowrap();
-            .indent();
+            //.indent();
         }
     }
     
     .shops {
         box-sizing: border-box;
         border: solid 1px @border-color;
-        background-color: @light-color;
-        padding-left: calc(~"@{w} + 2vh");
+        background-color: #f5f5f5;
+        padding-left: 16.77083333333333vh;
         height: @h;
         
         h5 {
             color: @rose-color;
             line-height: 4vh;
+            font-size: 1.1vh;
+            font-weight: normal;
+            padding-left: 0.5208vh;
         }
         
         a {
             display: block;
             background-color: @font-color;
             color: @gray-color;
-            font-size: 1.2vh;
+            font-size: 1.1vh;
             float: left;
-            height: 4vh;
-            line-height: 4vh;
-            margin-right: 0.5vh;
-            margin-left: 0.5vh;
-            margin-bottom: 1vh;
-            width: calc(~"(100vw - 22vh - 20px) / 3");
+            height: 3.125vh;
+            line-height: 3.125vh;
+            //margin-right: 0.26041666666667vh;
+            //margin-left: 0.26041666666667vh;
+            margin-bottom: 0.5208vh;
+            width: 12.11805555555556vh;
             text-align: center;
+            border: solid 1px #dfddde;
+            box-sizing: border-box;
         }
         
         a:nth-child(1n) {
-            margin-left: 0vh;
+            margin-left: 0.52083333333334vh;
         }
         
         a:nth-child(3n) {
-            margin-right: 0vh;
+            margin-right: 0.5208vh;
         }
      }
 }

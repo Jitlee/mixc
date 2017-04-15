@@ -3,14 +3,16 @@
 }
 
 .home-widget {
-    height: 14vh;
+    height: 9vh;
     overflow: hidden;
     margin-top: 2vh;
     margin-bottom: 0vh;
+    box-sizing: border-box;
+    padding: 0 5vw;
 
     .city {
-        width: 4vh;
-        font-size: 2.5vh;
+        width: 1.4vh;
+        font-size: 1.3vh;
         color: @nav-block1;
         word-break: break-all;
         .middle();
@@ -18,7 +20,7 @@
 
     .time {
         color: @moive-bg-color;
-        font-size: 6vh;
+        font-size: 4vh;
         .middle();
     }
 
@@ -26,13 +28,18 @@
         color: @moive-bg-color;
         font-size: 4vh;
         .middle();
+        font-weight: bold;
     }
 
     h5 {
         padding: 0;
         margin: 0;
-        color: rgb(67,171,162);
-        font-size: 2vh;
+        color: #68c3be;
+        font-size: 1.3vh;
         .middle();
+        height: initial;
+        line-height: initial;
+        font-weight: normal;
+        padding-left: 0.3vw;
     }
 }
