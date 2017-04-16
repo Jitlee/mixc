@@ -23,12 +23,6 @@
 			<el-table-column inline-template label="所在楼层" align="left" width="95px">
 				<div>{{ row.floorName }}</div>
 			</el-table-column>
-			<el-table-column inline-template label="客户端MAC地址" align="left" width="160px">
-				<div>{{ row.tmlMac }}</div>
-			</el-table-column>
-			<el-table-column inline-template label="客户端IP" align="left" width="140px">
-				<div>{{ row.tmlIp }}</div>
-			</el-table-column>
 			<el-table-column inline-template label="关机时间" align="left" width="95px">
 				<div>{{ row.shutdownTime == 0 ? '默认时间' : row.shutdownTimeText }}</div>
 			</el-table-column>
@@ -60,12 +54,6 @@
 						<el-select v-model="formData.floorId" placeholder="请选择">
 						    <el-option v-for="item in floors" :label="item.floorName" :value="item.floorId"></el-option>
 					  	</el-select>
-					</el-form-item>
-					<el-form-item label="客户端MAC地址" prop="tmlMac" class="el-form-item-left">
-						<el-input v-model="formData.tmlMac" auto-complete="off" :maxlength="30" placeholder="请输入MAC地址"></el-input>
-					</el-form-item>
-					<el-form-item label="客户端IP" class="el-form-item-left">
-						<el-input v-model="formData.tmlIp" auto-complete="off" :maxlength="30" placeholder="请输入IP地址"></el-input>
 					</el-form-item>
 					<el-form-item label="定时关机时间" class="el-form-item-left" style="text-align: left">
 						<el-time-select v-model="shutdownTime" :picker-options="{ start: '10:00', step: '00:15', end: '23:30' }" placeholder="默认时间"></el-time-select>

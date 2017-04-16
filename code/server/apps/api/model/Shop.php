@@ -50,9 +50,10 @@ class Shop extends Model
 		$request = Request::instance();
 		$keywords = $request->get('keywords', '');
 		$db = $this->alias('s')
-			->field('s.client_id clientId, shop_id shopId, shop_type shopType, d1.dict_value subShopTypeText, d2.dict_value mainShopTypeText, shop_name shopName, shop_en_name shopEnName, shop_icon shopIcon, file_path shopIconPath, shop_desc shopDesc')
+			->field('s.client_id clientId, s.shop_id shopId, shop_type shopType, d1.dict_value subShopTypeText, d2.dict_value mainShopTypeText, shop_floor shopFloor, shop_room shopRoom, shop_name shopName, shop_en_name shopEnName, shop_icon shopIcon, file_path shopIconPath, shop_desc shopDesc')
 			->join('__DICT__ d1', 's.shop_type = d1.dict_id and s.client_id = d1.client_id')
 			->join('__DICT__ d2', 'd2.dict_id = d1.dict_parent_id and s.client_id = d2.client_id')
+			->join('__SHOP_INFO__ i', 'i.shop_id = s.shop_id')
 			->join('__FILE__ f', 'f.file_key = s.shop_icon and f.file_type = 1');
 			
 		if($keywords != '') {

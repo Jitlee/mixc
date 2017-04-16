@@ -31,7 +31,7 @@
 		<el-dialog :title="formTitle" v-model="formVisible" :close-on-click-modal="false">
 			<el-form :model="formData" label-width="80px" :rules="formRules" ref="formData">
 				<div style="position:relative">
-					<el-form-item label="名称" prop="roomName">
+					<el-form-item label="房间名称" prop="roomName">
 						<el-input v-model="formData.roomName" auto-complete="off" :maxlength="30" placeholder="请输入房间名称"></el-input>
 					</el-form-item>
 					<el-form-item label="入驻店铺">
@@ -132,7 +132,7 @@
 			},
 			
 			handleAdd() {
-				this.formTitle = "新增房间";
+				this.formTitle = "新增店铺房间";
 				this.formData.floorId = this.floorId;
 				this.formData.roomId = 0;
 				this.formData.shopId = '';
@@ -142,7 +142,7 @@
 				this.formVisible = true;
 			},
 			handleEdit(index, row) {
-				this.formTitle = "编辑房间";
+				this.formTitle = "编辑店铺房间";
 				this.formData.floorId = row.floorId;
 				this.formData.roomId = row.roomId;
 				this.formData.shopId = row.shopId;

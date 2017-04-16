@@ -20,8 +20,8 @@
 					<el-tag type="gray">{{ row.subShopTypeText }}</el-tag>
 				</div>
 			</el-table-column>
-			<el-table-column inline-template label="店铺特色" align="left" :show-overflow-tooltip="true">
-				<div>{{ row.shopDesc }}</div>
+			<el-table-column inline-template label="店铺位置" align="left" :show-overflow-tooltip="true">
+				<div>{{ row.shopFloor }}-{{ row.shopRoom }}</div>
 			</el-table-column>
 			<el-table-column :context="_self" inline-template label="操作" width="200px">
 				<div>
