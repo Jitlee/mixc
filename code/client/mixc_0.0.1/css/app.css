@@ -832,6 +832,8 @@ nav.home-nav .nav-wheel {
   background-color: rgba(0, 0, 0, 0.5);
   display: table;
   transition: opacity .3s ease;
+  color: #333;
+  font-size: 14px;
 }
 .modal-wrapper {
   display: table-cell;

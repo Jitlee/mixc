@@ -4,22 +4,36 @@ const path = require('path')
 const zip = require('machinepack-zip');
 const request = require('request');
 const md5 = require('md5');
+const BUILD_VERSION = '0.0.35' // 客户端打包内嵌版本
 
 const dataPath = getUserFolderPath();
 let configPath = path.join(path.dirname(process.execPath), 'config.json')
 let config = { server: 'cky.ritacc.net', port: 8888, updateTime: 1485012010437, version: '0.0.1', sourceId: 1, adsTime: 3 }
 	
+/**
+ * 此方法,由于路径的问题，只限于main.js调用
+ * @param {Object} fileName
+ */
 function getMainPath(fileName = 'index.html') {
 	const config = readConfig()
-	const uuid = md5(config.version, config.updateTime);
+	const uuid = md5(config.version + config.updateTime);
 	const mixcPath = path.join(dataPath, 'mixc');
 	const localPath = path.join(mixcPath, uuid);
 	if(fs.existsSync(localPath)) {
 		return path.join(localPath, fileName);
 	} else {
-		resetConfig()
-		return path.join(__dirname, '../mixc_0.0.1', fileName);
+		return path.join(__dirname, '../mixc_0.0.1', fileName)
 	}
+}
+
+function isUpdated(config) {
+	if(config.version == BUILD_VERSION) {
+		return true
+	}
+	const uuid = md5(config.version + config.updateTime);
+	const mixcPath = path.join(dataPath, 'mixc');
+	const localPath = path.join(mixcPath, uuid);
+	return fs.existsSync(localPath)
 }
 
 function readConfig() {
@@ -42,19 +56,13 @@ function saveConfig(newCofing, callback) {
     }); 
 }
 
-function resetConfig() {
-	let newConfig = extend({}, config)
-	newConfig.version = '0.0.1'
-	saveConfig(newConfig)
-}
-
 function checkVersion(callback, autoUpdate, process) {
 //	callback(0, '已经是最新版本');
 //	return;
 	const config = readConfig()
 	const url = ['http://', urlTrim(config.server), ':', config.port, '/api/release/last/', config.sourceId].join('');
 	getJSON(url, function(rst) {
-		if(formatVersion(rst.releaseVersion) > formatVersion(config.version)) {
+		if(formatVersion(rst.releaseVersion) != formatVersion(config.version) || !isUpdated(config)) {
 			if(autoUpdate) {
 				process && process(1)
 				update(config, rst, callback, process)
@@ -69,11 +77,11 @@ function checkVersion(callback, autoUpdate, process) {
 	})
 }
 
-function update(config, rst, callback, process) {
-	const fileUrl = ['http://', urlTrim(config.server),
-			':', config.port, '\/', rst.releaseFile].join('');
+function update(lastConfig, rst, callback, process) {
+	const fileUrl = ['http://', urlTrim(lastConfig.server),
+			':', lastConfig.port, '\/', rst.releaseFile].join('');
 	const now = new Date().getTime();
-	const uuid = md5(rst.releaseVersion, now);
+	const uuid = md5(rst.releaseVersion + now);
 	const mixcPath = path.join(dataPath, 'mixc');
 	const zipPath = path.join(mixcPath, uuid + '.zip');
 	const outPath = path.join(mixcPath, uuid);
@@ -101,18 +109,18 @@ function update(config, rst, callback, process) {
 						},
 						success: function () {
 							process && process(5)
-							let newConfig = extend({}, config)
+							const lastUUID = md5(lastConfig.version + lastConfig.updateTime);
+							const lastPath = path.join(mixcPath, lastUUID);
+							let newConfig = extend({}, lastConfig)
 							newConfig.version = rst.releaseVersion
-							newConfig.updateTime = rst.now
+							newConfig.updateTime = now
 							saveConfig(newConfig, (err) => {
 								if(err) {
 									callback(-6, '保存最新的配置失败');
 								} else {
-									const lastUUID = md5(config.version, config.updateTime);
-									const lastPath = path.join(mixcPath, lastUUID);
 									try {
 										deleteFolderRecursive(zipPath)
-										deleteFolderRecursive(lastUUID);
+										deleteFolderRecursive(lastPath);
 									} catch(e) { console.error('删除旧资源失败' + e) }
 									
 							 		callback(1, rst);
@@ -246,31 +254,6 @@ function getJSON(url, success, error) {
     		}
 	})
 }
-
-//
-//function getJSON(url, success, error){
-//  var xhr = new XMLHttpRequest()
-//  xhr.open('get', url, true)
-//  xhr.onreadystatechange=function(){
-//      if(xhr.readyState==4){
-//          if(xhr.status==200){
-//              try {
-//              	const data = JSON.parse(xhr.responseText)
-//              	if(data && data.code == 200) {
-//              		success(data.rst)
-//              	} else {
-//              		error()
-//              	}
-//              } catch(e) {
-//              	error()
-//              }
-//          } else {
-//          	error()
-//          }
-//      }
-//  }
-//  xhr.send(null);
-//}
 
 module.exports = {
 	config: config,

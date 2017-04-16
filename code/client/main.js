@@ -10,6 +10,8 @@ const console = new nodeConsole.Console(process.stdout, process.stderr);
 // be closed automatically when the JavaScript object is garbage collected.
 let startWindow = null
 
+process.config.variables.aaa = 'bbb'
+
 function createWindow () {
   startWindow = new BrowserWindow({width: 400, height: 300, alwaysOnTop: true, frame: false, resize: false, center: true })
 
@@ -20,6 +22,7 @@ function createWindow () {
   }))
 
   startWindow.on('closed', () => { startWindow = null })
+//	startWindow.webContents.openDevTools()
 }
 
 app.on('ready', createWindow)
@@ -60,6 +63,12 @@ ipcMain.on('open-setting', () => {
     protocol: 'file:',
   }))
 	settingWindow.on('closed', () => { settingWindow = null })
+})
+
+ipcMain.on('do-print', ()=> {
+	if(mainWindow) {
+		mainWindow.webContents.print({silent: true, printBackground: false })
+	}
 })
 
 // 启动广告页面
@@ -114,8 +123,8 @@ const ip = require('ip')
 const mac = require('getmac')
 const ACTIVE_INTERVAL = 1*60*1000 // 3分钟检查更新一次
 const ipAddress = ip.address() // 本机ip
-const config = cv.readConfig()
 let activeData = { ip: ipAddress };
+let config = cv.readConfig()
 mac.getMac((err, address) => {
 	if(err) {
 		console.log('get mac failed： ', err);
@@ -124,10 +133,10 @@ mac.getMac((err, address) => {
 	activeData.mac = address
 	console.log('get mac sucess： ', activeData)
 	setInterval(autActive, ACTIVE_INTERVAL)
-	autActive()
 })
 function autActive(callback) {
 	// 发送心跳
+	config = cv.readConfig()
 	const url = ['http://', config.server, ':', config.port, '/api/terminal/active/', config.sourceId].join('');
 	console.log('active url: ' + url)
 	request.post({ url:url, form: activeData }, (err, response, body) => {
@@ -138,6 +147,7 @@ function autActive(callback) {
 					const rst = data.rst
 					 // 保存最新的配置
 					adsTime = rst.adsTime
+					config = cv.readConfig()
 					config.adsTime = rst.adsTime
 					config.password = rst.password
 					config.shutdownTime = rst.shutdownTime

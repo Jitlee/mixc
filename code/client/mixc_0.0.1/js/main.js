@@ -1,6 +1,5 @@
-(function(){
-	
-	const cv = !window.require ? null : require(process.resourcesPath + '/app/js/checkversion.js')
+(function(window){
+	const cv = App.getConfigManager() // 配置文件管理器
 	const _configListeners = []
 	
 	const WEEKS = '日一二三四五六';
@@ -1037,10 +1036,7 @@
 			    				btn: ['是的', '不，去设置页面'],
 			    				shadeClose: true, //开启遮罩关闭
 			    				yes: function(index){
-									if(window.require) {
-										const { app } = require('electron').remote
-										app.quit()
-									}
+									_exit();
 			      					layer.close(index)
 								},
 								no: this.onsetting.bind(this),
@@ -1155,4 +1151,4 @@
 	});
 	
 	
-})();
+})(window);
