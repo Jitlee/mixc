@@ -1,0 +1,140 @@
+.public-header {
+    display: block;
+    position: relative;
+    height: @public_header_height;
+    overflow: hidden;
+    color: @font-color;
+    
+    .block1 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: @public_header_row1;
+        width: @public_header_col1;
+        background-color: @nav-block1;
+    }
+    
+    .block2 {
+        position: absolute;
+        top: 0;
+        left: @public_header_col1;
+        height: @public_header_row1;
+        width: @public_header_col2;
+        background-color: @nav-block2;
+    }
+    
+    .block3 {
+        position: absolute;
+        top: 0;
+        left: @public_header_col1 + @public_header_col2;
+        height: @public_header_row1;
+        width: @public_header_col3;   
+        background-color: @nav-block3;
+    }
+    
+    .block4 {
+        position: absolute;
+        top: @public_header_row1;
+        left: 0;
+        height: @public_header_row2;
+        width: @public_header_col1;
+        background-color: @nav-block2;
+    }
+    
+    .block5 {
+        position: absolute;
+        top: @public_header_row1;
+        left: @public_header_col1;
+        height: @public_header_row2;
+        width: @public_header_col2;
+        background-color: @nav-block3;
+    }
+    
+    .block6 {
+        position: absolute;
+        top: @public_header_row1 + @public_header_row2;
+        left: 0;
+        height: @public_header_row3;
+        width: @public_header_col1 + @public_header_col2;
+        background-color: @nav-block1;
+        line-height: @public_header_row3;
+        font-size: 1.4vh;
+        padding-right: 20px;
+        box-sizing: border-box;
+    }
+    
+    // 返回
+    .block7 {
+        display: block;
+        position: absolute;
+        top: @public_header_row1;
+        left: @public_header_col1 + @public_header_col2;
+        height: @public_header_row2 + @public_header_row3;
+        width: @public_header_col3; 
+        background-color: @nav-block7;
+        padding-top: 1.4vh;
+        text-decoration: none;
+        
+        .iconfont {
+            font-size: 4.5vh;
+            color: @font-color;
+        }
+        
+        .title {
+            font-size: 1.1vh;
+            padding-top: 0.2vh;
+            color: @font-color;
+        }
+    }
+    
+    // 标题栏
+    .block8 {
+        position: absolute;
+        right: @public_header_col3;
+        top: 3vh;
+        text-align: right;
+        padding-right: 2 * @page_padding-h;
+        
+        .h() {
+            padding: 0;
+            margin: 0;
+            font-weight: normal;
+        }
+        
+        
+        h1 {
+            .h();
+            font-size: 2.9vh;
+        }
+        
+        h2 {
+            .h();
+            font-size: 2.0vh;
+            padding-bottom: 0.5vh;
+        }
+    }
+    
+    .block9 {
+        position: absolute;
+        top: @public_header_row1;
+        left: 0;
+        height: @public_header_row2;
+        width: @public_header_col1 + @public_header_col2;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        display: table;
+        
+        li {
+            padding: 0;
+            text-align: center;
+            display: table-cell;
+            line-height: @public_header_row2;
+        }
+        
+        .iconfont {
+            color: rgba(255,255,255, 0.5);
+            font-size: 2.8vh;
+        }
+    }
+}

@@ -16,3 +16,7 @@ client3
 client4
 client_template
 package
+packages
+*.user
+bin
+obj

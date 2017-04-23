@@ -1,0 +1,164 @@
+.brand {
+    position: relative;
+    color: @font-color;
+    
+    a {
+        background-color: #dab274;
+        display: block;
+        vertical-align: middle;
+        text-align: center;
+        .nowrap();
+        text-decoration: none;
+    }
+    
+    a.active {
+        background-color: #f39801;
+    }
+    @cell-height: 14.625vh;
+    @left-width: 27.77777777777778vw;
+    @sub-left: 28.26666666666667vw;
+    @padding-left: 28.7037037037037vw;
+    .side {
+        position: fixed;
+        width: @left-width;
+        top: 23.56vh;
+        left: @page_padding-h;
+        
+        .top {
+            height: @left-width;
+            background-color: @nav-block1;
+            position: relative;
+            
+            a {
+                margin-top: 0.5vh;
+                //padding-top: 0.3vh;
+                width: 11.11111111111111vw;
+                font-size: 1.1vh;
+                line-height: 2.24vh;
+                height: 2.24vh;
+            }
+            
+            hr {
+                padding: 0;
+                margin: 0;
+                background-color: @font-color;
+                height: 1px;
+                top: 0px;
+                right: 0px;
+                left: 2vh;
+                transform-origin: right;
+                border: 0;
+                transform: rotate(-45deg);
+            }
+            
+            .title {
+                font-size: 2vh;
+                right: @page_padding-h;
+                bottom: @page_padding-v;
+                position:absolute;
+            }
+        }
+        
+        .menus {
+            a {
+                margin-top: 0.5208vh;
+                height: 5.2vh;
+                line-height: 5.2vh;
+                font-size: 1.5vh;
+                letter-spacing: 8px;
+            }
+            &.letter {
+                a {
+                    width: 8.333333333333333vw;
+                    height: 4.6875vh;
+                    float: left;
+                    margin-right: 1.388888888888889vw;
+                }
+                
+                a:nth-child(3n) {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+        
+    .submenus {
+        position: absolute;
+        left: @sub-left;
+        width: 16.66666666666667vw;
+        z-index: 99;
+        transform-origin: -25% -25%;
+        animation-duration: 0.2s;
+        
+        a {
+            height: 2.60416666666667vh;
+            line-height: 2.60416666666667vh;
+            font-size: 1.1vh;
+            box-sizing: border-box;
+            border:solid 1px rgba(255,255,255,0.95);
+            background-color:fade(@achive-bg-color, 95%);
+        }
+    }
+    
+    .content {
+        padding-left: @padding-left;
+        height: 75.3vh;
+        overflow: auto;
+        
+        margin-top: 0.1212vh;
+        
+        .table-view-cell {
+            margin-top: 0.5208vh;
+            height: @cell-height;
+            border: 1px solid @border-color;
+            color: @gray-color;
+            background-color: inherit;
+            box-sizing: border-box;
+            position: relative;
+            
+            .img {
+                .bgimg();
+                border-left: 1px solid @border-color;
+                position: absolute;
+                top: 0;
+                right: 0;
+                left: 24.88888888888889vw;
+                bottom: 0;
+            }
+            
+            .info {
+                text-align: center;
+                width: 24.88888888888889vw;
+                .icon {
+                    .bgimg();
+                    border-radius: 50%;
+                    height: 4.16667vh;
+                    width: 7.407413333333333vw;
+                    margin: 1.5625vh auto;
+                }
+                
+                .name {
+                    font-size: 1.5vh;
+                    color: @font-color;
+                    background-color: @black-color;
+                    display: inline-block;
+                    padding: 0.1vh 0.5vh 0.25vh 0.5vh;
+                }
+                
+                .desc {
+                    font-size: 1.0vh;
+                    padding-top: 0.5vh;
+                }
+                
+                .floor {
+                    font-size: 1.1vh;
+                    padding-top: 0.5vh;
+                }
+            }
+        }
+        
+        .table-view-cell:first-child {
+            margin-top: 0;
+        }
+    }
+}

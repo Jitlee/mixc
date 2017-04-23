@@ -1,0 +1,120 @@
+// 总文件，通用样式
+
+html {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding: @page_padding-v @page_padding-h;
+    margin: 0;
+}
+
+// 去掉滚动条
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;
+}
+
+@imgpath: "../img";
+
+// 图片背景
+.bgimg() {
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+}
+
+// 强制不换行
+.nowrap() {
+    overflow: hidden;
+    white-space: nowrap;
+    word-break: keep-all;
+    text-overflow: ellipsis;
+}
+
+// 垂直居中
+.middle() {
+    vertical-align: middle;
+}
+
+.center(){
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+// 清除浮动
+.clear(){
+    &:after {
+        content: "";
+        height: 0px;
+        visibility: hidden;
+        display: block;
+        clear: both;
+    }
+}
+
+// 水平对齐
+.align {
+    &-left {
+        text-align: left;
+    }
+    &-right {
+        text-align: right;
+    }
+    &-center {
+        text-align: center;
+    }
+}
+
+// 行列样式  
+.row {
+    display: table; 
+    width: 100%;
+}
+
+.col {
+    display: table-cell;
+}
+
+// 表单样式
+.form-row {
+    padding: 10px 0;
+    
+    .form-label {
+        font-size: 14px;
+        height: 30px;
+        line-height: 30px;
+        box-sizing: border-box;
+        color: #666;
+    }
+    
+    .form-input {
+        outline:none;
+        height: 30px;
+        background-color: #FFF;
+        color: #333;
+        font-size: 16px;
+        border-radius:0px;
+        border:2px solid #999;
+        -webkit-transition: border-color 0.30s ease-in-out;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 5px;
+    }
+    
+    .form-input:hover{
+        border-color:#333;
+    }
+    
+    .form-input:focus{
+         border-color:rgb(0, 120, 215);
+    }
+}

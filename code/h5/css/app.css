@@ -1,0 +1,9 @@
+.index-ads {
+  height: 29.4717vh;
+}
+.index-ads .swiper-slide {
+  height: 29.4717vh;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: cover;
+}

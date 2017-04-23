@@ -1,0 +1,42 @@
+// 部件
+.index-widget {
+    height: @index_widget_height;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: @index_widget_padding;
+    padding-top: @index_widget_padding-top;
+    width: 100%;
+
+    .city {
+        width: @xxl_font_size;
+        font-size: @xl_font_size;
+        color: @widget-color1;
+        word-break: break-all;
+        .middle();
+    }
+
+    .time {
+        color: @widget-color2;
+        font-size: @XXXXL_FONT-SIZE;
+        .middle();
+    }
+
+    .build {
+        color: @widget-color2;
+        font-size: @XXXXL_FONT-SIZE;
+        .middle();
+        font-weight: bold;
+    }
+
+    h5 {
+        padding: 0;
+        margin: 0;
+        color: @widget-color3;
+        font-size: @xl_font_size;
+        .middle();
+        height: initial;
+        line-height: initial;
+        font-weight: normal;
+        padding-left: @index_widget_date_padding-left;
+    }
+}

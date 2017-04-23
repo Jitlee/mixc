@@ -21,8 +21,6 @@ const getStorage = () => {
 	return null
 }
 
-
-
 export const setPassport = ({ commit }, data) => {
 	if(data) {
 		saveStorage(data)

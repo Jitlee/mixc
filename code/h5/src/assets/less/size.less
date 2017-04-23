@@ -1,0 +1,47 @@
+//-----------------
+// 大小设置
+
+// 字体大小
+@s_font_size: 1vh;
+@m_font_size: 1.1vh;
+@l_font_size: 1.2vh;
+@xl_font_size: 1.3vh;
+@xxl_font_size: 1.4vh;
+@xxxl_font_size: 1.5vh;
+
+@XXXXL_FONT-SIZE: 4vh; // 首页标题字体
+
+// 页面边距(10px)
+@page_padding-v: 0.5283vh;
+@page_padding-h: 0.9259259259259259vw;
+@normal_pading: @page_padding-v; // 通用边距
+
+// 首页广告高度
+@index_ads_height: 30vh - @page_padding-v; // 广告高度
+@index_nav_height: 14vh; // 导航条高度
+@index_widget_height: 11vh; // 中间导航高度
+@index_widget_padding: 0 5vw;
+@index_widget_padding-top: 2vh;
+@index_widget_date_padding-left: 0.16875vh;
+@index_category_height: 100vh - @index_ads_height - 2 * @index_nav_height - @index_widget_height - 2 * @page_padding-v; // 底部大导航
+
+// 通用页头
+@public_header_height: 22.91666666666667vh; // 通用标题高度
+@public_header_row1: 12.4vh;
+@public_header_row2: 6vh;
+@public_header_row3: @public_header_height - @public_header_row1 - @public_header_row2;
+@public_header_col1: 100vw - @public_header_col2 - @public_header_col3 - 2 * @page_padding-h;
+@public_header_col2: 28.2vw;
+@public_header_col3: 18.5vw;
+
+// 楼层导购
+@floor_map_height: 36.97916666666667vh;// 导航图高度
+@floor_nav_height: 5.21vh;// 楼层列表高度
+@floor_info_height: 100vh - @public_header_height - 2 * @normal_pading - @floor_map_height - @floor_nav_height - 3 * @page_padding-v;
+@floor_info_width: 29.90740740740741vw;
+
+// 品牌导购
+
+// 商场简介
+@info_height: 100vh - @public_header_height - 3 * @page_padding-v;
+

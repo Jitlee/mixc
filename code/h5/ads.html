@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html class="ie ie6 no-js" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 no-js" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 no-js" lang="en"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9 no-js" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" lang="en"><!--<![endif]-->
+    <head id="head">
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+        <title>Fullscreen Background Image Slideshow with CSS3</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="description" content="Fullscreen Background Image Slideshow with CSS3 - A Css-only fullscreen background image slideshow" />
+        <meta name="keywords" content="css3, css-only, fullscreen, background, slideshow, images, content" />
+        <meta name="author" content="Codrops" />
+        <link rel="shortcut icon" href="../favicon.ico"> 
+        <link rel="stylesheet" type="text/css" href="lib/fullscreenslider/demo.css" />
+        <link id="style1" rel="stylesheet" type="text/css" href="lib/fullscreenslider/style1.css" />
+        <link id="style2" rel="stylesheet" type="text/css" href="lib/fullscreenslider/style2.css" />
+        <link id="style3" rel="stylesheet" type="text/css" href="lib/fullscreenslider/style3.css" />
+        <link id="style4" rel="stylesheet" type="text/css" href="lib/fullscreenslider/style4.css" />
+    </head>
+    <body style="overflow: hidden;">
+        <ul id="slideshow" class="cb-slideshow">
+            <!--<li><span style="background-image: url(ads/1.jpg)">Image 01</span><div><h3>se·ren·i·ty</h3></div></li>
+            <li><span style="background-image: url(ads/2.jpg)">Image 02</span><div><h3>com·po·sure</h3></div></li>
+            <li><span style="background-image: url(ads/3.jpg)">Image 03</span><div><h3>e·qua·nim·i·ty</h3></div></li>
+            <li><span style="background-image: url(ads/4.jpg)">Image 04</span><div><h3>bal·ance</h3></div></li>
+            <li><span style="background-image: url(ads/5.jpg)">Image 05</span><div><h3>qui·e·tude</h3></div></li>
+            <li><span style="background-image: url(ads/6.jpg)">Image 06</span><div><h3>我的天空</h3></div></li>-->
+        </ul>
+        <div class="container">
+        </div>
+		<script type="text/javascript" src="lib/fullscreenslider/modernizr.custom.86080.js"></script>
+        <script>
+    		(function() {
+        		const head = document.getElementById("head")
+        		const style1 = document.getElementById("style1")
+        		const style2 = document.getElementById("style2")
+        		const style3 = document.getElementById("style3")
+        		const style4 = document.getElementById("style4")
+        		const arr = [style1, style2, style3, style4]
+        		
+        		let index = 3;
+        		
+        		window.setInterval(function() {
+        			let nextIndex = parseInt((Math.random() * 99999)) % 4
+        			if(index == nextIndex) {
+        				nextIndex = (nextIndex + 1) % 4
+        			}
+        			
+        			head.appendChild(arr[nextIndex]);
+//	        			head.removeChild(arr[index]);
+        			index = nextIndex;
+        		}, 36000);
+        		
+        		getJSON('data/ads.json', function(ads) {
+        			let arr = [];
+        			ads = ads.filter(a => a.adsGroupId == 56)
+        			const animation = `imageAnimation ${6*Math.min(ads.length, 11)}s linear infinite 0s`
+        			for(let i = 0, len = Math.min(11, ads.length); i < len; i++) {
+        				let a = ads[i];
+        				arr.push(`<li>
+        							<span style="${animation};background-image: url(${a.adsFilePath.replace(/^\//, '')})">Image ${i}</span>
+        							<div style="${animation};"><h3>${a.adsTitle}</h3></div>
+        						</li>`)
+        			}
+        			document.getElementById("slideshow").innerHTML = arr.join('')
+        		}, function() {
+        			
+        		})
+        		
+        		function getJSON(url, success, error){
+				    const xhr = new XMLHttpRequest()
+				    xhr.open('get', url, true)
+				    xhr.onreadystatechange=function(){
+				        if(xhr.readyState==4){
+				            if(xhr.status==200){
+				                try {
+				                	const data = JSON.parse(xhr.responseText)
+				                	if(data && data.length > 0) {
+			                			success(data)
+			                		}
+				                } catch(e) {
+				                	error()
+				                }
+				            } else {
+				            	error()
+				            }
+				        }
+				    }
+				    xhr.send(null);
+				}
+	        })();
+        </script>
+		<script src="js/ads-exit.js"></script>
+    </body>
+</html>

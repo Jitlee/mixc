@@ -1,0 +1,32 @@
+// 精彩活动
+
+.activity {
+    @_w: 27.77777777777778vw;
+    @h: 100vh - @public_header_height - 3 * @page_padding-v;
+    
+    .imgs {
+        overflow: auto;
+        height: @h;
+        width: @_w;
+        float: left;
+        box-sizing: border-box;
+            
+        img {
+            box-sizing: border-box;
+            margin-top: @page_padding-v;
+            width: 100%;
+        }
+    }
+    
+    .img {
+        margin-left: @page_padding-h;
+        width: 100vw - @_w - 3 * @page_padding-h;
+        height: @h;
+        float: left;
+        margin-top: @page_padding-v;
+        
+        img {
+            width: 100%;
+        }
+    }
+}
