@@ -847,7 +847,7 @@ nav.index-nav .index-nav-item:first-child {
 }
 .activity .imgs {
   overflow: auto;
-  height: 75.49843333vh;
+  height: 74.97013333vh;
   width: 27.77777778vw;
   float: left;
   box-sizing: border-box;
@@ -860,9 +860,10 @@ nav.index-nav .index-nav-item:first-child {
 .activity .img {
   margin-left: 0.92592593vw;
   width: 69.44444444vw;
-  height: 75.49843333vh;
+  height: 74.97013333vh;
   float: left;
   margin-top: 0.5283vh;
+  overflow: auto;
 }
 .activity .img img {
   width: 100%;

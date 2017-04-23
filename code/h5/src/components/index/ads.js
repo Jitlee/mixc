@@ -3,7 +3,7 @@
 	const template = `
 		<div :id="swipeId" class="index-ads swiper-container">
 			<div class="swiper-wrapper">
-				<div class="swiper-slide" v-for="item in list" :style="{ backgroundImage: 'url(' + item.adsFilePath.substr(1) + ')' }"></div>
+				<div class="swiper-slide" v-for="item in list" :style="{ backgroundImage: 'url(' + item.adsFilePath + ')' }"></div>
 			</div>
 			<div class="swiper-pagination"></div>
 		</div>

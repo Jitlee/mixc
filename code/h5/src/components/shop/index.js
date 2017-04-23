@@ -4,26 +4,26 @@
 		<div class="shop">
 			<div :id="garryId" class="swiper-container">
 				<div class="swiper-wrapper">
-					<div class="swiper-slide" v-for="item in shopAlbums" :style="{ backgroundImage: 'url(' + item.filePath.substr(1) + ')' }"></div>
+					<div class="swiper-slide" v-for="item in shopAlbums" :style="{ backgroundImage: 'url(' + item.filePath + ')' }"></div>
 				</div>
 			</div>
 			<div class="info">
 				<div class="icon">
-					<div class="icon-img" :style="{ backgroundImage: 'url(' + shop.shopIconPath.substr(1) + ')' }"></div>
+					<div class="icon-img" :style="{ backgroundImage: 'url(' + shop.shopIconPath + ')' }"></div>
 				</div>
 				<hr />
 				<span class="name">品牌名：<span class="red">{{ shop.shopName }}</span></span>
 				<div class="floor">店铺位置：<strong>{{ shop.shopFloor }}</strong>&nbsp;&nbsp;{{ shop.shopRoom }}</div>
 				<div class="desc">类型：{{ shop.subShopTypeText }}</div>
 				<a @click="handleBack" class="back"><i class="iconfont icon-back"></i>&nbsp;&nbsp;返 回</a>
-				<div class="qr-img"  :style="{ backgroundImage: 'url(' + (shop.shopQRCodePath ? shop.shopQRCodePath.substr(1) : '') + ')' }"></div>
+				<div class="qr-img"  :style="{ backgroundImage: 'url(' + shop.shopQRCodePath + ')' }"></div>
 			</div>
 			<div class="introduction">
 				<h4>品牌介绍&nbsp;&nbsp;Brand</h4>
 				<p>{{ shop.shopIntroduction }}</p>
 			</div>
 			
-			<img class="shop-nav" :src="shop.shopNavPath.substr(1)"/>
+			<img class="shop-nav" :src="shop.shopNavPath"/>
 			
 		</div>
 	`

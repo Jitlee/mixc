@@ -5,7 +5,7 @@
 			<div class="index-nav-item" v-for="(item, index) in list"
 				@click.navtive="handleClick(index, item)"
 				:class="{ justify: item.adsStretch == 'B' }"
-				:style="{ backgroundColor: item.adsColor, backgroundImage: 'url(' + item.adsFilePath.substr(1) + ')' }"></div>
+				:style="{ backgroundColor: item.adsColor, backgroundImage: 'url(' + item.adsFilePath + ')' }"></div>
 		</nav>
 	`
 	

@@ -2,7 +2,7 @@
 
 .activity {
     @_w: 27.77777777777778vw;
-    @h: 100vh - @public_header_height - 3 * @page_padding-v;
+    @h: 100vh - @public_header_height - 2 * @page_padding-v;
     
     .imgs {
         overflow: auto;
@@ -24,6 +24,7 @@
         height: @h;
         float: left;
         margin-top: @page_padding-v;
+        overflow: auto;
         
         img {
             width: 100%;

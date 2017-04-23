@@ -4,10 +4,10 @@
 		<div class="activity clear">
 			<mixc-public-header title="精彩活动" sub-title="ACTIVITY CENTER"></mixc-public-header>
 			<div class="imgs">
-				<img v-for="(activity, index) in activities" @click="handleSelect(index)" :src="activity.activityFilePath.substr(1)"/>
+				<img v-for="(activity, index) in activities" @click="handleSelect(index)" :src="activity.activityFilePath"/>
 			</div>
 			<div class="img">
-				<img :src="currentActivity.activityFilePath.substr(1)"/>
+				<img :src="currentActivity.activityFilePath"/>
 			</div>
 		</div>
 	`

@@ -66,7 +66,7 @@
 				const target = $(evt.target)
 				
 				if(target.closest(submenus).length == 0) {
-					$(submenus).animateCss('zoomOut')
+					$(submenus).hide();
 				}
 			})
 		},
@@ -141,7 +141,7 @@
 			
 			handleSubMenu(evt, index) {
 				evt.stopPropagation()
-				$(this.$refs.submenus).animateCss('zoomOut')
+				$(this.$refs.submenus).hide();
 				if(index == this.subFilterIndex) {
 					return
 				}

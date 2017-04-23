@@ -15,7 +15,18 @@ namespace MIXC
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainFrame());
+
+#if DEBUG
+            Application.Run(new MainForm());
+#elif UPDATE
+            Application.Run(new MainForm());
+#else
+            SplashForm splashForm = new SplashForm();
+            if (splashForm.ShowDialog() == DialogResult.OK)
+            {
+                Application.Run(new MainForm());
+            }
+#endif
         }
     }
 }

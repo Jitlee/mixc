@@ -5,7 +5,7 @@
 			<div v-for="(item, index) in list"
 				@click="handleClick(index, item)" class="col"
 				:class="{ justify: item.adsStretch == 'B' }"
-				:style="{ backgroundColor: item.adsColor, backgroundImage: 'url(' + item.adsFilePath.substr(1) + ')' }"></div>
+				:style="{ backgroundColor: item.adsColor, backgroundImage: 'url(' + item.adsFilePath + ')' }"></div>
 		</div>
 	`
 	

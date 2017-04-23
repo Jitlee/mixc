@@ -18,4 +18,8 @@
 			})
 		})
 	}
+	
+	w.__backHome = () => {
+		router.replace('/')
+	}
 })(window)

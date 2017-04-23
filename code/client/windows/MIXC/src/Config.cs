@@ -55,6 +55,53 @@ namespace MIXC
         }
 
         /// <summary>
+        /// 源id
+        /// </summary>
+        public static string SourceId
+        {
+            get
+            {
+                return getValue("main", "sourceId", "1");
+            }
+            set
+            {
+                setValue("main", "sourceId", value);
+            }
+        }
+
+        /// <summary>
+        /// 源id
+        /// </summary>
+        public static string Version
+        {
+            get
+            {
+                return getValue("main", "version", "0.0.1");
+            }
+            set
+            {
+                setValue("main", "version", value);
+            }
+        }
+
+        /// <summary>
+        /// 定时关机时间
+        /// </summary>
+        public static int ShutdownTime
+        {
+            get
+            {
+                var strValue = getValue("main", "shutdownTime", "1260");
+                int intValue = 0;
+                if(int.TryParse(strValue, out intValue))
+                {
+                    return intValue;
+                }
+                return -1;
+            }
+        }
+
+        /// <summary>
         /// 机器码
         /// </summary>
         public static string MachineCode
@@ -72,11 +119,46 @@ namespace MIXC
         /// <returns>api全路径</returns>
         public static string getFullUrl(string api)
         {
+
             if (api.IndexOf("http://") == 0)
             {
                 return api;
             }
             return "http://" + Server + ":" + Port + api;
+        }
+
+        public static string H5Path
+        {
+            get
+            {
+#if DEBUG
+                return System.Text.RegularExpressions.Regex.Replace(System.AppDomain.CurrentDomain.BaseDirectory, "(\\\\[^\\\\]+){6}\\\\$", "\\h5\\");
+#else
+                return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), "__mixc__");
+#endif
+            }
+        }
+
+        /// <summary>
+        /// 获取值
+        /// </summary>
+        /// <param name="key">关键字</param>
+        /// <param name="defaultValue">默认值</param>
+        /// <returns></returns>
+        public static string getValue(string key, string defaultValue)
+        {
+            return Config.getValue("main", key, defaultValue);
+        }
+
+        /// <summary>
+        /// 设置值
+        /// </summary>
+        /// <param name="key">关键字</param>
+        /// <param name="value">值</param>
+        /// <returns></returns>
+        public static void setValue(string key, string value)
+        {
+            Config.setValue("main", key, value);
         }
 
         /// <summary>

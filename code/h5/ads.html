@@ -13,11 +13,11 @@
         <meta name="keywords" content="css3, css-only, fullscreen, background, slideshow, images, content" />
         <meta name="author" content="Codrops" />
         <link rel="shortcut icon" href="../favicon.ico"> 
-        <link rel="stylesheet" type="text/css" href="lib/fullscreenslider/demo.css" />
-        <link id="style1" rel="stylesheet" type="text/css" href="lib/fullscreenslider/style1.css" />
-        <link id="style2" rel="stylesheet" type="text/css" href="lib/fullscreenslider/style2.css" />
-        <link id="style3" rel="stylesheet" type="text/css" href="lib/fullscreenslider/style3.css" />
-        <link id="style4" rel="stylesheet" type="text/css" href="lib/fullscreenslider/style4.css" />
+        <link rel="stylesheet" type="text/css" href="static/libs/fullscreenslider/demo.css" />
+        <link id="style1" rel="stylesheet" type="text/css" href="static/libs/fullscreenslider/style1.css" />
+        <link id="style2" rel="stylesheet" type="text/css" href="static/libs/fullscreenslider/style2.css" />
+        <link id="style3" rel="stylesheet" type="text/css" href="static/libs/fullscreenslider/style3.css" />
+        <link id="style4" rel="stylesheet" type="text/css" href="static/libs/fullscreenslider/style4.css" />
     </head>
     <body style="overflow: hidden;">
         <ul id="slideshow" class="cb-slideshow">
@@ -30,7 +30,8 @@
         </ul>
         <div class="container">
         </div>
-		<script type="text/javascript" src="lib/fullscreenslider/modernizr.custom.86080.js"></script>
+		<script src="static/libs/fullscreenslider/modernizr.custom.86080.js"></script>
+		<script src="src/assets/js/proxy.js"></script>
         <script>
     		(function() {
         		const head = document.getElementById("head")
@@ -53,7 +54,7 @@
         			index = nextIndex;
         		}, 36000);
         		
-        		getJSON('data/ads.json', function(ads) {
+        		PROXY.getJSON('data/ads.json', function(ads) {
         			let arr = [];
         			ads = ads.filter(a => a.adsGroupId == 56)
         			const animation = `imageAnimation ${6*Math.min(ads.length, 11)}s linear infinite 0s`
@@ -69,29 +70,9 @@
         			
         		})
         		
-        		function getJSON(url, success, error){
-				    const xhr = new XMLHttpRequest()
-				    xhr.open('get', url, true)
-				    xhr.onreadystatechange=function(){
-				        if(xhr.readyState==4){
-				            if(xhr.status==200){
-				                try {
-				                	const data = JSON.parse(xhr.responseText)
-				                	if(data && data.length > 0) {
-			                			success(data)
-			                		}
-				                } catch(e) {
-				                	error()
-				                }
-				            } else {
-				            	error()
-				            }
-				        }
-				    }
-				    xhr.send(null);
-				}
+        		window.addEventListener("mouseup", () => { PROXY.close() })
+        		window.addEventListener("touchend", () => { PROXY.close() })
 	        })();
         </script>
-		<script src="js/ads-exit.js"></script>
     </body>
 </html>

@@ -3,7 +3,7 @@
 	const template = `
 		<div class="floor">
 			<mixc-public-header title="楼层导购" sub-title="FLOOR NAVIGATION"></mixc-public-header>
-			<div class="img" :style="{ backgroundImage: 'url(' + floor.navFilePath.substr(1) + ')' }"></div>
+			<div class="img" :style="{ backgroundImage: 'url(' + floor.navFilePath + ')' }"></div>
 			<div class="floors row">
 				<div class="title">楼层选择：</div>
 				<div class="col floor-col" @click="handlePrev"><i class="iconfont icon-prev"></i></div>

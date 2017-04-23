@@ -5,7 +5,7 @@
 			if(isCSharp) {
 				CAjax.getJSON(api, (jsonString) => {
 					try {
-						const data = JSON.stringify(jsonString)
+						const data = JSON.parse(jsonString)
 						if(data) {
 							success(data)
 						} else {
@@ -15,7 +15,7 @@
 						fail && fail()
 					}
 				}, fail)
-			} else {
+			} else if(w.$) {
 				$.getJSON(api, null, (data)=> {
 					if(data) {
 						success(data)
@@ -25,6 +25,26 @@
 				}, 'json').fail(() => {
 					fail && fail()
 				})
+			} else {
+			    const xhr = new XMLHttpRequest()
+			    xhr.open('get', api, true)
+			    xhr.onreadystatechange=function(){
+			        if(xhr.readyState==4){
+			            if(xhr.status==200){
+			                try {
+			                	const data = JSON.parse(xhr.responseText)
+			                	if(data && data.length > 0) {
+		                			success(data)
+		                		}
+			                } catch(e) {
+			                	error()
+			                }
+			            } else {
+			            	error()
+			            }
+			        }
+			    }
+			    xhr.send(null)
 			}
 		},
 		
@@ -43,8 +63,10 @@
 		},
 		
 		getConfigByKey(key, defaultValue) {
-			const config = w.getConfig()
-			return config[key] || defaultValue
+			if(isCSharp) {
+				return CBrowser.getConfigByKey(key, defaultValue)
+			}
+			return defaultValue
 		},
 		
 		saveConfig(config) {
@@ -61,5 +83,19 @@
 				w.close()
 			}
 		},
+		
+		close() {
+			if(isCSharp) {
+				CBrowser.close()
+			} else {
+				w.close()
+			}
+		},
+		
+		playAds() {
+			if(isCSharp) {
+				CBrowser.playAds()
+			}
+		}
 	}
 })(window)
