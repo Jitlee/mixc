@@ -8,6 +8,7 @@
 			albums: [],
 			articles: [],
 			activities: [], 
+			pois: [],
 			
 			config: {},
 		},

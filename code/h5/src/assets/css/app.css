@@ -63,6 +63,9 @@ body {
 .form-row .form-input:focus {
   border-color: #0078d7;
 }
+.ball {
+  transform: scale(1.2, 1.2);
+}
 .index-ads {
   height: 29.4717vh;
 }
@@ -340,14 +343,80 @@ nav.index-nav .index-nav-item:first-child {
   position: relative;
   color: #fff;
 }
+.floor .lenged {
+  margin-top: 0.5283vh;
+  height: 6vh;
+  line-height: 6vh;
+}
+.floor .lenged:after {
+  content: "";
+  height: 0px;
+  visibility: hidden;
+  display: block;
+  clear: both;
+}
+.floor .lenged .lenged-item {
+  display: block;
+  float: left;
+  width: 4.5vh;
+  height: 4.5vh;
+  line-height: 4.5vh;
+  text-align: center;
+  background-color: #b4b4dd;
+  border-radius: 50%;
+  margin: 0 0.92592593vw;
+  margin-top: 0.75vh;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+.floor .lenged .lenged-item:active {
+  transform: scale(1.2, 1.2);
+  color: red;
+}
+.floor .lenged .lenged-item .iconfont {
+  color: #4d2d1e;
+  font-size: 2.3vh;
+}
 .floor .img {
+  height: 25.36vh;
+  margin-bottom: 0.5283vh;
+  position: relative;
+}
+.floor .img .poi {
+  position: absolute;
+  z-index: 99;
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
   background-size: contain;
-  height: 36.97916667vh;
-  margin-top: 0.5283vh;
-  margin-bottom: 0.5283vh;
+  width: 30px;
+  height: 30px;
+  transition: all 0.2s ease-in-out;
+  transform-origin: bottom center;
+}
+.floor .img .location {
+  transition: all 0.2s ease-in-out;
+  transform-origin: bottom center;
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: cover;
+  background-size: contain;
+  text-align: center;
+  width: 50px;
+  height: 50px;
+  padding-top: 8px;
+  z-index: 999;
+  background-image: url("../../../static/img/location.png");
+}
+.floor .img .location .shop-icon {
+  margin: auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: cover;
 }
 .floor .floors {
   background-color: #ecb1ad;
@@ -370,9 +439,12 @@ nav.index-nav .index-nav-item:first-child {
   cursor: pointer;
   box-sizing: border-box;
 }
+.floor .floors .col {
+  transition: all 0.3s ease-in-out;
+}
 .floor .floors .col.active {
   color: #cb2c58;
-  transform: scale(1.3);
+  transform: scale(1.3, 1.3);
   transform-origin: 50% 50%;
 }
 .floor .floors .title {
@@ -387,7 +459,7 @@ nav.index-nav .index-nav-item:first-child {
 .floor .info {
   position: absolute;
   left: 0px;
-  height: 32.25266667vh;
+  height: 43.87183333vh;
   width: 29.90740741vw;
   padding-top: 2vh;
   box-sizing: border-box;
@@ -457,7 +529,7 @@ nav.index-nav .index-nav-item:first-child {
   border: solid 1px #e4e4e4;
   background-color: #f5f5f5;
   padding-left: 29.90740741vw;
-  height: 32.25266667vh;
+  height: 43.87183333vh;
 }
 .floor .shops:after {
   content: "";
@@ -847,7 +919,7 @@ nav.index-nav .index-nav-item:first-child {
 }
 .activity .imgs {
   overflow: auto;
-  height: 74.97013333vh;
+  height: 76.02673333vh;
   width: 27.77777778vw;
   float: left;
   box-sizing: border-box;
@@ -860,7 +932,7 @@ nav.index-nav .index-nav-item:first-child {
 .activity .img {
   margin-left: 0.92592593vw;
   width: 69.44444444vw;
-  height: 74.97013333vh;
+  height: 76.02673333vh;
   float: left;
   margin-top: 0.5283vh;
   overflow: auto;

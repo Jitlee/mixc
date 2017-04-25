@@ -8,6 +8,7 @@
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="list" border style="width: 100%">
+			<el-table-column type="index" class="table-index-cell"></el-table-column>
 			<el-table-column inline-template label="店铺房间名称" align="left">
 				<div>{{ row.roomName }}</div>
 			</el-table-column>
@@ -105,11 +106,13 @@
 			};
 		},
 		created() {
-			this.loadData()
 			this.loadShops()
+			this.loadData()
+			this.$bus.on('floor-map', this.loadData.bind(this))
 		},
 		methods: {
 			loadData() {
+				this.loading = true
 				this.$http.get(["/api/room/lst", this.floorId].join("/")).then((response) => {
 					if(response.nice) {
 						let rst = response.data.rst

@@ -1,6 +1,6 @@
 <template>
 	<el-form :model='formData' :rules='formRules' ref='formData' label-position='top' style='text-align: left'>
-	  	<el-form-item label='文章分组'>
+		<el-form-item label='文章分组'>
 		    <el-select v-model='formData.articleGroupId' placeholder='文章分组'>
 		      	<el-option label='默认分组' value=''></el-option>
 		      	<el-option v-for='group in articleGroups' :label='group.dictValue' :value='group.dictId'></el-option>

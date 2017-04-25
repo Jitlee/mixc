@@ -34,6 +34,11 @@ class File {
 		        		'file_name' => $info->getFilename(),
 		        		'file_path'	=> '/uploads/'.$info->getSaveName()
 		        ];
+		        
+		        $imgInfo = getimagesize(ROOT_PATH.'public/'.$data['file_path']);
+		        $data['file_width'] = $imgInfo[0];
+		        $data['file_height'] = $imgInfo[1];
+		        
 		        $data['file_key'] = uuid();
 		        $db = model('File');
 		        $rst = $db->_save($data);

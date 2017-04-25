@@ -8,6 +8,7 @@
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="list" border style="width: 100%">
+			<el-table-column type="index" class="table-index-cell"></el-table-column>
 			<el-table-column inline-template label="楼层名称" align="left">
 				<div>{{ row.floorName }}</div>
 			</el-table-column>
@@ -21,7 +22,7 @@
 				<div>
 					<el-button size="small" @click="handleEdit($index, row)">编辑</el-button>
 					<el-button size="small" type="danger" @click="handleDelete($index, row)">删除</el-button>
-					<el-button size="small" @click="handleSub($index, row)">房间管理</el-button>
+					<el-button size="small" @click="handleSub($index, row)">店铺管理</el-button>
 				</div>
 			</el-table-column>
 		</el-table>
@@ -134,6 +135,7 @@
 			},
 			
 			handleAdd() {
+				debugger
 				this.formTitle = "新增楼层";
 				this.formData.floorId = 0;
 				this.formData.buildId = this.buildId;
@@ -141,7 +143,7 @@
 				this.formData.floorEn = '';
 				this.formData.floorAlias = '';
 				this.tags = [];
-				this.formData.navFileKey = 'default_floor_nav_file';
+				//this.formData.navFileKey = 'default_floor_nav_file';
 				this.navFilePath = '/static/img/floor_nav.png';
 				this.formVisible = true;
 			},
@@ -181,7 +183,7 @@
 				});
 			},
 			handleSub(index, row) {
-				this.$router.replace('/scene/floor/mgr/' + row.floorId)
+				this.$router.replace('/scene/floor/mgr/' + row.floorId + '/' + row.floorName)
 			},
 			handleMoveUp(index, row) {
 				this.move(row.floorId, 'moveup');

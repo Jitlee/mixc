@@ -34,6 +34,26 @@ class Room {
 		$rst = $db->_save();
 		if($rst == 0) {
 			return success(true, '保存成功');
+		} else if($rst == -2) {
+			return success(true, '店铺房间名称有重复');
+		} else {
+			return fail('保存失败');
+		}
+	}
+	
+	/**
+	 * post: 保存房间位置
+	 * path: position/{roomId}/{x}/{y}
+	 * method: save
+	 * param: roomId - {int} = 0 
+	 * param: x - {int} = '' x坐标(像素)
+	 * param: y - {int} = '' y坐标(像素)
+	 */
+	public function position($roomId, $x, $y) {
+		$db = model('Room');
+		$rst = $db->_savePosition($roomId, $x, $y);
+		if($rst == 0) {
+			return success(true, '保存成功');
 		} else {
 			return fail('保存失败');
 		}

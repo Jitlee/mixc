@@ -15,7 +15,7 @@
 						</el-dropdown>
 					</div>
 					<el-table v-loading.body="mainLoading" :data="list" @current-change="handleCurrentChange" border style="width: 100%">
-						<el-table-column type="index"></el-table-column>
+						<el-table-column type="index" class="table-index-cell"></el-table-column>
 						<el-table-column inline-template label="名称" property="dictValue" align="left">
 							<div :class="{ 'selected': row.selected }">{{ row.dictValue }}</div>
 						</el-table-column>
@@ -56,7 +56,7 @@
 		<el-dialog :title="formTitle" v-model="formVisible" :close-on-click-modal="false">
 			<el-form :model="formData" label-width="80px" :rules="formRules" ref="formData">
 				<div style="position:relative">
-					<mixc-upload :clientId="formData.clientId" :type="dictType" v-model="formData.dictIcon" :path="dictIconPath" title="单击上传分类图标"></mixc-upload>
+					<!--<mixc-upload :clientId="formData.clientId" :type="dictType" v-model="formData.dictIcon" :path="dictIconPath" title="单击上传分类图标"></mixc-upload>-->
 					<el-form-item label="名称" prop="dictValue" class="el-form-item-left">
 						<el-input v-model="formData.dictValue" auto-complete="off" :maxlength="30" placeholder="请输入名称"></el-input>
 					</el-form-item>

@@ -8,6 +8,7 @@
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="list" border style="width: 100%">
+			<el-table-column type="index" class="table-index-cell"></el-table-column>
 			<el-table-column inline-template label="公共设施名称" align="left">
 				<div>{{ row.poiName }}</div>
 			</el-table-column>
@@ -108,11 +109,12 @@
 			};
 		},
 		created() {
-			this.loadData();
 			this.loadPoiTypes();
+			this.$bus.on('floor-poi', this.loadData.bind(this))
 		},
 		methods: {
 			loadData() {
+				this.loading = true
 				this.$http.get(["/api/poi/lst", this.floorId].join("/")).then((response) => {
 					if(response.nice) {
 						let rst = response.data.rst

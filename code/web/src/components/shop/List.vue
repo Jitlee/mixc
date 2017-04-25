@@ -8,6 +8,7 @@
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="shops" border style="width: 100%">
+			<el-table-column type="index" class="table-index-cell"></el-table-column>
 			<el-table-column inline-template label="店铺名称" align="left">
 				<div>{{ row.shopName }}</div>
 			</el-table-column>

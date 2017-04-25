@@ -91,7 +91,7 @@ class Ads extends Model
 			->where('a.ads_end_date', 'exp', ' >= curdate()')
 			->order('a.ads_start_date asc, a.ads_group_id asc')->select();
 		
-//		echo $this->getLastSql();
+		echo $this->getLastSql();
 		
 		return $list;
 	}

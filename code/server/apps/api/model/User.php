@@ -137,7 +137,7 @@ class User extends Model
 		$oldPassword = $request->patch('oldPassword');
 		$newPassword = $request->patch('newPassword');
 		
-		$user = $this->filed('username, password')->where('uid', $uid)->find();
+		$user = $this->field('username, password')->where('uid', $uid)->find();
 		if(empty($user)) {
 			return -2;	
 		}
@@ -147,9 +147,10 @@ class User extends Model
 		}
 		
 		try{
-			$this->where('uid', $uid)->update(['password' => md5(strtolower($user['username']).$password)]);
+			$this->where('uid', $uid)->update(['password' => md5(strtolower($user['username']).$newPassword)]);
 			return 0;
 		} catch (\Exception $e) {
+//			echo dump($e);
 		    return -1;
 		}
 	}

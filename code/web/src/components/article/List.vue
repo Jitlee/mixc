@@ -16,6 +16,7 @@
 		  </el-form-item>
 		</el-form>
 		<el-table v-loading.body="loading" :data="list" border style="width: 100%">
+			<el-table-column type="index"></el-table-column>
 			<el-table-column inline-template label="分组" align="left">
 				<div>{{ row.articleGroup }}</div>
 			</el-table-column>

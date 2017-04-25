@@ -18,6 +18,7 @@ class Floor {
 		$list = $floor->_query($buildId, $pageNo);
 		return success($list);
 	}
+	
 	/**
 	 * get: 获取层列表
 	 * path: all/{buildId}
@@ -32,14 +33,26 @@ class Floor {
 	
 	/**
 	 * get: 获取层列表
-	 * path: getall/{buildId}
+	 * path: getall/{clientId}
 	 * method: getall
-	 * param: buildId - {int} 楼id
+	 * param: clientId - {int} 客户Id
 	 */
-	public function getall($buildId = 0) {
+	public function getall($clientId = 0) {
 		$floor = model('Floor');
-		$list = $floor->_getall($buildId);
+		$list = $floor->_getall($clientId);
 		return success($list);
+	}
+	
+	/**
+	 * get: 获取层
+	 * path: get/{floorId}
+	 * method: get
+	 * param: floorId - {int} 层id
+	 */
+	public function get($floorId = 0) {
+		$db = model('Floor');
+		$floor = $db->_get($floorId);
+		return success($floor);
 	}
 	
 	/**

@@ -19,6 +19,18 @@ class Poi {
 	}
 	
 	/**
+	 * get: 获取层列表
+	 * path: all/{clientId}
+	 * method: _getall
+	 * param: clientId - {int} 楼id
+	 */
+	public function getall($clientId = 0) {
+		$floor = model('Floor');
+		$list = $floor->_getall($clientId);
+		return success($list);
+	}
+	
+	/**
 	 * post: 保存兴趣点
 	 * path: save
 	 * method: save
@@ -32,6 +44,24 @@ class Poi {
 	public function save() {
 		$db = model('Poi');
 		$rst = $db->_save();
+		if($rst == 0) {
+			return success(true, '保存成功');
+		} else {
+			return fail('保存失败');
+		}
+	}
+	
+	/**
+	 * post: 保存房间位置
+	 * path: position/{poiId}/{x}/{y}
+	 * method: save
+	 * param: poiId - {int} = 0 
+	 * param: x - {int} = '' x坐标(像素)
+	 * param: y - {int} = '' y坐标(像素)
+	 */
+	public function position($poiId, $x, $y) {
+		$db = model('Poi');
+		$rst = $db->_savePosition($poiId, $x, $y);
 		if($rst == 0) {
 			return success(true, '保存成功');
 		} else {
