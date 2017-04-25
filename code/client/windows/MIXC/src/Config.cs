@@ -113,6 +113,21 @@ namespace MIXC
         }
 
         /// <summary>
+        /// 注册码
+        /// </summary>
+        public static string SN
+        {
+            get
+            {
+                return getValue("main", "sn", "1");
+            }
+            set
+            {
+                setValue("main", "sn", value);
+            }
+        }
+
+        /// <summary>
         /// 获取url全路径
         /// </summary>
         /// <param name="api">接口api</param>

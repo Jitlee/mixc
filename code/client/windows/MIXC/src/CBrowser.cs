@@ -22,8 +22,10 @@ namespace MIXC
             sb.Append("{");
             sb.AppendFormat("\"server\":\"{0}\"", Config.Server);
             sb.AppendFormat(",\"port\":\"{0}\"", Config.Port);
-            sb.AppendFormat(",\"machineCode\":\"{0}\"", Config.MachineCode);
+            sb.AppendFormat(",\"code\":\"{0}\"", Config.MachineCode);
             sb.AppendFormat(",\"password\":\"{0}\"", Config.Password);
+            sb.AppendFormat(",\"sn\":\"{0}\"", Config.SN);
+            sb.AppendFormat(",\"version\":\"{0}\"", Config.Version);
             sb.Append("}");
             return sb.ToString();
         }
@@ -40,9 +42,7 @@ namespace MIXC
 
         public void saveConfig(string jsonString)
         {
-            Config.Server = valueWithJSONString(jsonString, "server");
-            Config.Port = valueWithJSONString(jsonString, "port");
-            Config.Password = valueWithJSONString(jsonString, "password");
+            Config.SN = valueWithJSONString(jsonString, "sn");
         }
 
         public void playAds()
