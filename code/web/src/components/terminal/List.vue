@@ -33,6 +33,9 @@
 			<el-table-column inline-template label="上次启动时间" align="left">
 				<div>{{ row.onlineTime }}</div>
 			</el-table-column>
+			<el-table-column inline-template label="注册状态" align="left">
+				<div>{{ row.isRegistered ? '已注册' : '-' }}</div>
+			</el-table-column>
 			<el-table-column inline-template label="状态" align="left" width="80px">
 				<i class="el-icon-circle-check" style="font-size: 18px; cursor: pointer" :style="{ color: row.isActive ? '#00b642' : '#999' }"></i>
 			</el-table-column>

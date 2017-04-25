@@ -63,6 +63,9 @@ body {
 .form-row .form-input:focus {
   border-color: #0078d7;
 }
+.form-row .form-input[readonly] {
+  background-color: #e0e0e0;
+}
 .ball {
   transform: scale(1.2, 1.2);
 }
@@ -297,6 +300,7 @@ nav.index-nav .index-nav-item:first-child {
   clear: both;
 }
 .modal-default-button {
+  margin-left: 10px;
   float: right;
   width: 120px;
   height: 30px;
