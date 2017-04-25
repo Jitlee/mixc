@@ -28,23 +28,55 @@ class Room extends Model
 	public function _save() {
 		$request = Request::instance();
 		$roomId = (int)$request->post('roomId');
+		$floorId = (int)$request->post('floorId');
 		$roomdata = [
 			'room_name' 		=> $request->post('roomName'),
 			'shop_id' 		=> $request->post('shopId'),
 			'x' 		=> $request->post('x'),
 			'y' 		=> $request->post('y')
 		];
+		
+		if($roomId == 0) {
+			$exists = db::table('__ROOM__')
+				->where('room_name', $roomdata['room_name'])
+				->where('floor_id', $floorId)->find();
+			if($exists) {
+				return -2;
+			}
+		} else {
+			$exists = db::table('__ROOM__')
+				->where('room_name', $roomdata['room_name'])
+				->where('room_id', 'neq', $roomId)
+				->where('floor_id', $floorId)->find();
+			if($exists) {
+				return -2;
+			}
+		}
+		
 		try {
 			if($roomId == 0) {
-				$roomdata['floor_id'] = (int)$request->post('floorId');
+				$roomdata['floor_id'] = $floorId;
 				$this->insert($roomdata);
 			} else {
 				$this->where('room_id', $roomId)->update($roomdata);
 			}
 			return 0;
 		} catch(\Exception $e) {
+			echo dump($e);
 			return -1;
 		}
+	}
+	
+	public function _savePosition($roomId, $x, $y) {
+		$roomdata = [
+			'x' 		=> $x,
+			'y' 		=> $y
+		];
+		
+		if($this->where('room_id', $roomId)->update($roomdata)) {
+			return 0;
+		}
+		return -1;
 	}
 	
 	public function _delete($roomId = 0) {

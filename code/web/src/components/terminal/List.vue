@@ -17,6 +17,7 @@
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="list" border style="width: 100%">
+			<el-table-column type="index"></el-table-column>
 			<el-table-column inline-template label="客户端名称" align="left">
 				<div>{{ row.tmlName }}</div>
 			</el-table-column>
@@ -31,6 +32,9 @@
 			</el-table-column>
 			<el-table-column inline-template label="上次启动时间" align="left">
 				<div>{{ row.onlineTime }}</div>
+			</el-table-column>
+			<el-table-column inline-template label="注册状态" align="left">
+				<div>{{ row.isRegistered ? '已注册' : '-' }}</div>
 			</el-table-column>
 			<el-table-column inline-template label="状态" align="left" width="80px">
 				<i class="el-icon-circle-check" style="font-size: 18px; cursor: pointer" :style="{ color: row.isActive ? '#00b642' : '#999' }"></i>

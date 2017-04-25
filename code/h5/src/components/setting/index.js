@@ -6,27 +6,24 @@
 		    <div slot="body">
 	    		<form>
 	    			<div class="form-row">
-						<div class="form-label">服务器IP</div>
-						<input v-model="formData.server" class="form-input" placeholder="请输入服务器的IP地址" ma/>
+						<div class="form-label">机器码</div>
+						<input v-model="formData.code" class="form-input" placeholder="请输入机器吗" readonly="readonly"/>
 					</div>
 					<div class="form-row">
-						<div class="form-label">服务器端口号</div>
-						<input v-model="formData.port" class="form-input" type="number" placeholder="请输入服务器的端口号" maxlength="5"/>
-					</div>
-					<div class="form-row">
-						<div class="form-label">版本源ID</div>
-						<input v-model="formData.sourceId" class="form-input" type="number" placeholder="请输入客户端版本源ID" maxlength="5"/>
+						<div class="form-label">注册码</div>
+						<input v-model="formData.sn" class="form-input" type="number" placeholder="请输入注册码" maxlength="5"/>
 					</div>
 	    		</form>
 	    		<div style="font-size: 12px;">
 	    			当前版本: {{ formData.version }}
 	    		</div>
-	    		<div style="font-size: 12px;">
+	    		<div style="font-size: 12px;display:none;">
 	    			更新时间：{{ new Date(formData.updateTime).toLocaleString() }}
 	    		</div>
 		    </div>
 		    <div slot="footer" class="form-row">
 		    		<button class="modal-default-button" @click="handleSubmit">保存</button>
+		    		<button class="modal-default-button" @click="$emit('close')">关闭</button>
 		    </div>
 	  	</mixc-public-modal>
 	`
@@ -43,8 +40,23 @@
 		},
 		methods: {
 			handleSubmit() {
-				this.$emit('close')
-				PROXY.saveConfig(this.formData)
+				layer.open({
+				    type: 2
+				    ,content: '加载中'
+				  })
+				PROXY.register(this.formData.sn, (rst, msg) => {
+					layer.closeAll()
+					if(rst) {
+						this.$emit('close')
+					} else {
+						layer.open({
+						    content: msg
+						    ,skin: 'msg'
+						    ,time: 2 //2秒后自动关闭
+						})
+					}
+				})
+				
 			},
 		},
 		computed: {

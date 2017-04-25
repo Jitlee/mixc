@@ -67,8 +67,7 @@
 			return {
 				state: 0, // default 0, sccuess 1, error: -1
 				loading: false,
-				currentPath: this.path,
-				currentValue: this.value,
+				currentPath: this.value
 			}
 		},
 		methods: {
@@ -84,47 +83,48 @@
 				let file = evt.target.files[0];
 				let reader = new FileReader();  
 			    //将文件以Data URL形式读入页面  
+			    reader.onload = function() {
+					ths.loading = true;
+			    		ths.currentPath = this.result
+			    		ths.onUpload.call(ths)
+			    }
 			    reader.readAsDataURL(file);  
-			    reader.onload = function(evt){
-			    		ths.loading = true;
-			        ths.currentPath = this.result; 
-			    }  
-			}
-		},
-		watch: {
-			'value'(val, oldValue) {
-		        this.currentValue = val;
-		    },
-			'path'(val, oldValue) {
-		        this.currentPath = val;
-		    },
-		    'currentPath'(val) {
-		    		let input = this.$refs.input;
+			},
+			
+			onUpload() {
+				let input = this.$refs.input;
 		    		if(input.files.length == 0) {
+		    			this.loading = false;
+		    			this.$refs.form.reset();
 		    			return;
 		    		}
 		    		let file = input.files[0];
 				let formData = new FormData();
         			formData.append("image", file);
         			this.$refs.form.reset();
-        			let url = ['/api/file/uploadImage', this.clientId, this.type, this.currentValue].join("/");
+        			let url = ['/api/file/uploadImage', this.clientId, this.type, this.value].join("/");
 				this.$http.post(url, formData).then((response) => {
 					if(response.nice) {
 						let rst = response.data.rst;
 						let fileKey = rst.fileKey;
-						this.currentValue = fileKey;
+						this.$emit('input', fileKey);
+		        			this.$emit('change', fileKey);
 						this.state = 1;
+						this.currentPath = rst.filePath
 					} else {
 						this.state = -1;
 						this.$message.error('上传图片失败, 请检查图片格式(jpg|jpeg|png|gif)和图片文件大小(小于5M)');
 					}
-				});
-		    },
-		    'currentValue'(val) {
-		        this.$emit('input', val);
-		        this.$emit('change', val);
-		    }
-			
+				})	
+			},
+		},
+		watch: {
+			'value'(val, oldValue) {
+				this.state = 0
+		   	},
+		   	'path'(val) {
+		   		this.currentPath = val
+		   	}
 		}
 	}
 </script>

@@ -55,10 +55,10 @@
 					const config = JSON.parse(configJSONString)
 					return config
 				} catch(err) {
-					return { server: 'cky.ritacc.net', port: '8888', sourceId: '1' }
+					return { server: 'cky.ritacc.net', port: '8888', sourceId: '1',code:'1111-1111', sn:'89DRI0EDD98', version: '0.0.1' }
 				}
 			} else {
-				return { server: 'cky.ritacc.net', port: '8888', sourceId: '1' }
+				return { server: 'cky.ritacc.net', port: '8888', sourceId: '1',code:'1111-1111', sn:'89DRI0EDD98', version: '0.0.1' }
 			}
 		},
 		
@@ -96,6 +96,14 @@
 			if(isCSharp) {
 				CBrowser.playAds()
 			}
-		}
+		},
+		
+		register(sn, callback) {
+			if(isCSharp) {
+				CBrowser.register(sn, callback)
+			} else {
+				callback(true)
+			}
+		},
 	}
 })(window)

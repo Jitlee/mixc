@@ -2,12 +2,70 @@
 .floor {
     position: relative;
     color: @font-color;
-    .img {
-        .bgimg();
-        background-size: contain;
-        height: @floor_map_height;
+    
+    .lenged {
         margin-top: @page_padding-v;
+        height: @floor_lenged_height;
+        line-height: @floor_lenged_height;
+        .clear();
+        
+        .lenged-item {
+            display: block;
+            float: left;
+            width: @floor_lenged_item_width;
+            height: @floor_lenged_item_height;
+            line-height: @floor_lenged_item_height;
+            text-align: center;
+            background-color: #b4b4dd;
+            border-radius: 50%;
+            margin: 0 @page_padding-h;
+            margin-top: 0.75vh;
+            cursor: pointer;
+            .clickZoomIn();
+            
+            .iconfont {
+                color: @nav-block7;
+                font-size: 2.3vh;
+            }
+        }
+    }
+    
+    .img {
+        height: @floor_map_height;
         margin-bottom: @page_padding-v;
+        position: relative;
+        
+        .poi {
+            position: absolute;
+            z-index: 99;
+            .bgimg();
+            background-size: contain;
+            width: 30px;
+            height: 30px; 
+            transition: all 0.2s ease-in-out;
+            transform-origin: bottom center;
+        }
+        
+        .location {
+            transition: all 0.2s ease-in-out;
+            transform-origin: bottom center;
+            position: absolute;
+            .bgimg();
+            background-size: contain;
+            text-align: center;
+            width: 50px;
+            height: 50px;
+            padding-top: 8px;
+            z-index:999;
+            background-image: url("@{imgpath}/location.png");
+            .shop-icon {
+                margin: auto;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                .bgimg();
+            }
+        }
     }
     
     .floors {
@@ -30,9 +88,13 @@
             box-sizing: border-box;
         }
         
+        .col {
+            transition: all 0.3s ease-in-out;
+        }
+        
         .col.active {
             color: @wheel-bg-color;
-            transform: scale(1.3);
+            transform: scale(1.3, 1.3);
             transform-origin: 50% 50%;
         }
         

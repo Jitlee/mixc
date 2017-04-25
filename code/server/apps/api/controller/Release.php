@@ -70,6 +70,7 @@ class Release {
             $this->download_data($clientId, $tmpDir, 'Ads', ['adsFilePath']);
             $this->download_data($clientId, $tmpDir, 'Album', ['filePath']);
             $this->download_data($clientId, $tmpDir, 'Article', ['articleContent']);
+            $this->download_data($clientId, $tmpDir, 'Poi', ['poiIcon']);
 //          $this->download_image($clientId, $tmpDir, [10]);
             $this->download_shop_types($clientId, $tmpDir);
             
@@ -122,8 +123,8 @@ class Release {
 		$list = $db->_getall($clientId);
 		foreach($list as &$row) {
 			foreach($fields as $field) {
+				$row[$field] = preg_replace('/\/static\/img\//', 'static/img/', preg_replace('/\/uploads\//', 'uploads/', $row[$field]));
 				if($field == 'articleContent') {
-					$row[$field] = preg_replace('/\/uploads\//', 'uploads/', $row[$field]);
 					$conetent = $row[$field];
 					$matches = [];
 					if(preg_match_all('/uploads\/\d+\/[A-Za-z0-9]+\.\w+/', $conetent, $matches, PREG_SET_ORDER) && count($matches) > 0) {
@@ -132,7 +133,8 @@ class Release {
 						}
 					}
 				} else {
-					$filePath = substr($row[$field], 1);
+//					$filePath = substr($row[$field], 1);
+					$filePath = $row[$field];
 					if(stripos($filePath, 'uploads') != 0) {
 						continue;
 					}
@@ -174,7 +176,8 @@ class Release {
     
     function save_to_json($tmpDir, $name, $list) {
 		$jsonFile = fopen($tmpDir.'/data/'.$name.'.json', 'w') or die('Unable to open file!');
-		fwrite($jsonFile, json_encode($list));
+		$json = json_encode($list);
+		fwrite($jsonFile, $json);
 		fclose($jsonFile);
     }
     

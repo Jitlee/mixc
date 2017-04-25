@@ -3,7 +3,13 @@
 	const template = `
 		<div class="floor">
 			<mixc-public-header title="楼层导购" sub-title="FLOOR NAVIGATION"></mixc-public-header>
-			<div class="img" :style="{ backgroundImage: 'url(' + floor.navFilePath + ')' }"></div>
+			<div class="lenged">
+				<div class="lenged-item" @click="handleLenged('A')"><i class="iconfont icon-lift"></i></div>
+				<div class="lenged-item" @click="handleLenged(['B', 'C', 'D'])"><i class="iconfont icon-stail"></i></div>
+			</div>
+			<div class="img" ref="map">
+				<canvas ref="canvas"></canvas>
+			</div>
 			<div class="floors row">
 				<div class="title">楼层选择：</div>
 				<div class="col floor-col" @click="handlePrev"><i class="iconfont icon-prev"></i></div>
@@ -29,7 +35,7 @@
 				<div :id="swipeId" class="floor swiper-container">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide" v-for="shops in pages">
-							<router-link class="shop-item" v-for="shop in shops"  :to="'/shop/0/' + shop.shopId">{{ shop.shopName }}</a>
+							<a class="shop-item" v-for="shop in shops" @click="handleClickShop(shop)">{{ shop.shopName }}</a>
 						</div>
 					</div>
 					<div class="pagination" v-show="pages.length > 1"></div>
@@ -37,6 +43,9 @@
 			</div>
 		</div>
 	`
+	
+	fabric.Object.prototype.originX = 'center'
+	fabric.Object.prototype.originY = 'center'
 	
 	// 注册组件
 	Vue.component('mixc-floor', {
@@ -67,6 +76,9 @@
 				_lettersVisible: false,
 				_selectedLetter: null,
 				_selectedIndex: -1,
+				
+				canvas: null,
+				zoom: 1,
 			}
 		},
 		created() {
@@ -74,6 +86,19 @@
 				this.allFloors = rst
 				this.setupFloors(0)
 			})
+		},
+		mounted() {
+			const roomElement = this.$refs.canvas
+			roomElement.width = $(roomElement).parent().width()
+			roomElement.height = $(roomElement).parent().height()
+			const canvas = this.canvas = new fabric.Canvas(roomElement, {
+			    hoverCursor: 'pointer',
+			    selection: false,
+			    perPixelTargetFind: true,
+			    targetFindTolerance: 5
+			})
+			
+			this.layout()
 		},
 		methods: {
 			// 获取商铺
@@ -102,6 +127,28 @@
 						}
 					})
 				}
+			},
+			
+			// 获取兴趣点
+			getPois(callback) {
+				if(this.$store.state.pois.length > 0) {
+					callback(this.$store.state.pois)
+				} else {
+					PROXY.getJSON('data/poi.json', (rst) => {
+						if(rst && rst.length > 0) {
+							this.$store.state.pois = rst
+							callback(rst)
+						}
+					})
+				}
+			},
+			
+			
+			getPoisByFloorId(floorId, callback) {
+				this.getPois(pois => {
+					const result = filterArray(pois, 'floorId', floorId)
+					callback(result)
+				});
 			},
 			
 			// 根据楼层搜索商铺
@@ -205,6 +252,8 @@
 					this.pages = pages
 					this.setup()
 				})
+				
+				this.layout()
 			},
 			
 			// 根据字母过滤
@@ -239,6 +288,116 @@
 					}
 				})
 			},
+			
+			// 地图布局
+			layout() {
+				if(!(this.floor && this.floor.floorId > 0 && this.canvas != null)) {
+					return
+				}
+				this.canvas.clear()
+				this.layoutBackground()
+				this.layoutPois()
+			},
+			
+			layoutPois() {
+				const map =$(this.$refs.map)
+				const center = this.canvas.getCenter()
+				const zoom = this.zoom || 1
+				$('.poi, .location', map).remove()
+				this.getPoisByFloorId(this.floor.floorId, pois => {
+					pois.forEach(poi => {
+						map.append(`<div class="poi" type="${ poi.poiType }" style="background-image: url(${ poi.poiIcon });
+							left:${ poi.x / zoom + center.left - 15 }px;top: ${ poi.y / zoom + center.top - 30 }px"></div>`)
+					}, this)
+				})
+			},
+			
+			layoutPoi(poi) {
+				//const canvas = this.canvas
+				//const center = this.canvas.getCenter()
+				//const zoom = this.zoom || 1
+				
+				
+				
+//				fabric.Image.fromURL(poi.poiIcon, function(oImg) {
+//					oImg.set({
+//						poi: poi,
+//						width: 30,
+//						height: 30,
+//						left: poi.x / zoom + center.left, top: poi.y / zoom + center.top,
+//						selectable: false,
+//						originY: 'bottom',
+//					})
+//					canvas.add(oImg)
+//				});
+			},
+			
+			layoutBackground() {
+				const canvas = this.canvas
+				const center = this.canvas.getCenter()
+				const backgroundImageSize = this.getAjustSize()
+				this.zoom = (this.floor.fileWidth / backgroundImageSize.width) || 1	
+				
+				fabric.Image.fromURL(this.floor.navFilePath, function(oImg) {
+					oImg.set({
+						width: backgroundImageSize.width,
+						height: backgroundImageSize.height,
+						left: center.left,
+						top: center.top,
+						selectable: false,
+					})
+  					canvas.insertAt(oImg, 0)
+				});
+			},
+			
+			getAjustSize() {
+				if(this.floor.fileWidth > 0 && this.floor.fileHeight > 0) {
+					if(this.canvas.width / this.canvas.height > this.floor.fileWidth / this.floor.fileHeight) {
+						return { width: this.floor.fileWidth * this.canvas.height /  this.floor.fileHeight, height: this.canvas.height }
+					} else {
+						return { width: this.floor.fileWidth, height: this.floor.fileHeight * this.canvas.width / this.floor.fileWidth }
+					}
+				}
+				return this.canvas
+			},
+			
+			// 楼梯联动
+			handleLenged(types) {
+				if(!Array.isArray(types)) {
+					types = [types]
+				}
+				const map =$(this.$refs.map)
+				$('.ball', map).removeClass('ball')
+				$('.poi', map).each((i, div) => {
+					if(types.includes(div.getAttribute('type'))) {
+						$(div).animateCss('ball')
+					}
+				})
+				
+			},
+			
+			handleClickShop(shop) {
+				if(!this.floor.rooms) {
+					return
+				}
+				const map =$(this.$refs.map)
+				const center = this.canvas.getCenter()
+				const zoom = this.zoom || 1
+				$('.ball', map).removeClass('ball')
+				$('.location', map).remove()
+				this.floor.rooms.forEach(r => {
+					if(r.shopId == shop.shopId) {
+						const s = $(`<div class="location" style="
+							left:${ r.x / zoom + center.left - 25 }px;top: ${ r.y / zoom + center.top - 50 }px">
+							<div class="shop-icon" style="background-image:url(${ shop.shopIconPath })"></div>
+						</div>`).appendTo(map)
+						setTimeout(() => {
+							s.animateCss('ball')
+						})
+					}
+				})
+			},
+			
 		}
 	})
 })()

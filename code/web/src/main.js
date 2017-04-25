@@ -10,12 +10,15 @@ import VueResource from 'vue-resource'
 // 状态管理
 import store from './vuex/store'
 import Vuex from 'vuex'
+import VueBus from 'vue-bus'
 
 // Element UI
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import './assets/iconfont/iconfont.css'
 import './assets/iconfont/iconfont.css'
+
+import './assets/less/main.less'
 
 // 自定义组件
 import './components/public/index'
@@ -30,6 +33,7 @@ Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(VueResource)
 Vue.use(Vuex)
+Vue.use(VueBus)
 
 const router = new VueRouter({ routes: routes })
 

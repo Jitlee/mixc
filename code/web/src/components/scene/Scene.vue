@@ -8,6 +8,7 @@
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="list" border style="width: 100%">
+			<el-table-column type="index" class="table-index-cell"></el-table-column>
 			<el-table-column inline-template label="名称" align="left">
 				<div>{{ row.dictValue }}</div>
 			</el-table-column>

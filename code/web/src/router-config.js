@@ -43,11 +43,11 @@ export let routes = [
 			{
 				path: '/scene/floor', icon: 'icon-1380louceng1f', name: '楼层管理', component: floor,
 				children: [
-					{ path: '/scene/floor/room/:floorId', icon: 'icon-shop', name: "店铺房间管理", component: room },
-					{ path: '/scene/floor/poi/:floorId', icon: 'icon-shop', name: "公共设施管理", component: poi }
+					{ path: '/scene/floor/room/:floorId/:floorName', icon: 'icon-shop', name: "店铺房间管理", component: room },
+					{ path: '/scene/floor/poi/:floorId/:floorName', icon: 'icon-shop', name: "公共设施管理", component: poi }
 				]
 			},
-			{ path: '/scene/floor/mgr/:floorId', icon: 'icon-shop', name: "公共设施管理", component: floormgr, hidden: true },
+			{ path: '/scene/floor/mgr/:floorId/:floorName', icon: 'icon-shop', name: "公共设施管理", component: floormgr, hidden: true },
 			{ path: '/scene/poi/7/-2', icon: 'icon-xingqudian', name: '公共设施类型管理', component: poiType }
 		]
 	},

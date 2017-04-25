@@ -23,6 +23,21 @@ class Poi extends Model
 		return $list;
 	}
 	
+	public function _getall($clientId = 0) {
+		
+		$list = Db::query('select p.poi_id poiId, p.floor_id floorId, p.poi_name poiName, p.x, p.y,
+			f.file_path poiIcon, d.can_delete poiType
+			from mixc_poi p inner join mixc_dict d on d.dict_id = p.poi_type
+			inner join mixc_file f on f.file_key = d.dict_icon
+			where exists(
+				select 0 from mixc_floor fr
+				inner join mixc_build b on b.build_id = fr.build_id and b.is_default = \'Y\'
+				inner join mixc_scene s on s.scene_id = b.scene_id and s.is_default = \'Y\'
+				where fr.floor_id = p.floor_id and s.client_id = ?
+			)', [$clientId]);
+		return $list;
+	}
+	
 	public function _save() {
 		$request = Request::instance();
 		$poiId = (int)$request->post('poiId');
@@ -43,6 +58,18 @@ class Poi extends Model
 		} catch(\Exception $e) {
 			return -1;
 		}
+	}
+	
+	public function _savePosition($poiId, $x, $y) {
+		$data = [
+			'x' 		=> $x,
+			'y' 		=> $y
+		];
+		
+		if($this->where('poi_id', $poiId)->update($data)) {
+			return 0;
+		}
+		return -1;
 	}
 	
 	public function _delete($poiId = 0) {

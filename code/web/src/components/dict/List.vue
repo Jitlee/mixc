@@ -8,6 +8,7 @@
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="list" border style="width: 100%">
+			<el-table-column type="index" class="table-index-cell"></el-table-column>
 			<el-table-column inline-template label="名称" align="left">
 				<div>{{ row.dictValue }}</div>
 			</el-table-column>
@@ -53,7 +54,7 @@
 <script>
 	export default {
 		data() {
-			let dictType = Number(this.$router.currentRoute.path.match(/(-?\d+)\/(-?\d+)$/)[0]);
+			let dictType = Number(this.$router.currentRoute.path.match(/(-?\d+)\/(-?\d+)$/)[1]);
 			let dictParentId = Number(this.$router.currentRoute.path.match(/(-?\d+)$/)[0]);
 			return {
 				list: [],

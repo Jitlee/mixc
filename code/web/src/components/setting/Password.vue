@@ -68,7 +68,10 @@
 							newPassword: md5(this.formData.password),
 						}).then((response) => {
 							if(response.nice) {
-								this.page(this.currentPage);
+								this.$message({
+						          message: '密码修改成功',
+						          type: 'success'
+						        });
 							}
 						});
 					});

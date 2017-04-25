@@ -46,6 +46,7 @@ class Terminal {
 	 * path: active/{releaseSourceId}
 	 * method: active
 	 * param: releaseSourceId - {int} 版本id
+	 * param: code - {string} = '' 终端机器码
 	 * param: mac - {string} = '' 终端MAC地址
 	 * param: ip - {string} = '' 终端IP地址
 	 */
@@ -70,6 +71,22 @@ class Terminal {
 			return success(true, '删除成功');
 		} else {
 			return fail("删除失败");
+		}
+	}
+	
+	/**
+	 * patch: 客户端注册
+	 * path: register
+	 * method: register
+	 * param: code - {string} 终端id
+	 * param: sn - {string} 终端id
+	 */
+	public function register() {
+		$db = model('Terminal');
+		if($db->_register() > -1) {
+			return success(true, '注册成功');
+		} else {
+			return fail("注册失败");
 		}
 	}
 }

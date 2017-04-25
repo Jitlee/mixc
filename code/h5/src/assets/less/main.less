@@ -21,7 +21,7 @@ body {
     background: transparent;
 }
 
-@imgpath: "../img";
+@imgpath: "../../../static/img";
 
 // 图片背景
 .bgimg() {
@@ -117,4 +117,38 @@ body {
     .form-input:focus{
          border-color:rgb(0, 120, 215);
     }
+    
+    .form-input[readonly] {
+        background-color: #e0e0e0;
+    }
+}
+
+// 点击缩小动画
+.clickZoomIn() {
+    transition: transform 0.2s ease-in-out;
+    
+    &:active {
+       transform: scale(1.2, 1.2);
+       color: red; 
+    }
+}
+
+//.ball {
+//  -webkit-animation: ball 300ms cubic-bezier(0.165, 0.840, 0.440, 1.000)  alternate;
+//  //-webkit-animation-iteration-count:5;
+//}
+//
+//@-webkit-keyframes ball {
+//  0% {
+//      -webkit-transform: translateY( 0 );
+//      transform: translateY( 0 );
+//  }
+//  100% {
+//      -webkit-transform: translateY( -50px );
+//      transform: translateY( -50px );
+//  }
+//}
+
+.ball {
+    transform: scale(1.2,1.2);
 }
