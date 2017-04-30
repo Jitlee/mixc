@@ -6,6 +6,8 @@
 		overflow: hidden;
 		margin-right: 15px;
 		border-radius: 5px;
+		background-position: 50% 50%;
+		background-size: contain;
 	}
 	
 	.mixc-card .mask {

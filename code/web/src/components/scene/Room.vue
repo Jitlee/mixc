@@ -8,12 +8,15 @@
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="list" border style="width: 100%">
-			<el-table-column type="index" class="table-index-cell"></el-table-column>
+			<el-table-column type="index" label="序号" width="70" align="center" class="table-index-cell"></el-table-column>
 			<el-table-column inline-template label="店铺房间名称" align="left">
 				<div>{{ row.roomName }}</div>
 			</el-table-column>
 			<el-table-column inline-template label="入驻店铺" align="left">
 				<div>{{ row.shopName }}</div>
+			</el-table-column>
+			<el-table-column inline-template label="入驻店铺位置" align="left">
+				<div>{{ row.shopPosition }}</div>
 			</el-table-column>
 			<el-table-column inline-template label="X坐标" align="left">
 				<div>{{ row.x }}</div>
@@ -30,7 +33,7 @@
 		</el-table>
 		
 		<el-dialog :title="formTitle" v-model="formVisible" :close-on-click-modal="false">
-			<el-form :model="formData" label-width="80px" :rules="formRules" ref="formData">
+			<el-form :model="formData" label-width="100px" :rules="formRules" ref="formData">
 				<div style="position:relative">
 					<el-form-item label="房间名称" prop="roomName">
 						<el-input v-model="formData.roomName" auto-complete="off" :maxlength="30" placeholder="请输入房间名称"></el-input>
@@ -42,10 +45,10 @@
 					    </el-select>
 					</el-form-item>
 					<el-form-item label="X坐标" prop="x">
-						<el-input v-model="formData.x" auto-complete="off" placeholder="请输入X坐标"></el-input>
+						<el-input v-model="formData.x" type="number" auto-complete="off" placeholder="请输入X坐标"></el-input>
 					</el-form-item>
 					<el-form-item label="Y坐标" prop="y">
-						<el-input v-model="formData.y" auto-complete="off" placeholder="请输入Y坐标"></el-input>
+						<el-input v-model="formData.y" type="number" auto-complete="off" placeholder="请输入Y坐标"></el-input>
 					</el-form-item>
 				</div>
 			</el-form>
@@ -93,14 +96,13 @@
 					y: 0
 				},
 				formRules: {
-					roomName: [
-						{ required: true, message: '请输入名称', trigger: 'blur' }
-					],
 					x: [
-						{ required: true, type: 'integer', message: '请输入X坐标', trigger: 'blur' }
+						{ required: true, message: '请输入X坐标' },
+						{ type: 'number', message: '坐标X必须为数字' }
 					],
 					y: [
-						{ required: true, type: 'integer', message: '请输入Y坐标', trigger: 'blur' }
+						{ required: true, message: '请输入y坐标' },
+						{ type: 'number', message: '坐标Y必须为数字' }
 					]
 				}
 			};

@@ -8,7 +8,7 @@
 			</el-col>
 		</el-row>
 		<el-table v-loading.body="loading" :data="list" border style="width: 100%">
-			<el-table-column type="index" class="table-index-cell"></el-table-column>
+			<el-table-column type="index" label="序号" width="70" align="center" class="table-index-cell"></el-table-column>
 			
 			<el-table-column inline-template label="公共设施类型" align="left">
 				<div>{{ row.poiTypeText }}</div>
@@ -28,7 +28,7 @@
 		</el-table>
 		
 		<el-dialog :title="formTitle" v-model="formVisible" :close-on-click-modal="false">
-			<el-form :model="formData" label-width="100px" :rules="formRules" ref="formData">
+			<el-form :model="formData" label-width="120px" :rules="formRules" ref="formData">
 				<div style="position:relative">
 					<el-form-item label="公共设施类型" prop="poiType">
 						<el-select v-model="formData.poiType" placeholder="请选公共设施类型" @change="handlePoiTypeChange">

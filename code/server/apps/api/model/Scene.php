@@ -8,6 +8,12 @@ use think\Request;
 // 场景
 class Scene extends Model
 {
+	protected $type = [
+        'sceneId'  		=>  'integer',
+        'clientId'  		=>  'integer',
+        'shutdownTime'  		=>  'integer',
+        'adsTime'  		=>  'integer',
+    ];
 	public function _query($clientId = 0, $pageNo = 1) {
 		$request = Request::instance();
 		$keywords = $request->get('keywords', '');

@@ -36,7 +36,9 @@ class Shop {
 	 * method: lst
 	 * param: clientId - {int} 客户id
 	 * param: pageNo - {int} 页码，从1开始
-	 * param: keywords - {string} = '' 关键字
+	 * param: shopName - {string} = '' 店铺名称
+	 * param: shopType - {string} = '' 店铺类型
+	 * param: floorId - {string} = '' 所在楼层id
 	 */
 	public function lst($clientId = 0, $pageNo = 1) {
 		$db = model('Shop');

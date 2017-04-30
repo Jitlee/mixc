@@ -44,6 +44,17 @@ class Floor extends Model
 		];
 	}
 	
+	public function _names($clientId = 0) {
+		$list = $this->alias('fr')
+			->field('fr.floor_id floorId, floor_name floorName')
+			->join('__BUILD__ b', 'b.build_id = fr.build_id and b.is_default=\'Y\'')
+			->join('__SCENE__ s', 'b.scene_id = s.scene_id and s.is_default=\'Y\'')
+			->where('fr.is_deleted', 'N')
+			->where('s.client_id', $clientId)
+			->order('fr.floor_sort asc')->select();
+		return $list;
+	}
+	
 	public function _all($buildId = 0) {
 		$list = $this->alias('fr')
 			->field('fr.build_id buildId, fr.floor_id floorId, fr.floor_name floorName, floor_alias floorAlias, floor_en floorEn')

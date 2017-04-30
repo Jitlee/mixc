@@ -412,6 +412,8 @@ nav.index-nav .index-nav-item:first-child {
   padding-top: 8px;
   z-index: 999;
   background-image: url("../../../static/img/location.png");
+  display: block;
+  text-decoration: none;
 }
 .floor .img .location .shop-icon {
   margin: auto;
@@ -610,6 +612,11 @@ nav.index-nav .index-nav-item:first-child {
   border: solid 1px #dfddde;
   box-sizing: border-box;
   text-decoration: none;
+}
+.floor .shops a.shop-item.active {
+  background-color: #e05eb6;
+  color: #fff;
+  border-color: transparent;
 }
 .floor .shops .pagination {
   text-align: center;
@@ -868,10 +875,13 @@ nav.index-nav .index-nav-item:first-child {
   font-size: 1.5vh;
 }
 .shop .introduction p {
-  text-indent: 2em;
   line-height: 2vh;
   font-size: 1vh;
   padding: 0;
+  margin: 0;
+}
+.shop .introduction p pre {
+  white-space: pre-wrap;
   margin: 0;
 }
 .shop .shop-nav {

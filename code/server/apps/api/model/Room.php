@@ -8,12 +8,20 @@ use think\Request;
 // 房间
 class Room extends Model
 {
+	protected $type = [
+        'shopId'  	=>  'integer',
+        'roomId'  	=>  'integer',
+        'floorId'  	=>  'integer',
+        'x'  	=>  'integer',
+        'y'  	=>  'integer',
+    ];
+    
 	public function _query($floorId = 0) {
 		$request = Request::instance();
 		$keywords = $request->get('keywords', '');
 		$db = $this->alias('r')
 			->field('floor_id floorId, room_id roomId, room_name roomName, x, y')
-			->field('r.shop_id shopId, s.shop_name shopName')
+			->field('r.shop_id shopId, s.shop_name shopName, f_get_shop_position(s.shop_id) shopPosition')
 			->join('__SHOP__ s', 's.shop_id = r.shop_id', 'left');
 			
 		if($keywords != '') {

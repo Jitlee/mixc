@@ -13,13 +13,13 @@ return [
     // 数据库类型
     'type'           => 'mysql',
     // 服务器地址
-    'hostname'       => 'cky.ritacc.net',
+    'hostname'       => '192.168.1.123',
     // 数据库名
     'database'       => 'mixc',
     // 用户名
     'username'       => 'root',
     // 密码
-    'password'       => ';ABCabc123',
+    'password'       => 'admin2018',
     // 端口
     'hostport'       => '',
     // 连接dsn

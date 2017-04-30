@@ -35,7 +35,7 @@
 				<div :id="swipeId" class="floor swiper-container">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide" v-for="shops in pages">
-							<a class="shop-item" v-for="shop in shops" @click="handleClickShop(shop)">{{ shop.shopName }}</a>
+							<a class="shop-item" v-for="shop in shops" :id="'floor_shop_' + shop.shopId" @click="handleClickShop(shop)">{{ shop.shopName }}</a>
 						</div>
 					</div>
 					<div class="pagination" v-show="pages.length > 1"></div>
@@ -297,6 +297,9 @@
 				this.canvas.clear()
 				this.layoutBackground()
 				this.layoutPois()
+				
+				const parent = $('#' + this.swiperId)
+				$('.active', parent).removeClass('active')
 			},
 			
 			layoutPois() {
@@ -385,12 +388,20 @@
 				const zoom = this.zoom || 1
 				$('.ball', map).removeClass('ball')
 				$('.location', map).remove()
+				
+				const parent = $('#' + this.swipeId)
+				$('.active', parent).removeClass('active')
+				
+				$('#' + 'floor_shop_' + shop.shopId).addClass('active')
+				
 				this.floor.rooms.forEach(r => {
 					if(r.shopId == shop.shopId) {
-						const s = $(`<div class="location" style="
+						const s = $(`<a class="location"
+						href="#/shop/0/${shop.shopId}"
+						style="
 							left:${ r.x / zoom + center.left - 25 }px;top: ${ r.y / zoom + center.top - 50 }px">
 							<div class="shop-icon" style="background-image:url(${ shop.shopIconPath })"></div>
-						</div>`).appendTo(map)
+						</a>`).appendTo(map)
 						setTimeout(() => {
 							s.animateCss('ball')
 						})

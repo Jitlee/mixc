@@ -18,3 +18,10 @@ function formatDate() {
 		minutes: minutes > 9 ? minutes : ('0' + minutes),
 	}
 }
+
+function formatShopPosition(position) {
+	if(position && position.length > 0) {
+		return position.replace(/^([^-]+)/, '<strong>$1</strong>')
+	}
+	return position
+}
