@@ -21,5 +21,5 @@ packages
 bin
 obj
 dist
-
+.vs/*
 *.tmp
