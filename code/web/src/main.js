@@ -25,8 +25,9 @@ import './components/public/index'
 import date from './assets/js/filter/index'
 
  // 页面顶部进度条
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
+// import NProgress from 'nprogress'
+// import 'nprogress/nprogress.css'
+
 import { routes } from './router-config'
 
 Vue.use(ElementUI)
@@ -37,15 +38,14 @@ Vue.use(VueBus)
 
 const router = new VueRouter({ routes: routes })
 
-router.beforeEach((to, from, next) => { NProgress.start(); next() })
+// router.beforeEach((to, from, next) => { NProgress.start(); next() })
 
-router.afterEach(transition => { NProgress.done() })
+// router.afterEach(transition => { NProgress.done() })
 
 // httpd 设置
 Vue.http.options.emulateJSON = true
 
 Vue.http.interceptors.push(function(request, next) {
-//	
 	if(window.location.hostname == 'localhost') {
 		request.url = 'http://localhost:8001' + request.url
 	}

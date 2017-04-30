@@ -100,7 +100,7 @@
 		
 		register(sn, callback) {
 			if(isCSharp) {
-				CBrowser.register(sn, callback)
+				CBrowser.register(String(sn), callback)
 			} else {
 				callback(true)
 			}

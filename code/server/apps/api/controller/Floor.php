@@ -44,6 +44,18 @@ class Floor {
 	}
 	
 	/**
+	 * get: 获取层列表
+	 * path: names/{clientId}
+	 * method: names
+	 * param: clientId - {int} 客户Id
+	 */
+	public function names($clientId = 0) {
+		$floor = model('Floor');
+		$list = $floor->_names($clientId);
+		return success($list);
+	}
+	
+	/**
 	 * get: 获取层
 	 * path: get/{floorId}
 	 * method: get

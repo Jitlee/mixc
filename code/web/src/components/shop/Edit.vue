@@ -31,16 +31,6 @@
 				<hr /> 
 				<div style="position: relative;height: 160px;">
 					<mixc-upload :clientId="formData.clientId" :type="13" v-model="formData.shopNavKey" :path="shopNavPath" title="单击上传楼层导航图片"></mixc-upload>
-					<el-form-item label="所在楼层" class="el-form-item-left">
-						<el-input v-model="formData.shopFloor" auto-complete="off" placeholder="楼层信息仅展示需要" :maxlength="10"></el-input>
-					</el-form-item>
-					<el-form-item label="所在铺面" class="el-form-item-left">
-						<el-input v-model="formData.shopRoom" auto-complete="off" placeholder="铺面层信息仅展示需要" :maxlength="10"></el-input>
-					</el-form-item>
-				</div>
-				<hr /> 
-				<div style="position: relative">
-					<mixc-upload :clientId="formData.clientId" :type="2" v-model="formData.shopQRCode" :path="shopQRCodePath" title="单击上传二维码"></mixc-upload>
 					<el-form-item label="店铺电话" class="el-form-item-left" style="position: relative">
 						<el-input v-model="formData.shopTel" auto-complete="off" placeholder="请输入店铺电话" :maxlength="20"></el-input>
 					</el-form-item>
@@ -57,9 +47,13 @@
 			    			</el-col>
 					</el-form-item>
 				</div>
-				<el-form-item label="店铺简介">
-					<el-input type="textarea" v-model="formData.shopIntroduction" placeholder="请输入店铺简介" :maxlength="400" :rows="8"></el-input>
-				</el-form-item>
+				<hr /> 
+				<div style="position: relative; height: 200px;">
+					<mixc-upload :clientId="formData.clientId" :type="2" v-model="formData.shopQRCode" :path="shopQRCodePath" title="单击上传二维码"></mixc-upload>
+					<el-form-item label="店铺简介" class="el-form-item-left">
+						<el-input type="textarea" v-model="formData.shopIntroduction" placeholder="请输入店铺简介" :maxlength="400" :rows="8"></el-input>
+					</el-form-item>
+				</div>
 				<el-form-item>
 					<el-button type="primary" @click.native="formSubmit" :loading="formLoading">保存</el-button>
 					<el-button @click="handleCancel">取消</el-button>
@@ -100,8 +94,6 @@
 					
 					shopImage: "default_shop_image",
 					shopNavKey: "default_shop_nav",
-					shop_floor: "",
-					shop_room: "",
 					shopType: "",
 					shopDesc: "",
 					shopTel: "",
@@ -117,12 +109,6 @@
 						message: '请输入店铺名称',
 						trigger: 'blur',
 						length: 20
-					}],
-					shopEnName: [{
-						required: true,
-						message: '请输入店铺英文名称',
-						trigger: 'blur',
-						length: 30
 					}],
 					shopIndex: [{
 						required: true,

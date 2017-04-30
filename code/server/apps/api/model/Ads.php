@@ -91,8 +91,6 @@ class Ads extends Model
 			->where('a.ads_end_date', 'exp', ' >= curdate()')
 			->order('a.ads_start_date asc, a.ads_group_id asc')->select();
 		
-		echo $this->getLastSql();
-		
 		return $list;
 	}
 	
@@ -121,7 +119,7 @@ class Ads extends Model
 			// 提交事务
 			return 0;
 		} catch(\Exception $e) {
-			echo dump($e);
+			// echo dump($e);
 			return -1;
 		}
 	}

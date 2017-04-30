@@ -58,6 +58,8 @@
             padding-top: 8px;
             z-index:999;
             background-image: url("@{imgpath}/location.png");
+            display: block;
+            text-decoration: none;
             .shop-icon {
                 margin: auto;
                 width: 30px;
@@ -254,6 +256,12 @@
             border: solid 1px #dfddde;
             box-sizing: border-box;
             text-decoration: none;
+            
+            &.active {
+                background-color: @rose-color;
+                color: @font-color;
+                border-color: transparent;
+            }
         }
         
         .pagination  {

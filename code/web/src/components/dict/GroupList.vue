@@ -15,7 +15,7 @@
 						</el-dropdown>
 					</div>
 					<el-table v-loading.body="mainLoading" :data="list" @current-change="handleCurrentChange" border style="width: 100%">
-						<el-table-column type="index" class="table-index-cell"></el-table-column>
+						<el-table-column type="index" label="序号" width="70" align="center" class="table-index-cell"></el-table-column>
 						<el-table-column inline-template label="名称" property="dictValue" align="left">
 							<div :class="{ 'selected': row.selected }">{{ row.dictValue }}</div>
 						</el-table-column>
@@ -30,6 +30,7 @@
 						</el-tooltip>
 					</div>
 					<el-table v-loading.body="subData.loading" :data="subData.list" border style="width: 100%">
+						<el-table-column type="index" label="序号" width="70" align="center" class="table-index-cell"></el-table-column>
 						<el-table-column inline-template label="名称" align="left">
 							<div>{{ row.dictValue }}</div>
 						</el-table-column>
@@ -261,9 +262,11 @@
 					let url = ["/api/dict/delete", row.dictId].join("/")
 					this.$http.delete(url).then((response) => {
 						if(response.nice) {
-							this.loadMainData();
-							this.currentRow = null;
-							this.subData.list = [];
+							if(this.formType == 0) {
+								this.loadMainData();
+							} else {
+								this.loadSubData();
+							}
 						}
 					});
 				});
@@ -296,7 +299,7 @@
 				this.formType == 0;
 				this.move(this.currentRow, 'movedown');
 			},
-			handleSubMainMoveUp(index, row) {
+			handleSubMoveUp(index, row) {
 				this.formType == 1;
 				this.move(row, 'moveup');
 			},

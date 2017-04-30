@@ -26,7 +26,7 @@
 			let floorId = this.pFloorId > 0 ? this.pFloorId : this.$route.params.floorId
 			let clientId = this.$store.state.client.clientId
 			return {
-				loading: true,
+				loading: false,
 				floorId: floorId,
 				clientId: clientId,
 				floor: {},

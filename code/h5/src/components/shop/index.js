@@ -12,15 +12,15 @@
 					<div class="icon-img" :style="{ backgroundImage: 'url(' + shop.shopIconPath + ')' }"></div>
 				</div>
 				<hr />
-				<span class="name">品牌名：<span class="red">{{ shop.shopName }}</span></span>
-				<div class="floor">店铺位置：<strong>{{ shop.shopFloor }}</strong>&nbsp;&nbsp;{{ shop.shopRoom }}</div>
+				<span class="name">品牌：<span class="red">{{ shop.shopName }}</span></span>
+				<div class="info-floor">店铺位置：{{ shop.shopPosition }}</div>
 				<div class="desc">类型：{{ shop.subShopTypeText }}</div>
 				<a @click="handleBack" class="back"><i class="iconfont icon-back"></i>&nbsp;&nbsp;返 回</a>
 				<div class="qr-img"  :style="{ backgroundImage: 'url(' + shop.shopQRCodePath + ')' }"></div>
 			</div>
 			<div class="introduction">
 				<h4>品牌介绍&nbsp;&nbsp;Brand</h4>
-				<p>{{ shop.shopIntroduction }}</p>
+				<p><pre>{{ shop.shopIntroduction }}</pre></p>
 			</div>
 			
 			<img class="shop-nav" :src="shop.shopNavPath"/>
@@ -38,8 +38,7 @@
 				garryId: 'shopAbums' + shopId,
 				shop: {
 					shopName: '',
-					shopFloor: '',
-					shopRoom: '',
+					shopPosition: '',
 					shopDesc: '',
 					shopIconPath: '',
 					shopQRCodePath: '',

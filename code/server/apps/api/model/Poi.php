@@ -8,6 +8,12 @@ use think\Request;
 // 兴趣点
 class Poi extends Model
 {
+	protected $type = [
+        'poiId'  		=>  'integer',
+        'clientId'  		=>  'integer',
+        'floorId'  		=>  'integer',
+        'poiType'  		=>  'integer',
+    ];
 	public function _query($floorId = 0) {
 		$request = Request::instance();
 		$keywords = $request->get('keywords', '');

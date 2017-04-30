@@ -11,7 +11,7 @@
 					</div>
 					<div class="form-row">
 						<div class="form-label">注册码</div>
-						<input v-model="formData.sn" class="form-input" type="number" placeholder="请输入注册码" maxlength="5"/>
+						<input v-model="formData.sn" class="form-input" type="text" placeholder="请输入注册码"/>
 					</div>
 	    		</form>
 	    		<div style="font-size: 12px;">

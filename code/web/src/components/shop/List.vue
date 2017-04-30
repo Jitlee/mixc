@@ -1,14 +1,29 @@
 <template>
 	<section>
-		<el-row style="margin-bottom: 10px;">
-			<el-col :span="24">
-				<div class="grid-content" align="left">
-					<el-button @click.native="handleAdd">新增</el-button>
-				</div>
-			</el-col>
-		</el-row>
+		
+		<el-form :inline="true" :model="formData" class="demo-form-inline" style="text-align: left">
+		  <el-form-item label="搜索：" label-width="80px">
+		    <el-input v-model="formData.shopName" placeholder="输入店铺名称搜索"></el-input>
+		  </el-form-item>
+		  <el-form-item>
+		    <el-select v-model="formData.shopType" filterable clearable placeholder="店铺类型">
+		      <el-option v-for="item in shopTypes" :label="item.dictValue" :value="item.dictId">
+		      	<span style="float: left" :style="{ fontWeight: item.level == 0 ? 'bold': 'normal', textIndent: item.level == 0 ? '0': '1em' }">{{ item.dictValue }}</span>
+		      </el-option>
+		    </el-select>
+		  </el-form-item>
+		  <el-form-item>
+		    <el-select v-model="formData.floorId" filterable clearable placeholder="所在楼层">
+		      <el-option v-for="item in floors" :label="item.floorName" :value="item.floorId"></el-option>
+		    </el-select>
+		  </el-form-item>
+		  <el-form-item>
+		    <el-button type="primary" @click.navtive="handleQuery" :loading="loading">查询</el-button>
+		    <el-button @click.native="handleAdd">新增</el-button>
+		  </el-form-item>
+		</el-form>
 		<el-table v-loading.body="loading" :data="shops" border style="width: 100%">
-			<el-table-column type="index" class="table-index-cell"></el-table-column>
+			<el-table-column type="index" label="序号" width="70" align="center" class="table-index-cell"></el-table-column>
 			<el-table-column inline-template label="店铺名称" align="left">
 				<div>{{ row.shopName }}</div>
 			</el-table-column>
@@ -22,7 +37,7 @@
 				</div>
 			</el-table-column>
 			<el-table-column inline-template label="店铺位置" align="left" :show-overflow-tooltip="true">
-				<div>{{ row.shopFloor }}-{{ row.shopRoom }}</div>
+				<div>{{ row.shopPosition }}</div>
 			</el-table-column>
 			<el-table-column :context="_self" inline-template label="操作" width="200px">
 				<div>
@@ -61,23 +76,27 @@
 				formLoading: false,
 				formTitle: '设置排名',
 				formData: {
-					shopId: 0,
 					shopName: '',
-					shopSort: '',
+					shopType: null,
+					floorId: null,
 				},
-				
 				currentPage: 1,
-				totalCount: 0
+				totalCount: 0,
+				
+				shopTypes: [],
+				floors: [],
 			};
 		},
 		created() {
 			this.page(1);
+			this.loadShopTypeGroup()
+			this.loadFloors()
 		},
 		methods: {
 			page(pageNo) {
 				let url = ["/api/shop/lst", this.clientId, pageNo].join("/")
 				this.loading = true;
-				this.$http.get(url).then((response) => {
+				this.$http.get(url, { params: this.formData }).then((response) => {
 					if(response.nice) {
 						let rst = response.data.rst
 						if(rst) {
@@ -87,6 +106,39 @@
 						}
 					}
 				});
+			},
+			
+			loadFloors() {
+				let url = ['/api/floor/names', this.clientId, -1].join("/");
+				this.$http.get(url).then((response) => {
+					if(response.data && response.data.code == 200) {
+						if(response.data.rst && response.data.rst.length > 0) {
+							this.floors = response.data.rst
+						}
+					}
+				})
+			},
+			
+			loadShopTypeGroup() {
+				let url = ['/api/dict/group', this.clientId, -1].join("/");
+				this.$http.get(url).then((response) => {
+					if(response.data && response.data.code == 200) {
+						if(response.data.rst && response.data.rst.length > 0) {
+							const group = response.data.rst
+							const shopTypes = []
+							group.forEach(g => {
+								g.level = 0
+								g.dictId += 1000000 // 后台需要减1000000,表示查询大类
+								shopTypes.push(g)
+								g.children.forEach(t => {
+									t.level = 1
+									shopTypes.push(t)
+								})
+							})
+							this.shopTypes = shopTypes
+						}
+					}
+				})
 			},
 			
 			handleCurrentChange(pageNo) {
@@ -119,6 +171,7 @@
 					});
 				}
 			},
+			
 			handleDelete(index, row) {
 				this.$confirm('确认删除该记录吗?', '提示', {
 					confirmButtonText: '确定',
@@ -135,6 +188,10 @@
 						}
 					});
 				});
+			},
+			
+			handleQuery() {
+				this.page(1);
 			},
 		}
 	}

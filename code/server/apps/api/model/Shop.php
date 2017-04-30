@@ -17,7 +17,8 @@ class Shop extends Model
 	public function _all($clientId) {
 		$list = $this->field('shop_id shopId, shop_name shopName')
 			->where('is_deleted', 'N')
-			->order('shop_name')
+			->where('client_id', $clientId)
+			->order('shop_sort asc')
 			->select();
 		return $list;
 	}
@@ -25,7 +26,7 @@ class Shop extends Model
 	public function _getall($clientId = 0) {
 		$list = $this->alias('s')
 			->field('s.client_id clientId, s.shop_id shopId, shop_type shopType, shop_name shopName, shop_en_name shopEnName, shop_index shopIndex, shop_index shopIndex, shop_icon shopIcon')
-			->field('shop_image shopImage, f3.file_path shopImagePath, shop_floor shopFloor, shop_room shopRoom, shop_tel shopTel, shop_url shopUrl, service_start_time serviceStartTime, service_end_time serviceEndTime, shop_qr_code shopQRCode, shop_introduction shopIntroduction, shop_desc shopDesc')
+			->field('shop_image shopImage, f3.file_path shopImagePath, f_get_shop_position(s.shop_id) shopPosition, shop_tel shopTel, shop_url shopUrl, service_start_time serviceStartTime, service_end_time serviceEndTime, shop_qr_code shopQRCode, shop_introduction shopIntroduction, shop_desc shopDesc')
 			->field('d1.dict_value subShopTypeText, d2.dict_value mainShopTypeText')
 			->field('f1.file_path shopIconPath')
 			->field('f2.file_path shopQRCodePath')
@@ -47,28 +48,70 @@ class Shop extends Model
 	}
 	
 	public function _query($clientId = 0, $pageNo = 1) {
-		$request = Request::instance();
-		$keywords = $request->get('keywords', '');
+		$request = Request::instance(); // 1000000
+		$shopName = $request->get('shopName', '');
+		$shopType = (int)$request->get('shopType', '0');
+		$floorId = (int)$request->get('floorId', '0');
 		$db = $this->alias('s')
-			->field('s.client_id clientId, s.shop_id shopId, shop_type shopType, d1.dict_value subShopTypeText, d2.dict_value mainShopTypeText, shop_floor shopFloor, shop_room shopRoom, shop_name shopName, shop_en_name shopEnName, shop_icon shopIcon, file_path shopIconPath, shop_desc shopDesc')
+			->field('s.client_id clientId, s.shop_id shopId, shop_type shopType, d1.dict_value subShopTypeText, d2.dict_value mainShopTypeText, f_get_shop_position(s.shop_id) shopPosition, shop_name shopName, shop_en_name shopEnName, shop_icon shopIcon, file_path shopIconPath, shop_desc shopDesc')
 			->join('__DICT__ d1', 's.shop_type = d1.dict_id and s.client_id = d1.client_id')
 			->join('__DICT__ d2', 'd2.dict_id = d1.dict_parent_id and s.client_id = d2.client_id')
-			->join('__SHOP_INFO__ i', 'i.shop_id = s.shop_id')
 			->join('__FILE__ f', 'f.file_key = s.shop_icon and f.file_type = 1');
 			
-		if($keywords != '') {
-			$db = $db->where('shop_name','like','%'.$keywords.'%');
+		if(!empty($shopName)) {
+			$db = $db->where('shop_name','like','%'.$shopName.'%');
+		}
+		
+		// 大分类
+		 if($shopType > 1000000) {
+			$db = $db->where(function($query) use($shopType) {
+		    		$query->table('__DICT__')->alias('d3')
+		    			->where('d3.dict_parent_id', $shopType - 1000000)
+		    			->where('d3.dict_id', 'exp', '= s.shop_type')->field('0');
+			},'exists');
+		} else if($shopType > 0) {
+			// 小分类
+			$db = $db->where('shop_type', $shopType);
+		}
+		
+		// 楼层
+		if($floorId > 0) {
+			$db = $db->where(function($query) use($floorId) {
+		    		$query->table('__ROOM__')->alias('r')
+		    			->where('r.floor_id', $floorId)
+		    			->where('r.shop_id', 'exp', '= s.shop_id')->field('0');
+			},'exists');
 		}
 		
 		$db = $db->where('s.client_id', $clientId)->where('s.is_deleted', 'N');
 		$list =  $db->order('s.shop_sort asc')
 			->page($pageNo, config('page_size'))->select();
 		
-//		echo $this->getLastSql();
+		// 统计开始
+		$db = $this->alias('s')->where('client_id', $clientId)->where('is_deleted', 'N');
+		if(!empty($shopName)) {
+			$db = $db->where('shop_name','like','%'.$shopName.'%');
+		}
 		
-		$db = $this->where('client_id', $clientId)->where('is_deleted', 'N');
-		if($keywords != '') {
-			$db = $db->where('shop_name','like','%'.$keywords.'%');
+		// 大分类
+		 if($shopType > 1000000) {
+			$db = $db->where(function($query) use($shopType) {
+		    		$query->table('__DICT__')->alias('d3')
+		    			->where('d3.dict_parent_id', $shopType - 1000000)
+		    			->where('d3.dict_id', 'exp', '= s.shop_type')->field('0');
+			},'exists');
+		} else if($shopType > 0) {
+			// 小分类
+			$db = $db->where('shop_type', $shopType);
+		}
+		
+		// 楼层
+		if($floorId > 0) {
+			$db = $db->where(function($query) use($floorId) {
+		    		$query->table('__ROOM__')->alias('r')
+		    			->where('r.floor_id', $floorId)
+		    			->where('r.shop_id', 'exp', '= s.shop_id')->field('0');
+			},'exists');
 		}
 		
 		$total =  $db->count();
@@ -82,7 +125,7 @@ class Shop extends Model
 	public function _get($shopId) {
 		$shop = $this->alias('s')
 			->field('s.client_id clientId, s.shop_id shopId, shop_type shopType, shop_name shopName, shop_en_name shopEnName, shop_index shopIndex, shop_index shopIndex, shop_icon shopIcon')
-			->field('shop_image shopImage, f3.file_path shopImagePath, shop_floor shopFloor, shop_room shopRoom, shop_tel shopTel, shop_url shopUrl, service_start_time serviceStartTime, service_end_time serviceEndTime, shop_qr_code shopQRCode, shop_introduction shopIntroduction, shop_desc shopDesc')
+			->field('shop_image shopImage, f3.file_path shopImagePath, f_get_shop_position(s.shop_id) shopPosition, shop_tel shopTel, shop_url shopUrl, service_start_time serviceStartTime, service_end_time serviceEndTime, shop_qr_code shopQRCode, shop_introduction shopIntroduction, shop_desc shopDesc')
 			->field('d1.dict_value subShopTypeText, d2.dict_value mainShopTypeText')
 			->field('f1.file_path shopIconPath')
 			->field('f2.file_path shopQRCodePath')
@@ -115,8 +158,6 @@ class Shop extends Model
 		$shopinfo = [
 			'shop_image' 		=> $request->post('shopImage'),
 			'shop_nav_key' 		=> $request->post('shopNavKey'),
-			'shop_floor'		=> $request->post('shopFloor'),
-			'shop_room'		=> $request->post('shopRoom'),
 			'shop_tel'		=> $request->post('shopTel'),
 			'shop_url'		=> $request->post('shopUrl'),
 			'service_start_time'		=> $request->post('serviceStartTime'),
