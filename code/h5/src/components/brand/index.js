@@ -206,7 +206,12 @@
 				evt.stopPropagation()
 				
 				if(this.filterIndex == index) {
-					$(this.$refs.submenus).show().animateCss('zoomIn')
+					const subObj = $(this.$refs.submenus)
+					if(subObj.is(':visible')) {
+						subObj.hide()
+					} else {
+						subObj.show().animateCss('zoomIn')
+					}
 					return
 				}
 				

@@ -8,7 +8,7 @@
 					<div class="icon" :style="{ backgroundImage: 'url(' + item.shopIconPath + ')' }"></div>
 					<span class="name">{{ item.shopName }}</span>
 					<div class="desc">{{ item.subShopTypeText }}</div>
-					<div class="floor">{{ formatShopPosition(item.shopPosition) }}</div>
+					<div class="info-floor">{{ item.shopPosition }}</div>
 				</div>
 			</router-link>
 		</div>
@@ -31,7 +31,6 @@
 		    }
 		},
 		methods: {
-			
 		}
 	})
 })()

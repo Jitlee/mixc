@@ -78,7 +78,7 @@
 			let clientId = this.$store.state.client.clientId
 			return {
 				list: [],
-				loading: true,
+				loading: false,
 				
 				floorId: floorId,
 				shops: [],
