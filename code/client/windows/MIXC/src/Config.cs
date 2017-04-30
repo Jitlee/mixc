@@ -119,7 +119,7 @@ namespace MIXC
         {
             get
             {
-                return getValue("main", "sn", "1");
+                return getValue("main", "sn", "");
             }
             set
             {

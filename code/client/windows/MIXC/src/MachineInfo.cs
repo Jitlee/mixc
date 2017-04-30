@@ -5,7 +5,7 @@ namespace MIXC
 {
     internal static class MachineInfo
     {
-        private static string _machineCode = "sdoifh";
+        private static string _machineCode = "";
         /// <summary>
         /// 机器码
         /// </summary>
@@ -15,7 +15,7 @@ namespace MIXC
             {
                 if (string.IsNullOrWhiteSpace(_machineCode))
                 {
-                    _machineCode = MD5.Encrypt(GetSignature() + "Windows_NT_MD5");
+                    _machineCode = _MD5.Encrypt(GetSignature() + "Windows_NT_MD5");
                     if(_machineCode.Length > 16)
                     {
                         _machineCode = _machineCode.Substring(8);
@@ -70,6 +70,11 @@ namespace MIXC
                 }
                 return mac;
             }
+        }
+
+        public static bool CheckSN(string sn)
+        {
+            return _MD5.Encrypt(_MD5.Encrypt(MachineInfo.MachineCode + "ABCEFG") + "12345").Substring(0, 8).ToLower() == sn.ToLower();
         }
     }
 }

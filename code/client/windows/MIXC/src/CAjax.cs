@@ -142,7 +142,7 @@ namespace MIXC
         /// <param name="success">成功回调</param>
         /// <param name="fail">失败回调</param>
         [JavascriptIgnore]
-        public void postJSON(string api, string data, Action<string> success, Action<string> fail)
+        public void postJSON(string api, string data, Action<string> success, Action<string> fail, string method = "POST")
         {
             if (string.IsNullOrWhiteSpace(api))
             {
@@ -162,7 +162,7 @@ namespace MIXC
                 HttpWebRequest request = WebRequest.Create(address) as HttpWebRequest;
 
                 // Set type to POST
-                request.Method = "POST";
+                request.Method = method;
                 request.ContentType = "application/x-www-form-urlencoded";
 
                 if (!string.IsNullOrWhiteSpace(data))

@@ -39,9 +39,8 @@ namespace MIXC
                     var rst = ajax.getValue(data, "rst");
                     if(rst != null)
                     {
-                        var releaseVersion = FormatVersion(ajax.getStringValue(rst, "releaseVersion"));
-                        var localVersion = FormatVersion(Config.Version);
-                        if(releaseVersion > localVersion)
+                        var releaseVersion = ajax.getStringValue(rst, "releaseVersion");
+                        if(FormatVersion(releaseVersion) > FormatVersion(Config.Version))
                         {
                             this.SetMessageSafe("准备下载最新的资源...");
                             var zipUrl = Config.getFullUrl("/" + ajax.getStringValue(rst, "releaseFile"));
@@ -59,6 +58,7 @@ namespace MIXC
                                     {
                                         if(unzipSuccess)
                                         {
+                                            Config.Version = releaseVersion;
                                             this.SetMessageSafe("更新最新的资源成功...");
                                         } else
                                         {
@@ -168,82 +168,13 @@ namespace MIXC
             Thread th = new Thread(() => {
                 try
                 {
-                    string path = targetDir;
-                    //解压出来的文件保存的路径
-                    string rootDir = "";
-                    ZipEntry ziEntry = null;
-                    //读取压缩文件(zip文件),准备解压缩
-                    using (ZipInputStream inputStream = new ZipInputStream(File.OpenRead(zipFilePath)))
+                    if (ZipHelper.UnZip(zipFilePath, targetDir))
                     {
-                        //根目录下的第一个子文件夹的名称
-                        while ((ziEntry = inputStream.GetNextEntry()) != null)
-                        {
-                            rootDir = Path.GetDirectoryName(ziEntry.Name);
-                            //得到根目录下的第一级子文件夹的名称
-                            if (rootDir.IndexOf("\\") >= 0)
-                            {
-                                rootDir = rootDir.Substring(0, rootDir.IndexOf("\\") + 1);
-                            }
-                            string dir = Path.GetDirectoryName(ziEntry.Name);
-                            //根目录下的第一级子文件夹的下的文件夹的名称
-                            string fileName = Path.GetFileName(ziEntry.Name);
-                            //根目录下的文件名称
-                            if (dir != " ")
-                            //创建根目录下的子文件夹,不限制级别
-                            {
-                                if (!Directory.Exists(targetDir + "\\" + dir))
-                                {
-                                    path = targetDir + "\\" + dir;
-                                    //在指定的路径创建文件夹
-                                    Directory.CreateDirectory(path);
-                                }
-                            }
-                            else if (dir == " " && fileName != "")
-                            //根目录下的文件
-                            {
-                                path = targetDir;
-                            }
-                            else if (dir != " " && fileName != "")
-                            //根目录下的第一级子文件夹下的文件
-                            {
-                                if (dir.IndexOf("\\") > 0)
-                                //指定文件保存的路径
-                                {
-                                    path = targetDir + "\\" + dir;
-                                }
-                            }
-
-                            if (dir == rootDir)
-                            //判断是不是需要保存在根目录下的文件
-                            {
-                                path = targetDir + "\\" + rootDir;
-                            }
-
-                            //以下为解压缩zip文件的基本步骤
-                            //基本思路就是遍历压缩文件里的所有文件,创建一个相同的文件。
-                            if (fileName != String.Empty)
-                            {
-                                using (FileStream streamWriter = File.Create(path + "\\" + fileName))
-                                {
-                                    int size = 2048;
-                                    byte[] data = new byte[2048];
-                                    while (true)
-                                    {
-                                        size = inputStream.Read(data, 0, data.Length);
-                                        if (size > 0)
-                                        {
-                                            streamWriter.Write(data, 0, size);
-                                        }
-                                        else
-                                        {
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        callback(true);
+                    } else
+                    {
+                        callback(false);
                     }
-                    callback(true);
                 }
                 catch(Exception ex)
                 {

@@ -4,21 +4,39 @@ using System.Text;
 using System.Windows.Forms;
 using CefSharp;
 using CefSharp.Internals;
+using System.Threading;
 
 namespace MIXC
 {
     public partial class MainForm : Form
     {
         ChromiumWebBrowser _webCom = null;
+        private SynchronizationContext _mainContext = null;
         System.Threading.Timer _heartTimer = null; // 心跳
 
         public MainForm()
         {
             InitializeComponent();
+#if DEBUG
+            this.TopMost = false;
+            this.WindowState = FormWindowState.Normal;
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+#elif UPDATE
+            this.TopMost = false;
+            this.WindowState = FormWindowState.Normal;
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+#endif
+            _mainContext = SynchronizationContext.Current;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+
+            SNLabel.Left = this.Size.Width - SNLabel.Size.Width;
+            SNLabel.Top = this.Size.Height - SNLabel.Size.Height;
+            SNLabel.BackColor = System.Drawing.Color.Transparent;
+            this.SNLabel.Visible = !MachineInfo.CheckSN(Config.SN);
+
             string url = System.IO.Path.Combine(Config.H5Path, "index.html");
 
             _webCom = new CefSharp.WinForms.ChromiumWebBrowser(url);
@@ -36,7 +54,9 @@ namespace MIXC
 
             this.Controls.Add(_webCom);
 
-            cbBrower.playAdsAction = BeginPlayAction;
+            cbBrower.playAdsAction = SafePlayAds;
+
+            _webCom.SendToBack();
         }
 
         private void WebCom_FrameLoadEnd(object sender, CefSharp.FrameLoadEndEventArgs e)
@@ -57,7 +77,9 @@ namespace MIXC
         const int HEART_INTVAL = 180000; // 心跳时间
         private void StartHeart()
         {
+#if !DEBUG
             this._heartTimer = new System.Threading.Timer(Heart, null, 0, HEART_INTVAL);
+#endif
         }
 
         private void Heart(object state)
@@ -84,10 +106,42 @@ namespace MIXC
                         if (Math.Abs(minutes - shutdownTime) * 60 * 1000 <= HEART_INTVAL * 1.5)
                         {
                             Application.Exit();
+                            return;
+                        }
+
+                        string lastVersion = ajax.getStringValue(rst, "lastVersion", "0.0.0");
+                        // 检查版本
+                        if (this.FormatVersion(lastVersion) > this.FormatVersion(Config.Version))
+                        {
+                            // 下载更新
+                            this._heartTimer.Dispose(); // 停止心跳
+                            this._heartTimer = null;
+                            // 开始自动更新版本
+                            var splashForm = new SplashForm();
+                            splashForm.ShowDialog(this);
+                            // 前端刷新网络
+                            _webCom.Reload();
+                            this.StartHeart();
                         }
                     }
                 }
             }, null);
+        }
+
+
+        private int FormatVersion(string version)
+        {
+            if (string.IsNullOrWhiteSpace(version))
+            {
+                return 0;
+            }
+            var nums = version.Split('.');
+            var result = 0;
+            for (int i = 0, iCount = nums.Length; i < iCount; i++)
+            {
+                result += Convert.ToInt32(nums[i]) * (int)Math.Pow(2, 2 - i);
+            }
+            return result;
         }
 
         private string _heartData = null;
@@ -102,7 +156,7 @@ namespace MIXC
             sb.Append(MachineInfo.MAC);
             sb.Append("&ip=");
             sb.Append(MachineInfo.IP);
-            sb.Append("&sn=");
+            sb.Append("&code=");
             sb.Append(MachineInfo.MachineCode);
             this._heartData = sb.ToString();
             return this._heartData;
@@ -123,13 +177,21 @@ namespace MIXC
             }
         }
 
-        private void BeginPlayAction()
+        private void SafePlayAds()
+        {
+            _mainContext.Post(PlayAds, null);
+        }
+
+        private void PlayAds(object state)
         {
             AdsForm ads = new AdsForm();
-            if(ads.ShowDialog() != DialogResult.OK)
-            {
-                _webCom.ExecuteScriptAsync("__beginWatchAdsIdle()");
-            }
+            ads.ShowDialog(this);
+            _webCom.ExecuteScriptAsync("__beginWatchAdsIdle()");
+        }
+
+        public void HideSNLabel()
+        {
+            SNLabel.Visible = false;
         }
     }
 }

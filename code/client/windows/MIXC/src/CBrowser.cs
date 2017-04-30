@@ -45,6 +45,36 @@ namespace MIXC
             Config.SN = valueWithJSONString(jsonString, "sn");
         }
 
+        public void register(string sn, IJavascriptCallback callback)
+        {
+            if(!MachineInfo.CheckSN(sn))
+            {
+                callback.ExecuteAsync(false, "注册码不能用");
+                return;
+            }
+            string parmasString = string.Format("code={0}&sn={1}", MachineInfo.MachineCode, sn);
+            CAjax ajax = new CAjax();
+            ajax.postJSON("/api/terminal/register", parmasString, (jsonString) =>
+            {
+                var data = ajax.Deserialize(jsonString);
+                if (ajax.getIntValue(data, "code") == 200)
+                {
+                    Config.SN = sn;
+                    (MainForm.ActiveForm as MainForm).HideSNLabel();
+                    callback.ExecuteAsync(true);
+                }
+                else
+                {
+                    callback.ExecuteAsync(false, "注册失败，请稍后再试");
+                }
+            },
+            (msg) =>
+            {
+                callback.ExecuteAsync(false, "网络请求错误，请稍后再试");
+            }, "PATCH");
+            callback.ExecuteAsync(true);
+        }
+
         public void playAds()
         {
             if(playAdsAction != null)

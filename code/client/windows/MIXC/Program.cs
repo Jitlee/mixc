@@ -18,14 +18,10 @@ namespace MIXC
 
 #if DEBUG
             Application.Run(new MainForm());
-#elif UPDATE
-            Application.Run(new MainForm());
 #else
             SplashForm splashForm = new SplashForm();
-            if (splashForm.ShowDialog() == DialogResult.OK)
-            {
-                Application.Run(new MainForm());
-            }
+            splashForm.ShowDialog();
+            Application.Run(new MainForm());
 #endif
         }
     }
