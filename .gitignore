@@ -9,7 +9,8 @@ uploads
 node_modules
 code/server/public/static/*
 code/web/dist/*
-release
+code/client/windows/MIXC/bin
+code/server/public/release
 client1
 client2
 client3
@@ -21,6 +22,11 @@ packages
 bin
 obj
 dist
-.vs/*
 *.tmp
 code/server/public/index.html
+
+导航软件
+导航软件.rar
+code/client/windows/MIXC/.vs/*
+*.suo
+code/client/windows/MIXC/.vs/MIXC/v14/.suo

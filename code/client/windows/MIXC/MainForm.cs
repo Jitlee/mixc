@@ -100,8 +100,6 @@ namespace MIXC
                         UpdateConfig(rst, ajax, "password", "8888");
                         UpdateConfig(rst, ajax, "shutdownTime", "1260");
 
-                        _webCom.ExecuteScriptAsync("window.__beginWatchAdsIdle()");
-
                         // 定时关机
                         var shutdownTime = Config.ShutdownTime;
                         var now = DateTime.Now;
