@@ -75,7 +75,7 @@ class Release {
             $this->download_shop_types($clientId, $tmpDir);
             
 			$zip = new \ZipArchive();
-			if ($zip->open($tmpFile, \ZipArchive::OVERWRITE) !== TRUE) {
+			if ($zip->open($tmpFile, \ZipArchive::CREATE) !== TRUE) {
 				$this->remove_tmp($tmpFile, $tmpDir);
 				return fail('发布失败：压缩文件失败');
 			}

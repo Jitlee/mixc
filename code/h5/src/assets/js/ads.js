@@ -6,16 +6,23 @@
 	let timeHandler = 0
 	let isStop = false
 	function beginTiming() {
-		isStop = false
+		if(isStop)
+		{
+			return;
+		}
+		
 		w.clearTimeout(timeHandler)
 		
 		TIMEOUT = PROXY.getConfigByKey('adsTime', "180")
 		timeHandler = w.setTimeout(() => {
+			if(isStop) {
+				return
+			}
 			let now = new Date().getTime()
 			if(now - lastActiveTime > TIMEOUT * 1000) {
-				isStop = true
 				lastActiveTime = now
 				__backHome()
+				isStop = true
 				PROXY.playAds()
 			} else {
 				beginTiming()
@@ -29,5 +36,11 @@
 	
 	beginTiming()
 	
-	w.__beginWatchAdsIdle = beginTiming
+	w.__stopAds = function() {
+		isStop = true
+	}
+	w.__beginWatchAdsIdle = function() {
+		isStop = false
+		beginTiming()
+	}
 })(window)

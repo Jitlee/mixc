@@ -95,9 +95,12 @@ namespace MIXC
                     var rst = ajax.getValue(data, "rst");
                     if (rst != null)
                     {
+                        string oldAdsTime = Config.getValue("adsTime", "120");
                         UpdateConfig(rst, ajax, "adsTime", "180");
                         UpdateConfig(rst, ajax, "password", "8888");
                         UpdateConfig(rst, ajax, "shutdownTime", "1260");
+
+                        _webCom.ExecuteScriptAsync("window.__beginWatchAdsIdle()");
 
                         // 定时关机
                         var shutdownTime = Config.ShutdownTime;
@@ -113,15 +116,12 @@ namespace MIXC
                         // 检查版本
                         if (this.FormatVersion(lastVersion) > this.FormatVersion(Config.Version))
                         {
+                            _webCom.ExecuteScriptAsync("window.__stopAds()");
                             // 下载更新
                             this._heartTimer.Dispose(); // 停止心跳
                             this._heartTimer = null;
-                            // 开始自动更新版本
-                            var splashForm = new SplashForm();
-                            splashForm.ShowDialog(this);
-                            // 前端刷新网络
-                            _webCom.Reload();
-                            this.StartHeart();
+
+                            SafeBeginUpdate();
                         }
                     }
                 }
@@ -187,6 +187,21 @@ namespace MIXC
             AdsForm ads = new AdsForm();
             ads.ShowDialog(this);
             _webCom.ExecuteScriptAsync("__beginWatchAdsIdle()");
+        }
+
+        private void SafeBeginUpdate()
+        {
+            _mainContext.Post(BeginUpdate, null);
+        }
+
+        private void BeginUpdate(object state)
+        {
+            // 开始自动更新版本
+            var splashForm = new SplashForm();
+            splashForm.ShowDialog(this);
+            // 前端刷新网络
+            _webCom.Reload();
+            this.StartHeart();
         }
 
         public void HideSNLabel()

@@ -12,8 +12,10 @@
   "dependencies": {
     "element-ui": "^1.0.8",
     "fabric": "^1.7.11",
+    "js-md5": "^0.4.2",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
+    "moment": "^2.18.1",
     "nprogress": "^0.2.0",
     "vue": "^2.1.0",
     "vue-bus": "^0.3.0",
