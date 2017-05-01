@@ -6,6 +6,7 @@
 			<div class="lenged">
 				<div class="lenged-item" @click="handleLenged('A')"><i class="iconfont icon-lift"></i></div>
 				<div class="lenged-item" @click="handleLenged(['B', 'C', 'D'])"><i class="iconfont icon-stail"></i></div>
+				<div class="lenged-item" @click="handleLenged(['E'])"><i class="iconfont icon-wc"></i></div>
 			</div>
 			<div class="img" ref="map">
 				<canvas ref="canvas"></canvas>

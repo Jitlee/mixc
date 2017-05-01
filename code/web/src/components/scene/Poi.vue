@@ -91,9 +91,6 @@
 					y: 0
 				},
 				formRules: {
-					poiType: [
-						{ required: true, type: 'integer', message: '请输入公共设施类型', trigger: 'blur' }
-					],
 					x: [
 						{ required: true, type: 'integer', message: '请输入X坐标', trigger: 'blur' }
 					],
