@@ -30,3 +30,4 @@ code/server/public/index.html
 code/client/windows/MIXC/.vs/*
 *.suo
 code/client/windows/MIXC/.vs/MIXC/v14/.suo
+code/server/public/index.html

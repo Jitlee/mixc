@@ -10,21 +10,6 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "element-ui": "^1.0.8",
-    "fabric": "^1.7.11",
-    "js-md5": "^0.4.2",
-    "less": "^2.7.1",
-    "less-loader": "^2.2.3",
-    "moment": "^2.18.1",
-    "nprogress": "^0.2.0",
-    "vue": "^2.1.0",
-    "vue-bus": "^0.3.0",
-    "vue-color": "^2.0.5",
-    "vue-resource": "^1.0.3",
-    "vue-router": "^2.1.1",
-    "vue-slide": "^1.1.1",
-    "vue2-html5-editor": "^0.6.0",
-    "vuex": "^2.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
@@ -66,7 +51,23 @@
     "webpack": "^1.13.2",
     "webpack-dev-middleware": "^1.8.3",
     "webpack-hot-middleware": "^2.12.2",
-    "webpack-merge": "^0.14.1"
+    "webpack-merge": "^0.14.1",
+    
+    "element-ui": "^1.0.8",
+    "fabric": "^1.7.11",
+    "js-md5": "^0.4.2",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "moment": "^2.18.1",
+    "nprogress": "^0.2.0",
+    "vue": "^2.1.0",
+    "vue-bus": "^0.3.0",
+    "vue-color": "^2.0.5",
+    "vue-resource": "^1.0.3",
+    "vue-router": "^2.1.1",
+    "vue-slide": "^1.1.1",
+    "vue2-html5-editor": "^0.6.0",
+    "vuex": "^2.1.1"
   },
   "engines": {
     "node": ">= 4.0.0",

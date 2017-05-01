@@ -18,7 +18,7 @@
 					<template v-for="(item,index) in menus" v-if="!item.hidden">
 						<el-menu-item :index="index+''"><i class="iconfont" :class="item.icon"></i>&nbsp;{{item.name}}</el-menu-item>
 					</template>
-				</el>
+				</el-menu>
 			</aside>
 			<section class="body">
 				<el-breadcrumb separator="/">
@@ -29,7 +29,7 @@
 					<transition name="fade" mode="out-in">
 						<router-view></router-view>
 					</transition>
-				</content>
+				</section>
 			</section>
 		</article>
 	</div>
