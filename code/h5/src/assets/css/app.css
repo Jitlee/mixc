@@ -438,6 +438,9 @@ nav.index-nav .index-nav-item:first-child {
 .floor .floors .iconfont {
   font-size: 2vh;
 }
+.floor .floors .col {
+  width: 11.203703703703702vw;
+}
 .floor .floors,
 .floor .floors .row,
 .floor .floors col {

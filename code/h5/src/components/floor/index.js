@@ -54,7 +54,7 @@
 		data() {
 			return {
 				index: -1,
-				start: -1,
+				start: 0,
 				pageSize: 5,
 				floor: {
 					floorId: 0,
@@ -179,7 +179,7 @@
 			
 			// 上一层
 			handlePrev () {
-				this.setupFloors(this.index - 1);
+				this.setupFloors(this.index - 1, true);
 			},
 			// 下一层
 			handleNext () {
@@ -192,7 +192,7 @@
 			},
 			
 			// 安装楼层
-			setupFloors (index, isReverse = true) {
+			setupFloors (index, isReverse) {
 				const floors = this.allFloors;
 				if(this.index != index && index > -1 && index < floors.length) {
 					this.index = index;
@@ -203,14 +203,20 @@
 					}
 					this.floor = floor;
 					this.setupShops(floor)
-					if(!(this.start > -1 && index >= this.start && index < Math.min(this.start + this.pageSize, floors.length))) {
-						if(isReverse) {
-							this.floors = floors.slice(index, Math.min(index + this.pageSize, floors.length));
-							this.start = index;
-						} else {
-							this.start = Math.max(0, index - this.pageSize);
-							this.floors = floors.slice(this.start, index + 1);
+					
+					if(isReverse === true ) {
+						if(index > -1 && index < this.start) {
+							this.start = index
+							this.floors = floors.slice(this.start, Math.min(this.start + this.pageSize, floors.length))
 						}
+					} else if(isReverse == false) {
+						if(index < floors.length && index > this.start + this.pageSize - 1) {
+							this.start = Math.max(0, index - this.pageSize  + 1)
+							this.floors = floors.slice(this.start, index + 1)
+						}
+					} else if(this.start == -1 || this.floors.length == 0) {
+						this.start = 0
+						this.floors = floors.slice(this.start, Math.min(index + this.pageSize, floors.length))
 					}
 				}
 			},
