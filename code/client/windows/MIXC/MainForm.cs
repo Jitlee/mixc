@@ -98,6 +98,7 @@ namespace MIXC
                         UpdateConfig(rst, ajax, "adsTime", "180");
                         UpdateConfig(rst, ajax, "password", "8888");
                         UpdateConfig(rst, ajax, "shutdownTime", "1260");
+                        UpdateConfig(rst, ajax, "name", MachineInfo.HostName);
 
                         // 定时关机
                         var shutdownTime = Config.ShutdownTime;
@@ -155,6 +156,8 @@ namespace MIXC
             sb.Append(MachineInfo.IP);
             sb.Append("&code=");
             sb.Append(MachineInfo.MachineCode);
+            sb.Append("&name=");
+            sb.Append(MachineInfo.HostName);
             this._heartData = sb.ToString();
             return this._heartData;
         }
@@ -193,6 +196,11 @@ namespace MIXC
 
         private void BeginUpdate(object state)
         {
+            if(AdsForm.ActiveForm != null && AdsForm.ActiveForm.Visible)
+            {
+                AdsForm.ActiveForm.Close();
+            }
+
             // 开始自动更新版本
             var splashForm = new SplashForm();
             splashForm.ShowDialog(this);

@@ -112,6 +112,18 @@ namespace MIXC
             }
         }
 
+        public static string TerminalName
+        {
+            get
+            {
+                return getValue("main", "name", MachineInfo.HostName);
+            }
+            set
+            {
+                setValue("main", "name", value);
+            }
+        }
+
         /// <summary>
         /// 注册码
         /// </summary>

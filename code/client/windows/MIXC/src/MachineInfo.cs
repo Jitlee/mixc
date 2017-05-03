@@ -54,6 +54,14 @@ namespace MIXC
             }
         }
 
+        public static string HostName
+        {
+            get
+            {
+                return Dns.GetHostName();
+            }
+        }
+
         public static string MAC
         {
             get

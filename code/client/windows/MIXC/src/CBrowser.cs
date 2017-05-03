@@ -26,6 +26,7 @@ namespace MIXC
             sb.AppendFormat(",\"password\":\"{0}\"", Config.Password);
             sb.AppendFormat(",\"sn\":\"{0}\"", Config.SN);
             sb.AppendFormat(",\"version\":\"{0}\"", Config.Version);
+            sb.AppendFormat(",\"name\":\"{0}\"", Config.TerminalName);
             sb.Append("}");
             return sb.ToString();
         }
@@ -43,6 +44,36 @@ namespace MIXC
         public void saveConfig(string jsonString)
         {
             Config.SN = valueWithJSONString(jsonString, "sn");
+        }
+
+        public void saveName(string name, IJavascriptCallback callback)
+        {
+            if(name == Config.TerminalName)
+            {
+                callback.ExecuteAsync(true);
+                return;
+            }
+
+            string parmasString = string.Format("code={0}&sn={1}", MachineInfo.MachineCode, name);
+            CAjax ajax = new CAjax();
+            ajax.postJSON("/api/terminal/name", parmasString, (jsonString) =>
+            {
+                var data = ajax.Deserialize(jsonString);
+                if (ajax.getIntValue(data, "code") == 200)
+                {
+                    Config.TerminalName = name;
+                    callback.ExecuteAsync(true);
+                }
+                else
+                {
+                    callback.ExecuteAsync(false, "修改名称失败，请稍后再试");
+                }
+            },
+            (msg) =>
+            {
+                callback.ExecuteAsync(false, "网络请求错误，请稍后再试");
+            }, "PATCH");
+            callback.ExecuteAsync(true);
         }
 
         public void register(string sn, IJavascriptCallback callback)
