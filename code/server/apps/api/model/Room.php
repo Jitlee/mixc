@@ -51,7 +51,7 @@ class Room extends Model
 			if($exists) {
 				return -2;
 			}
-		} else {
+		} else if(!empty($roomdata['room_name'])){
 			$exists = db::table('__ROOM__')
 				->where('room_name', $roomdata['room_name'])
 				->where('room_id', 'neq', $roomId)

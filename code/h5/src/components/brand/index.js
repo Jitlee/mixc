@@ -35,12 +35,12 @@
 		data() {
 			const typeId = this.$route.params.typeId || 0
 			return {
-				tab: -1,
+				tab: this.$store.state.brand.tab,
 				
 				typeId: typeId,
 				
-				filterIndex: -1, // 大分类，字母，数字，选中的id
-				subFilterIndex: -1, // 小分类选中的id
+				filterIndex: this.$store.state.brand.filterIndex, // 大分类，字母，数字，选中的id
+				subFilterIndex: this.$store.state.brand.subFilterIndex, // 小分类选中的id
 				
 				shops: [],
 				
@@ -56,8 +56,8 @@
 			}
 		},
 		created() {
-			this.setupShopes()
-			this.handleTab(0)
+			// this.setupShopes()
+			this.setTabIndex(this.tab)
 		},
 		
 		mounted() {	
@@ -86,6 +86,7 @@
 					this.tempIndex++
 					if(this.tempIndex < length) {
 						this.tempTimeoutId = setTimeout(this.beginTransition.bind(this), this.tab== 1 || this.tab == 2 ? 50 : 150)
+					} else {
 					}
 				}	
 			},
@@ -96,11 +97,18 @@
 				}
 				this.shops = []
 				
-				this.tab = tab
-				this.navTitle = ['品类查找', '字母查找', '数字查找', '楼层查找'][tab]
 				this.filterIndex = -1
 				this.subFilterIndex = -1
-				this.setupShopes()
+				this.$store.state.brand.filterIndex = -1
+				this.$store.state.brand.subFilterIndex = -1
+				
+				this.$store.state.brand.tab = tab
+				this.setTabIndex(tab)
+			},
+			
+			setTabIndex(tab) {
+				this.tab = tab
+				this.navTitle = ['品类查找', '字母查找', '数字查找', '楼层查找'][tab]
 				switch(tab) {
 					case 0:
 						this.setupMajorShopTypes()
@@ -117,6 +125,7 @@
 					default:
 						break
 				}
+				this.setupShopes()
 			},
 			
 			handleMenu(evt, index) {
@@ -140,7 +149,7 @@
 			},
 			
 			handleSubMenu(evt, index) {
-				evt.stopPropagation()
+				evt && evt.stopPropagation()
 				$(this.$refs.submenus).hide();
 				if(index == this.subFilterIndex) {
 					return
@@ -151,22 +160,28 @@
 			},
 			
 			setupShopes() {
-				this.getShops(shops => {
-					this.shops = shops
-				})
+				if(this.tab > -1 && this.subFilterIndex > -1) {
+					this.filterMinorShopTypes(this.subFilterIndex)
+				} else if(this.filterIndex > -1) {
+					this.handleMenu(null, this.filterIndex)
+				} else {
+					this.getShops(shops => {
+						this.shops = shops
+					})
+				}
 			},
 			setupMajorShopTypes() {
 				this.getShopTypes(shopTypes => {
 					this.setTempMenus(shopTypes.map((e) => { return e.dictValue }))
 					
-					if(!(this.typeId >= 0)) {
-						return
-					}
-					var index = -1
-					for(let i = 0, len = shopTypes.length; i < len; i++) {
-						if(shopTypes[i].dictId == this.typeId) {
-							index = i
-							break
+					var index = this.$store.state.brand.filterIndex
+					
+					if(this.typeId > 0) {
+						for(let i = 0, len = shopTypes.length; i < len; i++) {
+							if(shopTypes[i].dictId == this.typeId) {
+								index = i
+								break
+							}
 						}
 					}
 					
@@ -177,6 +192,7 @@
 					}
 			
 					this.filterIndex = index
+					this.$store.state.brand.filterIndex = index
 					
 					this.filterShopesByMajorType(index, shops => {
 						this.shops = shops
@@ -203,26 +219,33 @@
 			
 			// 一级分类
 			filterMajorShopTypes(evt, index) {
-				evt.stopPropagation()
+				evt && evt.stopPropagation()
 				
 				if(this.filterIndex == index) {
 					const subObj = $(this.$refs.submenus)
 					if(subObj.is(':visible')) {
 						subObj.hide()
-					} else {
-						subObj.show().animateCss('zoomIn')
+						return
 					}
-					return
 				}
 				
 				this.shops = []
 				this.filterIndex = index
+				this.$store.state.brand.filterIndex = index
+				this.$store.state.brand.subFilterIndex = -1
 				this.subFilterIndex = -1
+				
+				if(index == -1) {
+					return
+				}
 				
 				this.filterShopesByMajorType(index, shops => {
 					this.shops = shops
 				})
 				
+				if(!evt) {
+					return
+				}
 				this.getShopTypes(shopTypes => {
 					this.submenus = shopTypes[index].children
 					
@@ -238,6 +261,7 @@
 			// 二级分类
 			filterMinorShopTypes(index) {
 				this.subFilterIndex = index
+				this.$store.state.brand.subFilterIndex = index
 				if(index == -1) {
 					this.filterShopesByMajorType(this.filterIndex, shops => {
 						this.shops = shops
@@ -272,7 +296,8 @@
 			// 根据索引过滤
 			filterIndexes(index) {
 				this.filterIndex = index
-				const shopIndex = String(this.menus[index])
+				this.$store.state.brand.filterIndex = index
+				const shopIndex = String(this.tempMenus[index])
 				this.filterShopesByIndex(shopIndex, (shops) => {
 					this.shops = shops
 				})
@@ -281,6 +306,7 @@
 			// 根据楼层过滤
 			filterFloors(index) {
 				this.filterIndex = index
+				this.$store.state.brand.filterIndex = index
 				this.shops = []
 				this.getFloors(floors => {
 					const floor = floors[index]

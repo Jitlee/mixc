@@ -13,6 +13,15 @@
 	// 注册组件
 	Vue.component('mixc-index', {
 		template: template,
+		created() {
+			this.$store.state.brand.tab = 0	
+			this.$store.state.brand.filterIndex = -1	
+			this.$store.state.brand.subFilterIndex = -1	
+			this.$store.state.floor.index = 0	
+			this.$store.state.floor._lettersVisible = false	
+			this.$store.state.floor._selectedLetter = null
+			this.$store.state.floor.shop = null
+		},
 		methods: {
 			handleAdsNav(row) {
 				const adsTargetType = Number(row.adsTargetType);

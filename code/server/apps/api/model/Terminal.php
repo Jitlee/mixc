@@ -67,7 +67,7 @@ class Terminal extends Model
 		$code = $request->post('code');
 		$mac = $request->post('mac');
 		$ip = $request->post('ip');
-		if(empty($mac)) {
+		if(empty($code)) {
 			return -5;
 		}
 		$data = $this->field('unix_timestamp(active_time) active_time, tml_id, unix_timestamp() now, shutdown_time, ads_time')->where('tml_code', $code)->find();

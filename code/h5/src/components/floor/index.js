@@ -74,9 +74,8 @@
 				swiper: null,
 				swipeId: 'floor-' + new Date().getTime(),
 				
-				_lettersVisible: false,
-				_selectedLetter: null,
-				_selectedIndex: -1,
+				_lettersVisible: this.$store.state.floor._lettersVisible,
+				_selectedLetter: this.$store.state.floor._selectedLetter,
 				
 				canvas: null,
 				zoom: 1,
@@ -85,7 +84,7 @@
 		created() {
 			this.getFloors((rst)=> {
 				this.allFloors = rst
-				this.setupFloors(0)
+				this.setupFloors(this.$store.state.floor.index)
 			})
 		},
 		mounted() {
@@ -196,13 +195,19 @@
 				const floors = this.allFloors;
 				if(this.index != index && index > -1 && index < floors.length) {
 					this.index = index;
+					this.$store.state.floor.index = index
 					let floor = floors[index];
 					if(!floor.tags) {
 						floor.tags = (floor.floorTags && floor.floorTags.length > 0)
 							? floor.floorTags.split('、') : [];
 					}
-					this.floor = floor;
+					if(this.floor == floor) {
+						return
+					}
+					
+					this.floor = floor
 					this.setupShops(floor)
+					this.layout()
 					
 					if(isReverse === true ) {
 						if(index > -1 && index < this.start) {
@@ -259,8 +264,6 @@
 					this.pages = pages
 					this.setup()
 				})
-				
-				this.layout()
 			},
 			
 			// 根据字母过滤
@@ -275,6 +278,13 @@
 						result.push(shops[i])
 					}
 				}
+				const map = $(this.$refs.map)
+				$('.ball', map).removeClass('ball')
+				$('.location', map).remove()
+				
+				const parent = $('#' + this.swipeId)
+				$('.active', parent).removeClass('active')
+				
 				return result
 			},
 			
@@ -307,6 +317,8 @@
 				
 				const parent = $('#' + this.swiperId)
 				$('.active', parent).removeClass('active')
+				
+				this.handleClickShop(this.$store.state.floor.shop)
 			},
 			
 			layoutPois() {
@@ -387,9 +399,10 @@
 			},
 			
 			handleClickShop(shop) {
-				if(!this.floor.rooms) {
+				if(!this.floor.rooms || !shop) {
 					return
 				}
+				this.$store.state.floor.shop = shop
 				const map =$(this.$refs.map)
 				const center = this.canvas.getCenter()
 				const zoom = this.zoom || 1
