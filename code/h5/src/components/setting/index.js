@@ -2,17 +2,21 @@
 	// 模版
 	const template = `
 		<mixc-public-modal @close="$emit('close')" class="setting">
-		    <h3 slot="header">服务器设置</h3>
+		    <h3 slot="header">设置</h3>
 		    <div slot="body">
 	    		<form>
-	    			<div class="form-row">
-						<div class="form-label">机器码</div>
-						<input v-model="formData.code" class="form-input" placeholder="请输入机器吗" readonly="readonly"/>
-					</div>
-					<div class="form-row">
-						<div class="form-label">注册码</div>
-						<input v-model="formData.sn" class="form-input" type="text" placeholder="请输入注册码"/>
-					</div>
+    				<div class="form-row">
+					<div class="form-label">名称</div>
+					<input v-model="formData.name" class="form-input" placeholder="请输入当前设备的名称"/>
+				</div>
+    				<div class="form-row">
+					<div class="form-label">机器码</div>
+					<input v-model="formData.code" class="form-input" placeholder="请输入机器吗" readonly="readonly"/>
+				</div>
+				<div class="form-row">
+					<div class="form-label">注册码</div>
+					<input v-model="formData.sn" class="form-input" type="text" placeholder="请输入注册码"/>
+				</div>
 	    		</form>
 	    		<div style="font-size: 12px;">
 	    			当前版本: {{ formData.version }}
@@ -44,19 +48,30 @@
 				    type: 2
 				    ,content: '加载中'
 				  })
-				PROXY.register(this.formData.sn, (rst, msg) => {
-					layer.closeAll()
+				PROXY.setName(this.formData.name, (rst, msg) => {
 					if(rst) {
-						this.$emit('close')
+						PROXY.register(this.formData.sn, (rst, msg) => {
+							layer.closeAll()
+							if(rst) {
+								this.$emit('close')
+							} else {
+								layer.open({
+								    content: msg
+								    ,skin: 'msg'
+								    ,time: 2 //2秒后自动关闭
+								})
+							}
+						})	 
 					} else {
+						layer.closeAll()
 						layer.open({
 						    content: msg
 						    ,skin: 'msg'
 						    ,time: 2 //2秒后自动关闭
 						})
 					}
+						
 				})
-				
 			},
 		},
 		computed: {

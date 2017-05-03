@@ -67,10 +67,11 @@ class Terminal extends Model
 		$code = $request->post('code');
 		$mac = $request->post('mac');
 		$ip = $request->post('ip');
+		$name = $request->post('name');
 		if(empty($code)) {
 			return -5;
 		}
-		$data = $this->field('unix_timestamp(active_time) active_time, tml_id, unix_timestamp() now, shutdown_time, ads_time')->where('tml_code', $code)->find();
+		$data = $this->field('unix_timestamp(active_time) active_time, tml_id, tml_name, unix_timestamp() now, shutdown_time, ads_time')->where('tml_code', $code)->find();
 		if(empty($data)) {
 			$clientData = Db::table('__SCENE__')->field('client_id, shutdown_time, ads_time, password')->where('scene_id', $releaseSourceId)->find();
 			if(empty($clientData)) {
@@ -81,7 +82,7 @@ class Terminal extends Model
 			
 			$data = [
 				'client_id'			=> $clientId,
-				'tml_name'			=> $ip,
+				'tml_name'			=> $name,
 				'tml_mac'			=> $mac,
 				'tml_code'			=> $code,
 				'tml_ip'				=> $ip,
@@ -108,6 +109,7 @@ class Terminal extends Model
 		$time = (int)$data['now'];
 		$shutdownTime = (int)$data['shutdown_time'];
 		$adsTime = (int)$data['ads_time'];
+		$name = $data['tml_name'];
 		
 		$defaultData = Db::table('__SCENE__')->field('shutdown_time, ads_time, password,first_version,second_version,thrid_version')->where('scene_id', $releaseSourceId)->find();
 		if($shutdownTime == 0) {
@@ -132,6 +134,7 @@ class Terminal extends Model
 				'shutdownTime' => $shutdownTime,
 				'adsTime' => $adsTime,
 				'password' => $passwrod,
+				'name'	=> $name,
 				'lastVersion' => $defaultData['first_version'].'.'.$defaultData['second_version'].'.'.$defaultData['thrid_version']
 			];
 		} catch(\Exception $e) {
@@ -149,6 +152,21 @@ class Terminal extends Model
 		}
 	}
 	
+	public function _name() {
+		$request = Request::instance();
+		$code = $request->patch('code');
+		$name = $request->patch('name');
+		$data = [
+			'tml_name'			=> $name
+		];
+		$rst = $this->where('tml_code', $code)->update($data);
+		
+		if($rst) {
+			return 0;
+		} else {
+			return -1;
+		}
+	}
 	
 	public function _register() {
 		$request = Request::instance();

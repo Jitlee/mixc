@@ -105,5 +105,13 @@
 				callback(true)
 			}
 		},
+		
+		setName(name, callback) {
+			if(isCSharp) {
+				CBrowser.setName(String(name), callback)
+			} else {
+				callback(true)
+			}
+		},
 	}
 })(window)

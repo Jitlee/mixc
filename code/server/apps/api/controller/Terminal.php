@@ -75,6 +75,22 @@ class Terminal {
 	}
 	
 	/**
+	 * patch: 修改客户端名称
+	 * path: name
+	 * method: name
+	 * param: code - {string} 终端id
+	 * param: name - {string} 终端名称
+	 */
+	public function name() {
+		$db = model('Terminal');
+		if($db->_name() > -1) {
+			return success(true, '修改成功');
+		} else {
+			return fail("修改失败");
+		}
+	}
+	
+	/**
 	 * patch: 客户端注册
 	 * path: register
 	 * method: register
