@@ -19,7 +19,8 @@
 				</div>
 	    		</form>
 	    		<div style="font-size: 12px;">
-	    			当前版本: {{ formData.version }}
+	    			当前版本: {{ formData.version }}<br/>
+	    			终端版本: {{ formData.shellVersion }}
 	    		</div>
 	    		<div style="font-size: 12px;display:none;">
 	    			更新时间：{{ new Date(formData.updateTime).toLocaleString() }}
