@@ -95,7 +95,6 @@ namespace MIXC
                     var rst = ajax.getValue(data, "rst");
                     if (rst != null)
                     {
-                        string oldAdsTime = Config.getValue("adsTime", "120");
                         UpdateConfig(rst, ajax, "adsTime", "180");
                         UpdateConfig(rst, ajax, "password", "8888");
                         UpdateConfig(rst, ajax, "shutdownTime", "1260");
