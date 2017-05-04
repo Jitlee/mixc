@@ -16,6 +16,8 @@ namespace MIXC
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            var a = Config.AssemblyFileVersion;
+
 #if DEBUG
             Application.Run(new MainForm());
 #else

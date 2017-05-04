@@ -27,6 +27,7 @@ namespace MIXC
             sb.AppendFormat(",\"sn\":\"{0}\"", Config.SN);
             sb.AppendFormat(",\"version\":\"{0}\"", Config.Version);
             sb.AppendFormat(",\"name\":\"{0}\"", Config.TerminalName);
+            sb.AppendFormat(",\"shellVersion\":\"{0}\"", Config.AssemblyFileVersion);
             sb.Append("}");
             return sb.ToString();
         }
@@ -46,7 +47,7 @@ namespace MIXC
             Config.SN = valueWithJSONString(jsonString, "sn");
         }
 
-        public void saveName(string name, IJavascriptCallback callback)
+        public void setName(string name, IJavascriptCallback callback)
         {
             if(name == Config.TerminalName)
             {
@@ -54,7 +55,7 @@ namespace MIXC
                 return;
             }
 
-            string parmasString = string.Format("code={0}&sn={1}", MachineInfo.MachineCode, name);
+            string parmasString = string.Format("code={0}&name={1}", MachineInfo.MachineCode, name);
             CAjax ajax = new CAjax();
             ajax.postJSON("/api/terminal/name", parmasString, (jsonString) =>
             {

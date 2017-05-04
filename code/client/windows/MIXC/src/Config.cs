@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -163,6 +164,22 @@ namespace MIXC
 #else
                 return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), "__mixc__");
 #endif
+            }
+        }
+
+        public static string AssemblyFileVersion
+        {
+            get
+            {
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false);
+                if (attributes.Length == 0)
+                {
+                    return "";
+                }
+                else
+                {
+                    return ((AssemblyFileVersionAttribute)attributes[0]).Version;
+                }
             }
         }
 
