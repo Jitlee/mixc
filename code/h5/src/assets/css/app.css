@@ -775,6 +775,18 @@ nav.index-nav .index-nav-item:first-child {
   position: relative;
   color: #fff;
 }
+.shop .map {
+  height: 25.36vh;
+  margin-top: 0.5283vh;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+.shop .map canvas {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
 .shop .swiper-container {
   margin-right: 44.44444444vw;
   height: 25vh;

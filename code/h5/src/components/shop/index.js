@@ -23,8 +23,10 @@
 				<p><pre>{{ shop.shopIntroduction }}</pre></p>
 			</div>
 			
-			<img class="shop-nav" :src="shop.shopNavPath"/>
-			
+			<!--<img class="shop-nav" :src="shop.shopNavPath"/>-->
+			<div class="map" ref="map">
+				<canvas ref="canvas"></canvas>
+			</div>
 		</div>
 	`
 	
@@ -49,6 +51,11 @@
 				shopAlbum: '',
 				shopAlbums: [],
 				swiper: null,
+				
+				floor: {},
+				room: {},
+				canvas: null,
+				zoom: 1,
 			}
 		},
 		created() {
@@ -80,6 +87,25 @@
 					this.setup()
 				})
 			})
+			
+			this.getShopRoom((floor, room) => {
+				this.floor = floor
+				this.room = room
+			})
+		},
+		
+		mounted() {
+			const roomElement = this.$refs.canvas
+			roomElement.width = $(roomElement).parent().width()
+			roomElement.height = $(roomElement).parent().height()
+			const canvas = this.canvas = new fabric.Canvas(roomElement, {
+			    hoverCursor: 'pointer',
+			    selection: false,
+			    perPixelTargetFind: true,
+			    targetFindTolerance: 5
+			})
+			
+			this.layout()
 		},
 		
 		methods: {
@@ -142,6 +168,89 @@
 					}
 					callback(result)
 				});
+			},
+			
+			// 获取楼层
+			getFloors(callback) {
+				if(this.$store.state.floors.length > 0) {
+					callback(this.$store.state.floors)
+				} else {
+					PROXY.getJSON('data/floor.json', (rst) => {
+						if(rst && rst.length > 0) {
+							this.$store.state.floors = rst
+							callback(rst)
+						}
+					})
+				}
+			},
+			
+			layout() {
+				this.canvas.clear()
+				this.layoutBackground()
+				this.layoutShop()
+			},
+			
+			layoutBackground() {
+				const canvas = this.canvas
+				const center = this.canvas.getCenter()
+				const backgroundImageSize = this.getAjustSize()
+				this.zoom = (this.floor.fileWidth / backgroundImageSize.width) || 1	
+				
+				fabric.Image.fromURL(this.floor.navFilePath, function(oImg) {
+					oImg.set({
+						width: backgroundImageSize.width,
+						height: backgroundImageSize.height,
+						left: center.left,
+						top: center.top,
+						selectable: false,
+					})
+  					canvas.insertAt(oImg, 0)
+				})
+			},
+			
+			layoutShop() {
+				const map =$(this.$refs.map)
+				const center = this.canvas.getCenter()
+				const zoom = this.zoom || 1
+				const shop = this.shop
+				const r = this.room
+				const s = $(`<a class="location"
+					href="#/shop/0/${shop.shopId}"
+					style="
+						left:${ r.x / zoom + center.left - 25 }px;top: ${ r.y / zoom + center.top - 50 }px">
+						<div class="shop-icon" style="background-image:url(${ shop.shopIconPath })"></div>
+					</a>`).appendTo(map)
+				setTimeout(() => {
+					s.animateCss('ball')
+				})
+			},
+			
+			getShopRoom(callback) {
+				const shopId = this.shopId
+				this.getFloors(floors => {
+					for(let i = 0, iCount = floors.length; i < iCount; i++) {
+						const f = floors[i]
+						if(f && f.rooms && f.rooms.length > 0) {
+							for(let j = 0, jCount = f.rooms.length; j < jCount; j++) {
+								if(f.rooms[j].shopId == shopId) {
+									callback(f, f.rooms[j])
+									return
+								}
+							}
+						}
+					}
+				})
+			},
+			
+			getAjustSize() {
+				if(this.floor.fileWidth > 0 && this.floor.fileHeight > 0) {
+					if(this.canvas.width / this.canvas.height > this.floor.fileWidth / this.floor.fileHeight) {
+						return { width: this.floor.fileWidth * this.canvas.height /  this.floor.fileHeight, height: this.canvas.height }
+					} else {
+						return { width: this.floor.fileWidth, height: this.floor.fileHeight * this.canvas.width / this.floor.fileWidth }
+					}
+				}
+				return this.canvas
 			},
 		}
 	})

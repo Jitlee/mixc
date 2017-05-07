@@ -33,6 +33,7 @@
             // 
             // MessageLabel
             // 
+            this.MessageLabel.BackColor = System.Drawing.SystemColors.ControlLight;
             this.MessageLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.MessageLabel.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.MessageLabel.Location = new System.Drawing.Point(0, 303);

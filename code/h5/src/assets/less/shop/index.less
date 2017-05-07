@@ -5,6 +5,20 @@
     @h: 25vh;
     color: @font-color;
     
+    .map {
+        height: @floor_map_height;
+        margin-top: @page_padding-v;
+        position: relative;
+        width: 100%;
+        box-sizing: border-box;
+        
+        canvas {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+        }
+    }
+    
     .swiper-container {
         margin-right: @w;
         height: @h;
