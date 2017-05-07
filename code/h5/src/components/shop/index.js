@@ -52,10 +52,11 @@
 				shopAlbums: [],
 				swiper: null,
 				
-				floor: {},
-				room: {},
+				floor: null,
+				room: null,
 				canvas: null,
 				zoom: 1,
+				layouted: false,
 			}
 		},
 		created() {
@@ -88,9 +89,12 @@
 				})
 			})
 			
-			this.getShopRoom((floor, room) => {
+			this.getShopRoom((floor, rooms) => {
 				this.floor = floor
-				this.room = room
+				this.rooms = rooms
+				if(this.canvas) {
+					this.layout()
+				}
 			})
 		},
 		
@@ -104,7 +108,6 @@
 			    perPixelTargetFind: true,
 			    targetFindTolerance: 5
 			})
-			
 			this.layout()
 		},
 		
@@ -185,6 +188,12 @@
 			},
 			
 			layout() {
+				if(!(this.floor && !this.layouted)) {
+					return
+				}
+				
+				this.layouted = true
+				
 				this.canvas.clear()
 				this.layoutBackground()
 				this.layoutShop()
@@ -213,15 +222,15 @@
 				const center = this.canvas.getCenter()
 				const zoom = this.zoom || 1
 				const shop = this.shop
-				const r = this.room
-				const s = $(`<a class="location"
-					href="#/shop/0/${shop.shopId}"
-					style="
-						left:${ r.x / zoom + center.left - 25 }px;top: ${ r.y / zoom + center.top - 50 }px">
-						<div class="shop-icon" style="background-image:url(${ shop.shopIconPath })"></div>
-					</a>`).appendTo(map)
-				setTimeout(() => {
-					s.animateCss('ball')
+				this.rooms.forEach(r => {
+					const s = $(`<a class="location"
+						style="
+							left:${ r.x / zoom + center.left - 25 }px;top: ${ r.y / zoom + center.top - 50 }px">
+							<div class="shop-icon" style="background-image:url(${ shop.shopIconPath })"></div>
+						</a>`).appendTo(map)
+					setTimeout(() => {
+						s.animateCss('ball')
+					})
 				})
 			},
 			
@@ -231,11 +240,10 @@
 					for(let i = 0, iCount = floors.length; i < iCount; i++) {
 						const f = floors[i]
 						if(f && f.rooms && f.rooms.length > 0) {
-							for(let j = 0, jCount = f.rooms.length; j < jCount; j++) {
-								if(f.rooms[j].shopId == shopId) {
-									callback(f, f.rooms[j])
-									return
-								}
+							const rooms = f.rooms.filter(r => r.shopId == shopId)
+							if(rooms && rooms.length > 0) {
+								callback(f, rooms)
+								return
 							}
 						}
 					}

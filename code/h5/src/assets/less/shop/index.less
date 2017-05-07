@@ -17,6 +17,29 @@
             height: 100%;
             box-sizing: border-box;
         }
+        
+        .location {
+            transition: all 0.2s ease-in-out;
+            transform-origin: bottom center;
+            position: absolute;
+            .bgimg();
+            background-size: contain;
+            text-align: center;
+            width: 50px;
+            height: 50px;
+            padding-top: 8px;
+            z-index:999;
+            background-image: url("@{imgpath}/location.png");
+            display: block;
+            text-decoration: none;
+            .shop-icon {
+                margin: auto;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                .bgimg();
+            }
+        }
     }
     
     .swiper-container {

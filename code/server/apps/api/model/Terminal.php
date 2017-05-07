@@ -23,7 +23,7 @@ class Terminal extends Model
 			->field("tml_id tmlId, t.client_id clientId, tml_name tmlName, tml_brand tmlBrand, tml_model tmlModel, tml_mac tmlMac, tml_ip tmlIp, tml_desc tmlDesc, online_time onlineTime, active_time activeTime, shutdown_time shutdownTime, f_format_time(shutdown_time) shutdownTimeText, x, y, (unix_timestamp() - unix_timestamp(active_time) < 200) isActive, (not ISNULL(tml_sn) and LENGTH(trim(tml_sn)) > 0 ) isRegistered, ads_time adsTime")
 			->field('t.floor_id floorId, f.floor_name floorName')
 			->join('__FLOOR__ f','f.floor_id = t.floor_id', 'left')
-			->where('t.client_id', $clientId)->order('isActive asc, tml_name asc')
+			->where('t.client_id', $clientId)->order('isActive desc, tml_name asc')
 			->page($pageNo, config('page_size'))->select();
 		
 //		echo $this->getLastSql();
