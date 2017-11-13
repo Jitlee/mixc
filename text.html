@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>单线图例子</title>
+	    <link rel="stylesheet" href="https://openlayers.org/en/v4.4.2/css/ol.css" type="text/css">
+	   	<!--<script src="https://openlayers.org/en/v4.4.2/build/ol.js" type="text/javascript"></script>-->
+	   	<script src="https://cdn.bootcss.com/openlayers/4.4.1/ol-debug.js"></script>
+	   	<style>
+	   		html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
+	   		.map { height: 100%; }
+	   	</style>
+	</head>
+	<body>
+		<div id="map" class="map"></div>
+		
+	    <script>
+	    	//根据指定的XPATH表达式查找满足条件的所有节点  
+			//@param xmldoc 执行查找的节点  
+			//@param sXpath xpath的表达式  
+			function selectNodes(xmldoc,sXpath){    
+			    if(window.ActiveXObject){         
+			        //IE浏览器       
+			        return xmldoc.selectNodes(sXpath);          
+			    } else if(window.XPathEvaluator){        
+			        //FireFox类浏览器         
+			        var xpathObj=new XPathEvaluator();    
+			  
+			        if(xpathObj){    
+			                 var result=xpathObj.evaluate(sXpath,xmldoc,null,XPathResult.ORDERED_NODE_ITEARTOR_TYPE,null);          
+			            var nodes=new Array();          
+			            var node;          
+			            while((node = result.iterateNext())!=null) {          
+			                nodes.push(node);         
+			            }          
+			           return nodes;    
+			    
+			        }
+			    }
+			    return null;
+			}    
+			  
+			//根据指定的XPATH表达式查找满足条件的第一个节点  
+			//@param xmldoc 执行查找的节点  
+			//@param sXpath xpath的表达式  
+			function selectSingleNode(xmldoc,sXpath){    
+			    if(window.ActiveXObject){         
+			        //IE浏览器          
+			        return xmldoc.selectSingleNode(sXpath);          
+			    } else if(window.XPathEvaluator) {          
+			        //FireFox类浏览器          
+			        var xpathObj=new XPathEvaluator();          
+			        if(xpathObj){          
+			            var result=xpathObj.evaluate(sXpath,xmldoc,null,XPathResult.ORDERED_NODE_ITEARTOR_TYPE,null);                                
+			            return result.singleNodeValue;          
+			        }          
+			    }     
+			   	return null;       
+			}    
+	    </script>
+	    
+	    <script>
+	    	function loadXMLDoc(url, success) {
+				var xmlhttp= new XMLHttpRequest();
+				xmlhttp.onreadystatechange=function() {
+	  				if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+						//x=xmlhttp.responseXML.documentElement.getElementsByTagName("CD");
+		    			success && success(xmlhttp.responseXML)	
+					}
+				}
+				xmlhttp.open("GET",url,true)
+				xmlhttp.send()
+	    	}
+	    </script>
+	    
+		<script>
+//			var circle_feature = new ol.Feature({ 
+//				geometry: new ol.geom.Circle([1312.4,1006.8], 20)
+//			});
+//			var linestring_feature = new ol.Feature({
+//			  	geometry: new ol.geom.LineString(
+//			    	[[1332.4,1006.8], [1392.4,1006.8]]
+//			 	 )
+//			});
+//			var linestring_feature1 = new ol.Feature({
+//			  	geometry: new ol.geom.LineString(
+//			    	[[1392.4,1006.8], [1452.4,1006.8]]
+//			 	)
+//			});
+//			
+//			
+//			linestring_feature1.setStyle(new ol.style.Style({
+//				fill: new ol.style.Fill({ color: [255, 255, 0, 0.8] }),
+//				stroke: new ol.style.Stroke({ color: [255, 255, 0, 1], width: 2 }),
+//			}));
+//			
+//			let x = 1385.4
+//			let y = 999.8
+//			var symbol1 = new ol.Feature({
+//			  	geometry: new ol.geom.MultiLineString([
+//			    	[[x + 1.0, y + 1.0], [x + 13.0, y + 1.0], [x + 13.0, y + 13.0], [x + 1.0, y + 13.0], [x + 1.0, y + 1.0]],
+//			    	[[x + 12.7, y + 1.3], [x + 1.3, y + 12.7]],
+//			    	[[x + 1.3, y + 1.3], [x + 12.7, y + 12.7]],
+//			 	 ])
+//			});
+//			var symbol2 = new ol.Feature({
+//			  	geometry: new ol.geom.Circle([1452.4,1007.0], 7)
+//			});
+//			
+			
+			var FEATURE_TYPE = {
+				'SubstationClass': 			'变电站',
+				'DisconnectorClass':		'隔离开关',
+				'BreakerClass':		 		'断路器',
+				'PolePSRClass': 			'杆塔',
+				'FuseClass': 				'跌落式熔断器',
+				'PowerTransformerClass':	'柱上公变',
+				'LoadSwitchClass':			'负荷开关',
+				'TextClass':				'标注',
+				'LinkPointClass':			'变电站链接',
+				'ACLineSegmentClass':		'导线',
+				'ConnectiveLineClass':		'连接关系',
+			};
+			
+			var readFunctions = {
+				defs: 						readDefs,
+				symbol: 					readSymbol,
+				circle: 					readCircle,
+				polygon: 					readPolygon,
+				polyline: 					readPolyline,
+				path: 						readPath,
+				line: 						readLine,
+				rect: 						readRect,
+				pattern: 					readPattern,
+				use: 						readUse,
+				g: 							readG,
+				metadata: 					readMetadata,
+				text: 						readText,
+				
+				SubstationClass: 			readFeatures,
+				DisconnectorClass: 			readFeatures,
+				BreakerClass:	 			readFeatures,
+				PolePSRClass:	 			readFeatures,
+				FuseClass:	 				readFeatures,
+				PowerTransformerClass:	 	readFeatures,
+				LoadSwitchClass:		 	readFeatures,
+				ACLineSegmentClass:			readFeatures,
+				JointUseClass:				readFeatures,
+				
+				TextClass:					readTexts,
+			};
+			
+			var useFunctions = {
+				GeometryCollection: 		useGeometryCollection,
+				Polygon: 					usePolygon,
+				LineString: 				useLineString,
+				Circle: 					useCircle,
+			};
+			
+			var rotateFunctions = {
+				GeometryCollection: 		rotateGeometryCollection,
+				Polygon: 					rotatePolygon,
+				LineString: 				rotateLineString,
+				Circle: 					rotateCircle,
+			};
+		    
+		    function readG(g, geojsonObject) {
+		    	var id = g.getAttribute('id');
+		    	if(readFunctions.hasOwnProperty(id)) {
+		    		readFunctions[id](g, geojsonObject);
+		    	}
+		    }
+		    
+		    function readFeatures(g, geojsonObject) {
+		    	var childNode = null;
+		    	var feature = null;
+		    	var id = g.getAttribute('id');
+		    	for(var i = 0, iCount = g.childElementCount; i < iCount; i++) {
+		    		childNode = g.children[i];
+		    		feature = readFeature(childNode, geojsonObject, id);
+		    		feature && geojsonObject.features.push(feature);
+		    	}
+		    }
+		    
+		    function readFeature(g, geojsonObject, graphicClass) {
+		    	var id = g.getAttribute('id');
+		    	var childNode = null;
+		    	var geometry = null;
+		    	var metadata = null;
+		    	var geometryNode = null;
+		    	var metadataNode = null;
+		    	if(g.childElementCount == 0) {
+		    		alert('解析' + id + '到出现异常情况：svg不是图形+元数据结构');
+		    		return null;
+		    	}
+		    	
+		    	geometryNode = g.firstElementChild;
+		    	geometry = readFunctions[geometryNode.nodeName](geometryNode, geojsonObject);
+		    	if(metadataNode = g.lastElementChild) {
+		    		metadata = readFunctions[metadataNode.nodeName](metadataNode);
+		    	}
+		    	
+		    	metadata = metadata || {};
+		    	if(geometryNode.nodeName == 'use') {
+		    		var symbolId = geometryNode.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
+		    		if(symbolId && geojsonObject.styleMap.hasOwnProperty(symbolId = symbolId.substr(1))) {
+			    		metadata.graphicType = symbolId;
+			    		metadata.style = geojsonObject.styleMap[symbolId];
+		    		}
+		    	} else {
+		    		metadata.style = readStyle(geometryNode);
+		    	}
+		    	metadata.graphicClass = graphicClass;
+		    	
+		    	return {
+					type: 'Feature',
+					geometry: geometry,
+					properties: metadata,
+		    	};
+		    }
+		    
+		    function readStyle(node) {
+		    	return {
+		    		fill: node.getAttribute('fill'),
+		    		stroke: node.getAttribute('stroke'),
+		    		strokeWidth: readFloatValue(node, 'stroke-width'),
+		    	};
+		    }
+		    
+		    function readTextStyle(node) {
+		    	return {
+		    		fill: node.getAttribute('fill'),
+		    		stroke: node.getAttribute('stroke'),
+		    		textAnchor: node.getAttribute('text-anchor'),
+		    		fontFamily: node.getAttribute('font-family'),
+		    		strokeWidth: readFloatValue(node, 'stroke-width'),
+		    		strokeWidth: readFloatValue(node, 'font-size'),
+		    	};
+		    }
+		    
+//		    var REG_EXP_RGB = /^rgb\(\d+,\d+\d+\)$/ig;
+//		    var REG_EXP_DIGIT = /\d+/g;
+//		    var colorCache = {};
+//		    function readColorStyle(node, propName) {
+//		    	var attr = node.getAttribute(propName);
+//		    	if(val !== 'none') {
+//		    		if(colorCache.hasOwnProperty(val)) {
+//		    			return colorCache[val];
+//		    		}
+//		    		var val = val.match(/\d+/g).map(Number);
+//		    	}
+//		    	return null;
+//		    }
+		    
+		    function readFloatValue(node, propName) {
+		    	var attr = node.getAttribute(propName);
+		    	if(attr) {
+		    		return Number(attr);
+		    	}
+		    	return 0;
+		    }
+		    
+		    var xlink = 'http://www.w3.org/1999/xlink';
+		    var REG_EXP_ROATE = /^rotate\(([0-9\.]+),([0-9\.]+),([0-9\.]+)\).*$/ig;
+		    function readUse(use, geojsonObject) {
+		    	var symbolId = use.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
+		    	if(!symbolId || !geojsonObject.symbolMap.hasOwnProperty(symbolId = symbolId.substr(1))) {
+		    		return;
+		    	}
+		    	var symbol = geojsonObject.symbolMap[symbolId];
+		    	var x = Number(use.getAttribute('x'));
+		    	var y = -Number(use.getAttribute('y'));
+		    	var geometry = useFunctions[symbol.type](symbol, x, y);
+		    	
+		    	var transform = use.getAttribute('transform');
+				var rotateMatches = REG_EXP_ROATE.exec(transform);
+				var angle = 0;
+				var originX = 0;
+				var originY = 0;
+				REG_EXP_ROATE.lastIndex = 0;
+				if(rotateMatches && rotateMatches.length == 4) {
+					angle = -Number(rotateMatches[1]) * Math.PI / 180;
+					if(angle != 0) {
+						originX = Number(rotateMatches[2]);
+						originY = -Number(rotateMatches[3]);
+						rotateFunctions[geometry.type](geometry, angle, originX, originY);
+					}
+				}
+		    	return geometry;
+		    }
+		    
+		    function rotateGeometryCollection(geometry, angle, originX, originY) {
+		    	for(var i = 0, iCount = geometry.geometries.length; i < iCount; i++) {
+					rotateFunctions[geometry.geometries[i].type](geometry.geometries[i], angle, originX, originY);
+		    	}
+		    }
+		    
+		    function rotateLineString(geometry, angle, originX, originY) {
+		    	var coordinates = geometry.coordinates;
+		    	for(var i = 0, iCount = coordinates.length; i < iCount; i++) {
+		    		rotatePoint(coordinates[i], angle, originX, originY);
+		    	}
+		    }
+		    
+		    function rotatePolygon(geometry, angle, originX, originY) {
+		    	var coordinates = geometry.coordinates[0];
+		    	for(var i = 0, iCount = coordinates.length; i < iCount; i++) {
+		    		rotatePoint(coordinates[i], angle, originX, originY);
+		    	}
+		    }
+		    
+		    function rotateCircle(geometry, angle, originX, originY) {
+		    	rotatePoint(geometry.center, angle, originX, originY);
+		    }
+		    
+		    function rotatePoint(point, angle, originX, originY) {
+		    	var vectorX = point[0] - originX;
+		    	var vectorY = point[1] - originY;
+		    	point[0] = vectorX * Math.cos(angle) - vectorY * Math.sin(angle) + originX;
+				point[1] = vectorX * Math.sin(angle) + vectorY * Math.cos(angle) + originY;
+		    }
+		    
+		    function useGeometryCollection(collection, transformX, transformY) {
+		    	var geometry = { type: collection.type };
+		    	geometry.geometries = collection.geometries.map(function(symbol) {
+		    		return useFunctions[symbol.type](symbol, transformX, transformY);
+		    	});
+		    	return geometry;
+		    }
+		    
+		    function usePolygon(polygon, transformX, transformY) {
+		    	var geometry = { type: polygon.type };
+		    	geometry.coordinates = [polygon.coordinates[0].map(function(point) {
+		    		return [point[0] + transformX, point[1] + transformY];
+		    	})];
+		    	return geometry;
+		    }
+		    
+		    function useLineString(line, transformX, transformY) {
+		    	var geometry = { type: line.type };
+		    	geometry.coordinates = line.coordinates.map(function(point) {
+		    		return [point[0] + transformX, point[1] + transformY];
+		    	});
+		    	return geometry;
+		    }
+		    
+		    function useCircle(circle, transformX, transformY) {
+		    	var geometry = { type: circle.type, radius: circle.radius };
+		    	geometry.center = [circle.center[0] + transformX, circle.center[1] + transformY];
+		    	return geometry;
+		    }
+		    
+		    function readMetadata(childNode) {
+		    	return {
+		    		id: childNode.firstElementChild.getAttribute('ObjectID'),
+		    		name: childNode.firstElementChild.getAttribute('ObjectName'),
+		    	}
+		    }
+		    
+		    function readTexts(g, geojsonObject) {
+		    	var childNode = null;
+		    	var features = null;
+		    	var id = g.getAttribute('id');
+		    	for(var i = 0, iCount = g.childElementCount; i < iCount; i++) {
+		    		childNode = g.children[i];
+		    		//new ol.geom.Point(routeCoords[0])
+		    		features = readGTexts(childNode, geojsonObject, id);
+		    		for(var j = 0, jCount = features.length; j < jCount; j++) {
+		    			geojsonObject.features.push(features[j]);
+		    		}
+		    	}
+		    }
+		    
+		    function readGTexts(g, geojsonObject, graphicClass) {
+		    	var id = g.getAttribute('id');
+		    	var childNode = null;
+		    	var geometry = null;
+		    	var style = null;
+			    var text = null;
+			    var features = [];
+			    for(var i = 0, iCount = g.childElementCount; i < iCount; i++) {
+			    	childNode = g.children[i];
+			    	text = childNode.innerHTML;
+			    	if(text == "") {
+			    		continue;
+			    	}
+			    	geometry = readFunctions[childNode.nodeName](childNode);
+			    	style = readTextStyle(childNode);
+			    	features.push({
+			    		type: 'Feature',
+			    		geometry: geometry,
+			    		properties: {
+			    			id: id,
+			    			text: text,
+			    			style: style
+			    		}
+			    	});
+			    }
+			    return features;
+		    }
+		    
+		    function readDefs(defs, geojsonObject) {
+		    	var childNode = null;
+		    	var geoms = null;
+		    	var styles = null;
+		    	for(var i = 0, iCount = defs.childElementCount; i < iCount; i++) {
+		    		childNode = defs.children[i];
+		    		symbolId = childNode.getAttribute('id');
+		    		geoms = readFunctions[childNode.nodeName](childNode, geojsonObject);
+		    		styles = readSymbolStyle(childNode);
+		    		geojsonObject.symbolMap[symbolId] = geoms;
+		    		geojsonObject.styleMap[symbolId] = styles;
+		    	}
+		    }
+		    
+		    function readSymbol(symbol, geojsonObject) {
+		    	var childNode = null;
+		    	var geoms = [];
+		    	var geom = null;
+		    	for(var i = 0, iCount = symbol.childElementCount; i < iCount; i++) {
+		    		childNode = symbol.children[i];
+		    		if(readFunctions.hasOwnProperty(childNode.nodeName)) {
+			    		geom = readFunctions[childNode.nodeName](childNode, geojsonObject);
+			    		geoms.push(geom);
+		    		} else {
+		    			debugger
+		    		}
+		    	}
+		    	if(geoms.length == 1) {
+		    		return geoms[0];
+		    	}
+		    	return {
+		    		type: 'GeometryCollection',
+		    		geometries: geoms
+		    	};
+		    }
+		    
+		    function readSymbolStyle(symbol) {
+		    	var childNode = null;
+		    	var styles = [];
+		    	var style = null;
+		    	for(var i = 0, iCount = symbol.childElementCount; i < iCount; i++) {
+		    		childNode = symbol.children[i];
+		    		style = readStyle(childNode);
+		    		styles.push(style);
+		    	}
+		    	if(styles.length == 1) {
+		    		return styles[0];
+		    	}
+		    	return styles;
+		    }
+		    
+		    function readCircle(circle) {
+		    	return {
+		    		type: 'Circle',
+		    		radius: Number(circle.getAttribute('r')),
+		    		center: [Number(circle.getAttribute('cx')), -Number(circle.getAttribute('cy'))]
+		    	}
+		    }
+		    
+		    function readPolyline(polyline) {
+		    	var pointsString = polyline.getAttribute('points');
+		    	var points = pointsString.split(' ').map(function(pointString) { return pointString.split(',') });
+		    	return {
+		    		type: 'LineString',
+		    		coordinates: points.map(function(point) {
+		    			return [Number(point[0]), -Number(point[1])];
+		    		})
+		    	}
+		    }
+		    
+		    function readPolygon(polygon) {
+		    	var pointsString = polygon.getAttribute('points');
+		    	var points = pointsString.split(' ').map(function(pointString) { return pointString.split(',') });
+		    	return {
+		    		type: 'Polygon',
+		    		coordinates: [points.map(function(point) {
+		    			return [Number(point[0]), -Number(point[1])];
+		    		})]
+		    	}
+		    }
+		    
+		    function readLine(line) {
+		    	return {
+		    		type: 'LineString',
+		    		coordinates: [
+		    			[Number(line.getAttribute('x1')), -Number(line.getAttribute('y1'))],
+		    			[Number(line.getAttribute('x2')), -Number(line.getAttribute('y2'))]
+		    		]
+		    	}
+		    }
+		    
+		    var REG_EXP_SEGS = /(M[^A-Za-z]+)|(L[^A-Za-z]+)|(V[^A-Za-z]+)|(H[^A-Za-z]+)|(A[^A-Za-z]+)/ig;
+		    var REG_EXP_POINTS = /((\d+\.\d+)|(\d+))/ig;
+		    function readPath(path) {
+		    	var d = path.getAttribute('d');
+		    	var segs = d.match(REG_EXP_SEGS);
+		    	var lastX, lastY;
+		    	var seg = null;
+		    	var point = null;
+		    	var geoms = [];
+		    	var geom = null;
+		    	for(var i = 0, iCount = segs.length; i < iCount; i++) {
+		    		seg = segs[i];
+		    		point = seg.match(REG_EXP_POINTS);
+		    		switch(seg[0]) {
+		    			case 'M':
+							lastX = Number(point[0]);
+							lastY = -Number(point[1]);
+							
+							if(geom) {
+								geoms.push(geom);
+							}
+							
+							geom = {
+					    		type: 'LineString',
+					    		coordinates: [[lastX, lastY]]
+							};
+							break;
+						case 'L':
+							lastX = Number(point[0]);
+							lastY = -Number(point[1]);
+							geom.coordinates.push([lastX, lastY]);
+							break;
+						case 'V':
+							lastY = -Number(point[1]);
+							geom.coordinates.push([lastX, lastY]);
+							break;
+						case 'H':
+							lastX = Number(point[0]);
+							geom.coordinates.push([lastX, lastY]);
+							break;
+						case 'A':
+							// TODO:
+							break;
+		    		}
+		    		geoms.push(geom);
+		    	}
+		    	if(geoms.length == 1) {
+		    		return geoms[0];
+		    	}
+		    	return {
+		    		type: 'GeometryCollection',
+		    		geometries: geoms
+		    	};
+		    }
+		    
+		    function readRect(rect) {
+		    	var x = Number(rect.getAttribute('x'));
+		    	var y = Number(rect.getAttribute('y'));
+		    	var width = Number(rect.getAttribute('width'));
+		    	var height = Number(rect.getAttribute('height'));
+		    	return {
+		    		type: 'Polygon',
+		    		coordinates: [[
+		    			[x, -y],
+		    			[x + width, -y],
+		    			[x + width, -y - height],
+		    			[x, -y - height]
+		    		]]
+		    	}
+		    }
+		    
+		    function readText(text) {
+		    	var x = Number(text.getAttribute('x'));
+		    	var y = Number(text.getAttribute('y'));
+		    	return {
+		    		type: 'Point',
+		    		coordinate: [x, y]
+		    	}
+		    }
+		    
+		    function readPattern() {
+		    	
+		    }
+	    </script>
+	    
+	    
+	    <script>
+			
+			var source = new ol.source.Vector({ features: [] });
+      		var vector = new ol.layer.Vector({ source: source, style: styleFunction });
+      		var defaultFill = new ol.style.Fill({ color: [0, 0, 0, 0] });
+			var defaultStroke = new ol.style.Stroke({ color: [0, 0, 0, 1], width: 1 });
+			
+	    	var style1 = new ol.style.Style({ fill: defaultFill, stroke: defaultStroke });
+//			vector.setStyle(style);
+	    	var style = new ol.style.Style({ });
+			var colorCache = {};
+			var strokeCache = {};
+			var fillCache = {};
+			var styleCache = {};
+			var map = new ol.Map({
+		        target: 'map',
+		        layers: [vector],
+		        view: new ol.View({
+		          	center: [160303198.54368874, -4041.362555970114],
+		          	zoom: 15
+		        })
+		    });
+		    
+		    function styleFunction(feature, resolution) {
+		    	var styleData = feature.get('style');
+		    	var graphicType = feature.get('graphicType');
+		    	if(!graphicType) {
+		    		transStyle(style, styleData, resolution);
+		    		return style;
+		    	}
+		    	
+		    	var id = feature.get('id');
+		    	var symbolStyle = styleCache[id];
+		    	if(!symbolStyle) {
+		    		if(feature.getGeometry().getType() === 'GeometryCollection') {
+		    			var geoms = feature.getGeometry().getGeometries();
+		    			symbolStyle = [];
+		    			var childStyle = null;
+		    			var childStyleData = null;
+		    			
+		    			for(var i = 0, iCount = geoms.length; i < iCount; i++) {
+		    				childStyleData = styleData[i];
+		    				if(!childStyleData.fill && (!childStyleData.stroke || childStyleData.strokeWidth == 0)) {
+		    					continue;
+		    				}
+				    		
+		    				childStyle = new ol.style.Style({ geometry: geoms[i] });
+		    				transStyle(childStyle, childStyleData, resolution);	
+		    				symbolStyle.push(childStyle);
+		    			}  
+		    		} else {
+		    			symbolStyle = new ol.style.Style({});
+		    			transStyle(symbolStyle, styleData, resolution);
+		    		}
+		    		styleCache[id] = symbolStyle;
+		    	}
+		    	
+		    	if(Array.isArray(symbolStyle)) {
+		    		for(var i = 0, iCount = symbolStyle.length; i < iCount; i++) {
+		    			updateStrokeWidth(symbolStyle[i], resolution) 
+		    		}
+		    	} else {
+		    		updateStrokeWidth(symbolStyle, resolution);
+		    	}
+		    	
+		    	return symbolStyle;
+		    }
+		    
+		    function transStyle(style, styleData, resolution) {
+		    	var color = null;
+		    	var fill = null;
+		    	var stroke = null;
+		    	var cacheKey = null;
+		    	if(styleData.fill && styleData.fill !== 'none') {
+		    		cacheKey = styleData.fill;
+		    		if(fillCache.hasOwnProperty(cacheKey)) {
+		    			fill = fillCache[cacheKey];
+		    		} else {
+		    			color = colorCache.hasOwnProperty(styleData.fill) ? colorCache[styleData.fill] : convertRGB2Array(styleData.fill);
+		    			fill = new ol.style.Fill({ color: color });
+		    			fillCache[cacheKey] = fill;
+		    		}
+		    		style.setFill(fill);
+		    	} else {
+		    		style.setFill(null);
+		    	}
+		    	
+		    	if(styleData.strokeWidth > 0 && styleData.stroke !== 'none') {
+		    		cacheKey = styleData.stroke + styleData.strokeWidth;
+		    		if(strokeCache.hasOwnProperty(cacheKey)) {
+		    			stroke = strokeCache[cacheKey];
+		    		} else {
+		    			color = colorCache.hasOwnProperty(styleData.stroke) ? colorCache[styleData.stroke] : convertRGB2Array(styleData.stroke);
+		    			stroke = new ol.style.Stroke({ color: color, width: styleData.strokeWidth });
+		    			strokeCache[cacheKey] = stroke;
+		    			stroke.__width = styleData.strokeWidth;
+		    		}
+		    		style.setStroke(stroke);
+//		    		updateStrokeWidth(style, resolution);
+		    	} else {
+		    		style.setStroke(null);
+		    	}
+		    }
+		    
+		    function updateStrokeWidth(style, resolution) {
+		    	if(style) {
+			    	var stroke = style.getStroke();
+			    	if(stroke) {
+			    		stroke.setWidth(stroke.__width / resolution);
+			    	}
+		    	}
+		    }
+		    
+		    function convertRGB2Array(rgb) {
+		    	return rgb.match(/\d+/g).map(Number).concat([1]);
+		    }
+		    
+		    ol.format.GeoJSON.GEOMETRY_READERS_.Circle = function(object) {
+		    	return new ol.geom.Circle(object.center, object.radius);
+		    }
+		    
+//		    loadXMLDoc('data/svg/FEDR_20151119154201.svg', xml => {
+//		    loadXMLDoc('data/svg/FEDR_20170318183122.svg', xml => {
+		    loadXMLDoc('data/svg/FEDR_20170523083521.svg', xml => {
+		    	window.xml = xml;
+		    	if(xml && xml.firstElementChild) {
+		    		console.time('解析svg耗时');
+		    		var rootNode = xml.firstElementChild;
+		    		var childNode = null;
+		    		var geojsonObject = {
+		    			type: 'FeatureCollection',
+		    			symbolMap: {},
+		    			styleMap: {},
+		    			features: [],
+		    		};
+		    		for(var i = 0, iCount = rootNode.childElementCount; i < iCount; i++) {
+		    			childNode = rootNode.children[i];
+		    			if(readFunctions.hasOwnProperty(childNode.nodeName)) {
+		    				readFunctions[childNode.nodeName](childNode, geojsonObject);
+		    			}
+		    		}
+		    		 console.log(geojsonObject);
+		    		var features =  (new ol.format.GeoJSON()).readFeatures(geojsonObject)
+		    		source.addFeatures(features);
+		    		console.timeEnd('解析svg耗时');
+		    	}
+		    })
+	    </script>
+	</body>
+</html>
