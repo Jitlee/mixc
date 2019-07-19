@@ -1,4 +1,4 @@
-package com.to8to.housedesigner.view.scene2d.sculpt.comm
+package com.
 {
 	import flash.geom.Point;
 	
